@@ -103,19 +103,19 @@ Opens a public keystore.
 
 - `{Boolean} [silent]` Don't write key changes, warnings and errors to `console`. Defaults to `false`.
 
-- `{Boolean} [db_for_update]` (`db_type='pouchdb'`) PouchDB can only write to a database from one process at a time. If you want to run multiple processes against the same keystore, `pub-keystore` can work around this by writing to a master database and then replicating it to multiple reader databases (one for each process). When you're updating keys, pass `db_for_update=true` to write to the master database. Make sure you [`deploy`](deploy) and close the master database after updating it so that your reader processes can open it for replication. Defaults to `false`.
+- `{Boolean} [db_for_update]` (`db_type='pouchdb'`) PouchDB can only write to a database from one process at a time. If you want to run multiple processes against the same keystore, `pub-keystore` can work around this by writing to a master database and then replicating it to multiple reader databases (one for each process). When you're updating keys, pass `db_for_update=true` to write to the master database. Make sure you [`deploy`](#pubkeystoreprototypedeploycb) and close the master database after updating it so that your reader processes can open it for replication. Defaults to `false`.
 
 - `{String} [deploy_name]` (`db_type='pouchdb'`) Name of the replica database to use for this process (when `db_for_update=false`). Make sure you specify a differrent `deploy_name` for each process running against the same keystore. Defaults to `default`.
 
 - `{String} [db_dir]` (`db_type='pouchdb'`) Where to write the PouchDB database files. Defaults to a directory named `pouchdb/store/<db_name>` in the `pub_keystore` module directory.
 
-- `{Boolean} [no_initial_replicate]` (`db_type='pouchdb'`) Whether to skip initial replication from the master database. Defaults to `false`. Note that replication will still occur whenever the master database is updated and [`deploy`](deploy)ed.
+- `{Boolean} [no_initial_replicate]` (`db_type='pouchdb'`) Whether to skip initial replication from the master database. Defaults to `false`. Note that replication will still occur whenever the master database is updated and [`deploy`](#pubkeystoreprototypedeploycb)ed.
 
 - `{Boolean} [keep_master_open]` (`db_type='pouchdb'`) Normally the master database is closed after replicating from it so that it can be updated or replicated from other processes. However, if you want to use master and replica databases from a single process then you'll need to specify `keep_master_open=true` to stop PouchDB getting confused. Defaults to `false`. Normally if only a single process is accessing the keystore then you can just open one instance with `db_for_update=true`.
 
-- `{Boolean} [persistent_watch]` (`db_type='pouchdb'`) Reader processes monitor a shared file to know when [`deploy`](deploy) has been called on the master database, using [`fs.watch`](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener). By default, the watch isn't persistent so it won't keep your process open if nothing else is going on. Pass `persistent_watch=true` to make it persistent.
+- `{Boolean} [persistent_watch]` (`db_type='pouchdb'`) Reader processes monitor a shared file to know when [`deploy`](#pubkeystoreprototypedeploycb) has been called on the master database, using [`fs.watch`](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener). By default, the watch isn't persistent so it won't keep your process open if nothing else is going on. Pass `persistent_watch=true` to make it persistent.
 
-- `{String} [replicate_signal]` (`db_type='pouchdb'`) Name of a Unix signal (e.g. `SIGUSR2`) which can be sent to a reading process to force a replication from the master database. Defaults to `undefined` (no signal will be listened to). Replication normally happens when [`deploy`](deploy) is called from the writing process or [`replicate`](replicate) is called from the reading process.
+- `{String} [replicate_signal]` (`db_type='pouchdb'`) Name of a Unix signal (e.g. `SIGUSR2`) which can be sent to a reader process to force a replication from the master database. Defaults to `undefined` (no signal will be listened to). Replication normally happens when [`deploy`](#pubkeystoreprototypedeploycb) is called from the writing process or [`replicate`](#pubkeystoreprototypereplicateopts-cb) is called from the reading process.
 
 - `{String} [db_host]` (`db_type='couchdb'`) URL of the CouchDB server. Defaults to `http://localhost`.
 
@@ -131,7 +131,7 @@ Opens a public keystore.
 
 - `{Object} err` If an error occurred then details of the error, otherwise `null`. Note that for PouchDB-backed stores, if the database is already open by another process for update or replication, you will receive an error. It's up to you to retry as appropriate for your application.
 
-- `{PubKeyStore} ks` The [`PubKeyStore`](PubKeyStore) object. Note that in the case of an error occuring _after_ the store has been open but before a successful changes feed has been established, you may receive `err` _and_ `ks`.
+- `{PubKeyStore} ks` The [`PubKeyStore`](pubkeystore) object. Note that in the case of an error occuring _after_ the store has been open but before a successful changes feed has been established, you may receive `err` _and_ `ks`.
 */
 module.exports = function (config, cb) { };
 
@@ -146,16 +146,16 @@ Add a public key to the keystore.
 
 - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
-- `{String} issuer_id` A unique, random string which you can use as an alternative when retrieving the public key. This is useful if you want to give out an index to the key without identifying its owner. Note that every time you add a key, a new `issuer_id` will be generated. If a key already exists for the `uri` then it will be overwritten.
+- `{String} issuer_id` A unique, random string which you can use as an alternative when retrieving the public key. This is useful if you want to give out an identifier for the key without revealing its owner. Note that every time you add a key, a new `issuer_id` will be generated. If a key already exists for the `uri` then it will be overwritten.
 
-- `{String} rev` A revision string for the key. Like the `issuer_id`, this will change every time a key is added. Unlike the `issuer_id`, it is sent with [`change`](events.change) events so you if you're caching keys then you can tell whether the cached version is up-to-date.
+- `{String} rev` A revision string for the key. Like the `issuer_id`, this will change every time a key is added. Unlike the `issuer_id`, it is sent with [`change`](#pubkeystoreeventschangeuri-rev-deleted) events so you if you're caching keys then you can tell whether the cached version is up-to-date.
 */
 PubKeyStore.prototype.add_pub_key = function (uri, pub_key, cb) { };
 
 /**
 Remove a public key from the keystore.
 
-@param {String} uri The permanent identifier you gave to the key when adding it using [`add_pub_key`](pubkeystoreprototypeaddpubkey).
+@param {String} uri The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb).
 
 @param {Function} cb Function to call once the key has been removed. It will receive the following argument:
 
@@ -166,7 +166,7 @@ PubKeyStore.prototype.remove_pub_key = function (uri, cb) { };
 /**
 Retrieve a public key using its permanent identifier (URI).
 
-@param {String} uri The permanent identifier you gave to the key when adding it using [`add_pub_key`](pubkeystoreprototypeaddpubkey).
+@param {String} uri The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb).
 
 @param {Function} cb Function to call with the result. It will receive the following arguments:
 
@@ -174,7 +174,7 @@ Retrieve a public key using its permanent identifier (URI).
 
 - `{String} pub_key` The public key for the `uri`, or `null` if it wasn't found.
 
-- `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](pubkeystoreprototypeget_pub_key_by_issuer_id).
+- `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idcb).
 
 - `{String} rev` The current revision string for the public key.
 */
@@ -183,7 +183,7 @@ PubKeyStore.prototype.get_pub_key_by_uri = function (uri, cb) { };
 /**
 Retrieve a public key using its unique, random identifier.
 
-- `{String} issuer_id` The unique identifier for the key.
+@param {String} issuer_id The unique identifier for the key.
 
 @param {Function} cb Function to call with the result. It will receive the following arguments:
 
@@ -191,7 +191,7 @@ Retrieve a public key using its unique, random identifier.
 
 - `{String} pub_key` The public key for the `issuer_id`, or `null` if it wasn't found.
 
-- `{String} uri` The permanent identifier you gave to the key when adding it using [`add_pub_key`](pubkeystoreprototypeaddpubkey).
+- `{String} uri` The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb).
 
 - `{String} rev` The current revision string for the public key.
 */
@@ -200,13 +200,13 @@ PubKeyStore.prototype.get_pub_key_by_issuer_id = function (issuer_id, cb) { };
 /**
 Get a unique, random identifier for a public key.
 
-@param {String} uri The permanent identifier you gave to the key when adding it using [`add_pub_key`](pubkeystoreprototypeaddpubkey).
+@param {String} uri The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb).
 
 @param {Function} cb Function to call with the result. It will receive the following arguments:
 
 - `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
 
-- `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](pubkeystoreprototypeget_pub_key_by_issuer_id), or `null` if it wasn't found.
+- `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idcb), or `null` if it wasn't found.
 
 - `{String} rev` The current revision string for the public key.
 */
@@ -235,7 +235,7 @@ PubKeyStore.prototype.close = function (cb) { };
 /**
 Create the store's backing database.
 
-Unless you pass `db_already_created=true` when opening the keystore, this method is automatically called for you when the store is opened. It is an idempotent operation so it doesn't matter if you call it twice.
+Unless you pass `db_already_created=true` when [opening the keystore](#moduleexportsconfig-cb), this method is automatically called for you when the store is opened. It is an idempotent operation so it doesn't matter if you call it twice.
 
 @param {Function} cb Function to call once the database has been created. It will receive the following arguments:
 
@@ -253,7 +253,7 @@ Close the store and destroy its backing database. This will delete all public ke
 PubKeyStore.prototype.destroy = function (cb) { };
 
 /**
-(PouchDB) Notify reader processes to replicate from the master database. You should call this when you've opened the keystore with `db_for_update=true`, performed some updates and want other processes reading from the store to receive the updates. Internally it uses [`touch`](https://github.com/isaacs/node-touch) and [`fs.watch`](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) on a shared file.
+(PouchDB) Notify reader processes to replicate from the master database. You should call this when you've [opened the keystore](#moduleexportsconfig-cb) with `db_for_update=true`, performed some updates and want other processes reading from the store to receive the updates. Internally it uses [`touch`](https://github.com/isaacs/node-touch) and [`fs.watch`](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) on a shared file.
 
 For a CouchDB-backed keystore, this is a no-op.
 
@@ -264,15 +264,15 @@ For a CouchDB-backed keystore, this is a no-op.
 PubKeyStore.prototype.deploy = function (cb) { };
 
 /**
-(PouchDB) Force replication from the master database. Usually you shouldn't need to call this because reader processes (where the keystore is opened _without_ `db_for_update=true`) will replicate when the keystore is opened and when they detect that a writer process has called [`deploy`](deploy).
+(PouchDB) Force replication from the master database. Usually you shouldn't need to call this because reader processes (where the keystore is [opened](#moduleexportsconfig-cb) _without_ `db_for_update=true`) will replicate when the keystore is opened and when they detect that a writer process has called [`deploy`](#pubkeystoreprototypedeploycb).
 
 For a CouchDB-backed keystore, this is a no-op.
 
 @param {Object} opts Replication options. Valid properties:
 
-- `{Boolean} no_retry` If replication fails (typically because the master database is open in another process also trying to replicate) then it is automatically retries after a random delay of between 1 and 2 seconds. Set `no_retry` to `true` to disable this behaviour. Defaults to `false`.
+- `{Boolean} no_retry` If replication fails (typically because the master database is open in another process also trying to replicate) then it is automatically retried after a random delay of between 1 and 2 seconds. Set `no_retry` to `true` to disable this behaviour. Defaults to `false`.
 
-@param {Functon} [cb] Function to call once replication has completed successfully (or failed if you set `opts.no_retry=true` and an error occurred). Alternatively you can listen for the [`replicated`](replicated) event which is emitted on successful replication (for consistency, CouchDB-backed stores will raise this too, after the no-op). `cb` will receive the following arguments:
+@param {Functon} [cb] Function to call once replication has completed successfully (or failed if you set `opts.no_retry=true` and an error occurred). Alternatively you can listen for the [`replicated`](#pubkeystoreeventsreplicatedclose_master) event which is emitted on successful replication (for consistency, CouchDB-backed stores will raise this too, after the no-op). `cb` will receive the following arguments:
 
 - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 */
@@ -294,7 +294,7 @@ PubKeyStore.events.change = function (uri, rev, deleted) { };
 /*
 `error` event
 
-Emmited when an error occurs in the changes feed from the database. This may mean you receive no more [`change`](change) events.
+Emmited when an error occurs in the changes feed from the database. This may mean you receive no more [`change`](#pubkeystoreeventschangeuri-rev-deleted) events.
 
 @param {Object} err Details of the error.
 */
@@ -303,9 +303,9 @@ PubKeyStore.events.error = function (err) { };
 /*
 `replicated` event
 
-Emitted when a successful replication from the master database completes (PouchDB-backed keystores). CouchDB-backed stores emit this too for consistency, after [`replicate`](replicate) is called.
+Emitted when a successful replication from the master database completes (PouchDB-backed keystores). CouchDB-backed stores emit this too for consistency, after [`replicate`](#pubkeystoreprototypereplicateopts-cb) is called.
 
-@param {Function} close_master Function you can call to close the master database if you set `config.keep_master_open=true` when [opening the keystore](moduleexports). This lets you control when to close the master database yourself. If you didn't set `config.keep_master_open=true` then `close_master` is a no-op. `close_master` takes the following parameters:
+@param {Function} close_master Function you can call to close the master database if you set `config.keep_master_open=true` when [opening the keystore](#moduleexportsconfig-cb). This lets you control when to close the master database yourself. If you didn't set `config.keep_master_open=true` then `close_master` is a no-op. `close_master` takes the following parameters:
 
 - `{Function} cb(err)` This will be called after the master database is closed (or after the no-op).
 */
