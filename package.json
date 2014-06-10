@@ -38,7 +38,7 @@
     "node": "~0.10.26"
   },
   "dependencies": {
-    "cradle": "~0.3.8",
+    "cradle": "~0.6.7",
     "pouchdb": "~2.2.3",
     "yargs": "~1.2.1",
     "async": "~0.8.0",
