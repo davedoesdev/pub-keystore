@@ -1,0 +1,4 @@
+*
+!.gitignore
+!_users.couch
+!_replicator.couch
