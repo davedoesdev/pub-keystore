@@ -170,7 +170,7 @@ _Source: [docs.js](/docs.js)_
 
   - `{Object} err` If an error occurred then details of the error, otherwise `null`. Note that for PouchDB-backed stores, if the database is already open by another process for update or replication, you will receive an error. It's up to you to retry as appropriate for your application.
 
-  - `{PubKeyStore} ks` The [`PubKeyStore`](pubkeystore) object. Note that in the case of an error occuring _after_ the store has been open but before a successful changes feed has been established, you may receive `err` _and_ `ks`.
+  - `{PubKeyStore} ks` The [`PubKeyStore`](#pubkeystore) object. Note that in the case of an error occuring _after_ the store has been open but before a successful changes feed has been established, you may receive `err` _and_ `ks`.
 
 <sub>Go: [TOC](#tableofcontents) | [module](#toc_module)</sub>
 
@@ -237,7 +237,7 @@ _Source: [docs.js](/docs.js)_
 
   - `{String} pub_key` The public key for the `uri`, or `null` if it wasn't found.
 
-  - `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idcb).
+  - `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idissuer_id-cb).
 
   - `{String} rev` The current revision string for the public key.
 
@@ -281,7 +281,7 @@ _Source: [docs.js](/docs.js)_
 
   - `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
 
-  - `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idcb), or `null` if it wasn't found.
+  - `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idissuer_id-cb), or `null` if it wasn't found.
 
   - `{String} rev` The current revision string for the public key.
 
