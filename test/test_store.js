@@ -471,7 +471,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                 return close_update_stores(function (err)
                 {
                     if (err) { return cb(err); }
-                    console.log('deploy:closed update stored');
+                    console.log('deploy:closed update stores');
                     after_deploy();
                 });
             }
