@@ -4,5 +4,5 @@ node_js:
 before_install:
   - git clone "https://github.com/davedoesdev/build-couchdb-travis.git"
   - ( cd build-couchdb-travis; wget -O - "https://github.com/davedoesdev/build-couchdb-travis/releases/download/$(git tag | tail -n 1)/build-couchdb.tar.gz" | tar -zxC .. )
-  - ln -s build-couchdb ~
+  - ln -s build-couchdb "$HOME"
 script: npm run travis-test
