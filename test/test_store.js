@@ -1005,12 +1005,18 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
         {
             if (err) { return cb(err); }
 
+            console.log('destroyed');
+
             function after_deploy(err)
             {
                 if (err) { return cb(err); }
 
+                console.log('after_deploy');
+
                 check_changes([], false, function ()
                 {
+                    console.log('got changes');
+
                     async.each(states[0].stores_for_query, function (ks, cb)
                     {
                         ks.get_uris(function (err, uris)
@@ -1029,8 +1035,12 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                         });
                     }, function ()
                     {
+                        console.log('queried');
+
                         if (db_type === 'pouchdb')
                         {
+                            console.log('destroying query stores');
+
                             // need to ensure view data is destroyed
                             return async.each(states[0].stores_for_query,
                             function (ks, cb)
@@ -1046,6 +1056,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
 
             deploy(function (err, close)
             {
+                console.log("deployed");
                 if (err) { return cb(err); }
                 if (close) { return close(after_deploy); }
                 after_deploy();
