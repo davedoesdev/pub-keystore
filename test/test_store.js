@@ -1061,7 +1061,6 @@ function make_states()
 
 function setup(multiprocess, num, db_type, db_host, db_port, ssl)
 {
-/*
     describe('keystore ' + db_type + ' functionality (separate store for each test, without changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
     {
         this.timeout(60000);
@@ -1111,7 +1110,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
 
         tests(states, multiprocess, multiprocess, false, make_query_stores, close_query_stores, close_update_stores);
     });
-*/
+
     describe('keystore ' + db_type + ' functionality (separate store for each test, with changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
     {
         this.timeout(60000);
@@ -1130,7 +1129,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
 
         tests(states, multiprocess, true, true, make_query_stores, close_query_stores, close_update_stores);
     });
-return
+
     describe('keystore ' + db_type + ' functionality (one store for all tests, with changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
     {
         this.timeout(60000);
@@ -1164,14 +1163,13 @@ return
 }
 
 var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
-nkeys = [1];
 
-[/*false,*/ true].forEach(function (m)
+[false, true].forEach(function (m)
 {
     nkeys.forEach(function (n)
     {
-        //setup(m, n, 'couchdb');
-        //setup(m, n, 'couchdb', 'https://localhost', 6984, true);
+        setup(m, n, 'couchdb');
+        setup(m, n, 'couchdb', 'https://localhost', 6984, true);
         setup(m, n, 'pouchdb');
     });
 });
