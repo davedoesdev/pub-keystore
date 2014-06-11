@@ -18,7 +18,8 @@ module.exports = function (grunt)
             default: {
                 src: ['test/*.js'],
                 options: {
-                    timeout: 10000
+                    timeout: 10000,
+                    bail: true
                 }
             }
         },
