@@ -232,14 +232,16 @@ PubKeyStorePouchDB.prototype._replicate = function (opts, cb)
 
 PubKeyStorePouchDB.prototype._replicate_try_again = function (err, opts, cb)
 {
-    if (opts.no_retry)
-    {
-        return cb(err);
-    }
-
     if (!this._config.silent)
     {
         console.error(err.toString());
+    }
+
+    this.emit('replicate_error', err);
+
+    if (opts.no_retry)
+    {
+        return cb(err);
     }
 
     var ths = this;
