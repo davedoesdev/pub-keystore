@@ -317,5 +317,5 @@ PubKeyStore.events.replicated = function (close_master) { };
 Emitted when replication from the master database fails (PouchDB-backed keystores only). This is emitted even when replication retry is enabled (i.e. if you didn't set `no_retry=true` when [opening the store](#moduleexportsconfig-cb)).
 
 @param {Object} err Details of the error.
-
+*/
 PubKeyStore.events.replicate_error = function (err) { };

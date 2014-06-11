@@ -117,6 +117,8 @@ _Source: [docs.js](/docs.js)_
 ### Events
 - <a name="toc_pubkeystoreeventschangeuri-rev-deleted"></a><a name="toc_pubkeystoreevents"></a>[PubKeyStore.events.change](#pubkeystoreeventschangeuri-rev-deleted)
 - <a name="toc_pubkeystoreeventserrorerr"></a>[PubKeyStore.events.error](#pubkeystoreeventserrorerr)
+- <a name="toc_pubkeystoreeventsreplicatedclose_master"></a>[PubKeyStore.events.replicated](#pubkeystoreeventsreplicatedclose_master)
+- <a name="toc_pubkeystoreeventsreplicate_errorerr"></a>[PubKeyStore.events.replicate_error](#pubkeystoreeventsreplicate_errorerr)
 
 <a name="module"></a>
 
@@ -405,6 +407,33 @@ Emitted when a public key is updated or removed from the keystore.
 > `error` event
 
 Emmited when an error occurs in the changes feed from the database. This may mean you receive no more [`change`](#pubkeystoreeventschangeuri-rev-deleted) events.
+
+**Parameters:**
+
+- `{Object} err` Details of the error.
+
+<sub>Go: [TOC](#tableofcontents) | [PubKeyStore.events](#toc_pubkeystoreevents)</sub>
+
+## PubKeyStore.events.replicated(close_master)
+
+> `replicated` event
+
+Emitted when a successful replication from the master database completes (PouchDB-backed keystores). CouchDB-backed stores emit this too for consistency, after [`replicate`](#pubkeystoreprototypereplicateopts-cb) is called.
+
+**Parameters:**
+
+- `{Function} close_master` Function you can call to close the master database if you set `config.keep_master_open=true` when [opening the keystore](#moduleexportsconfig-cb). This lets you control when to close the master database yourself. If you didn't set `config.keep_master_open=true` then `close_master` is a no-op. `close_master` takes the following parameters:
+
+
+  - `{Function} cb(err)` This will be called after the master database is closed (or after the no-op).
+
+<sub>Go: [TOC](#tableofcontents) | [PubKeyStore.events](#toc_pubkeystoreevents)</sub>
+
+## PubKeyStore.events.replicate_error(err)
+
+> `replicate_error` event
+
+Emitted when replication from the master database fails (PouchDB-backed keystores only). This is emitted even when replication retry is enabled (i.e. if you didn't set `no_retry=true` when [opening the store](#moduleexportsconfig-cb)).
 
 **Parameters:**
 
