@@ -413,6 +413,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
     {
         function done(close)
         {
+            console.log('deploy:done');
             cb(null, close);
         }
 
@@ -433,6 +434,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                 ks.once('replicated', function (close_fn)
                 {
                     n -= 1;
+                    console.log('deploy:replicated', n);
                     close = close_fn;
                     if ((n === 0) && deployed)
                     {
@@ -443,6 +445,8 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
 
             after_deploy = function ()
             {
+                console.log('deploy:after_deploy', n);
+
                 deployed = true;
 
                 if (n === 0)
@@ -460,11 +464,14 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
         {
             if (err) { return cb(err); }
 
+            console.log('deploy:deployed');
+
             if (one_for_each && multiprocess)
             {
                 return close_update_stores(function (err)
                 {
                     if (err) { return cb(err); }
+                    console.log('deploy:closed update stored');
                     after_deploy();
                 });
             }
@@ -1056,7 +1063,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
 
             deploy(function (err, close)
             {
-                console.log("deployed");
+                console.log('deployed');
                 if (err) { return cb(err); }
                 if (close) { return close(after_deploy); }
                 after_deploy();
