@@ -377,7 +377,6 @@ function close_stores_for_update(states)
                 if (err && (err.message !== 'not_open')) { return cb(err); }
                 cb();
             });
-
         }, function (err)
         {
             delete states[0].stores_for_update;
