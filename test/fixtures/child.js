@@ -29,7 +29,8 @@ keystore(config, function (err, ks)
 
     if (ks)
     {
-        var proto = Object.getPrototypeOf(ks), f, orig_on, server;
+        var proto = Object.getPrototypeOf(ks),
+            f, orig_on, orig_once, server, expect_done = true;
 
         /*jslint forin: true */
         for (f in proto)
@@ -42,20 +43,35 @@ keystore(config, function (err, ks)
 
         ks.on = function (event, cb, done)
         {
-            if (event !== 'error')
+            if (event === 'error')
             {
-                return orig_on.call(ks, event, cb);
+                orig_on.call(ks, event, function (err)
+                {
+                    cb.call(this,
+                    {
+                        message: err.message,
+                        feed_error: err.feed_error
+                    });
+                });
+            }
+            else
+            {
+                orig_on.call(ks, event, cb);
             }
 
-            orig_on.call(ks, event, function (err)
+            if (expect_done)
             {
-                cb.call(this,
-                {
-                    message: err.message,
-                    feed_error: err.feed_error
-                });
-            });
+                done();
+            }
+        };
 
+        orig_once = ks.once;
+
+        ks.once = function (event, cb, done)
+        {
+            expect_done = false;
+            orig_once.call(ks, event, cb);
+            expect_done = true;
             done();
         };
 

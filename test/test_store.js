@@ -333,9 +333,15 @@ function make_stores_for_query(multiprocess, num, db_type, db_name, changes, sta
                         {
                             states[0].notify_change();
                         }
-                    });
+                    }, multiprocess ? function ()
+                    {
+                        cb(null, store)
+                    } : undefined);
 
-                    cb(null, store);
+                    if (!multiprocess)
+                    {
+                        cb(null, store);
+                    }
                 }
 
                 if (changes)
@@ -423,24 +429,32 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
             deployed,
             close;
 
+        function do_deploy()
+        {
+            uks.deploy(function (err)
+            {
+                if (err) { return cb(err); }
+
+                console.log('deploy:deployed');
+
+                if (one_for_each && multiprocess)
+                {
+                    return close_update_stores(function (err)
+                    {
+                        if (err) { return cb(err); }
+                        console.log('deploy:closed update stores');
+                        after_deploy();
+                    });
+                }
+
+                after_deploy();
+            });
+        }
+
         if (uks.db_type === 'pouchdb')
         {
             qks = states[0].stores_for_query;
             n = qks.length;
-
-            qks.forEach(function (ks)
-            {
-                ks.once('replicated', function (close_fn)
-                {
-                    n -= 1;
-                    console.log('deploy:replicated', n);
-                    close = close_fn;
-                    if ((n === 0) && deployed)
-                    {
-                        done(close);
-                    }
-                });
-            });
 
             after_deploy = function ()
             {
@@ -453,30 +467,31 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                     done(close);
                 }
             };
+
+            async.each(qks, function (ks, cb)
+            {
+                ks.once('replicated', function (close_fn)
+                {
+                    n -= 1;
+                    console.log('deploy:replicated', n);
+                    close = close_fn;
+                    if ((n === 0) && deployed)
+                    {
+                        done(close);
+                    }
+                }, multiprocess ? cb : undefined);
+
+                if (!multiprocess)
+                {
+                    cb();
+                }
+            }, do_deploy);
         }
         else
         {
             after_deploy = done;
+            do_deploy();
         }
-
-        uks.deploy(function (err)
-        {
-            if (err) { return cb(err); }
-
-            console.log('deploy:deployed');
-
-            if (one_for_each && multiprocess)
-            {
-                return close_update_stores(function (err)
-                {
-                    if (err) { return cb(err); }
-                    console.log('deploy:closed update stores');
-                    after_deploy();
-                });
-            }
-
-            after_deploy();
-        });
     }
 
     var cur_changes = [];
@@ -1185,8 +1200,8 @@ var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
 {
     nkeys.forEach(function (n)
     {
-        setup(m, n, 'couchdb');
-        setup(m, n, 'couchdb', 'https://localhost', 6984, true);
+        //setup(m, n, 'couchdb');
+        //setup(m, n, 'couchdb', 'https://localhost', 6984, true);
         setup(m, n, 'pouchdb');
     });
 });
