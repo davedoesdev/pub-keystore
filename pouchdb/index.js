@@ -67,7 +67,7 @@ function PubKeyStorePouchDB(config, db_name, db_path, deploy_path, deploy_file, 
                     }
                 }
 
-                ths.emit('change', change.id, rev, change.deleted);
+                ths.emit('change', change.id, rev, !!change.deleted);
             });
 
             ths._feed.on('error', function (err)

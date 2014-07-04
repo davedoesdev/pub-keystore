@@ -93,7 +93,7 @@ function PubKeyStoreCouchDB(config, cb)
             }
         }
 
-        ths.emit('change', change.id, rev, change.deleted);
+        ths.emit('change', change.id, rev, !!change.deleted);
     });
 
     this._feed.on('query', function (req)
