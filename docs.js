@@ -105,7 +105,7 @@ Opens a public keystore.
 
 - `{Boolean} [db_for_update]` (`db_type='pouchdb'`) PouchDB can only write to a database from one process at a time. If you want to run multiple processes against the same keystore, `pub-keystore` can work around this by writing to a master database and then replicating it to multiple reader databases (one for each process). When you're updating keys, pass `db_for_update=true` to write to the master database. Make sure you [`deploy`](#pubkeystoreprototypedeploycb) and close the master database after updating it so that your reader processes can open it for replication. Defaults to `false`.
 
-- `{String} [deploy_name]` (`db_type='pouchdb'`) Name of the replica database to use for this process (when `db_for_update=false`). Make sure you specify a differrent `deploy_name` for each process running against the same keystore. Defaults to `default`.
+- `{String} [deploy_name]` (`db_type='pouchdb'`) Name of the replica database to use for this process (when `db_for_update=false`). Make sure you specify a different `deploy_name` for each process running against the same keystore. Defaults to `default`.
 
 - `{String} [db_dir]` (`db_type='pouchdb'`) Where to write the PouchDB database files. Defaults to a directory named `pouchdb/store/<db_name>` in the `pub_keystore` module directory.
 
