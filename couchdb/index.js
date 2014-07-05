@@ -59,7 +59,12 @@ function PubKeyStoreCouchDB(config, cb)
 
     if (config.no_changes)
     {
-        return cb(null, this);
+        return this._db.exists(function (err, exists)
+        {
+            if (err) { return cb(err, ths); }
+            if (!exists) { return cb(new Error('not_found'), ths); }
+            cb(null, ths);
+        });
     }
     
     this._feed = this._db.changes(

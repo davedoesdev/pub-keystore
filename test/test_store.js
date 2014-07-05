@@ -1204,6 +1204,21 @@ describe('index', function ()
             cb();
         });
     });
+
+    it("should callback with error if database doesn't exist and can't create", function (cb)
+    {
+        keystore(
+        {
+            db_type: 'couchdb',
+            db_name: 'foobar',
+            db_for_update: true,
+            no_changes: true
+        }, function (err)
+        {
+            expr(expect(err).to.exist);
+            cb();
+        });
+    });
 });
 
 var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
