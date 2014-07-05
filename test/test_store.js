@@ -1200,7 +1200,7 @@ describe('index', function ()
     {
         keystore({ db_type: 'foobar' }, function (err)
         {
-            expect(err).to.exist;
+            expr(expect(err).to.exist);
             cb();
         });
     });
