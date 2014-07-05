@@ -1194,6 +1194,18 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
     });
 }
 
+describe('index', function ()
+{
+    it('should callback with error when unknown db_type is passed', function (cb)
+    {
+        keystore({ db_type: 'foobar' }, function (err)
+        {
+            expect(err).to.exist;
+            cb();
+        });
+    });
+});
+
 var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
 
 [false, true].forEach(function (m)

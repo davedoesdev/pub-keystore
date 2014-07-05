@@ -92,6 +92,7 @@ before(function (cb)
 
     global.couchdb_process = child_process.spawn(
             path.join(__dirname, '..', 'couchdb', 'run_couchdb.sh'),
+            [],
             { stdio: 'inherit' });
 
     function check()

@@ -5,7 +5,18 @@ var path = require('path');
 
 module.exports = function (config, cb)
 {
-    require(path.join(__dirname, config.db_type))(config, function (err, ks)
+    var f;
+    
+    try
+    {
+        f = require(path.join(__dirname, config.db_type));
+    }
+    catch (ex)
+    {
+        return cb(ex);
+    }
+    
+    f(config, function (err, ks)
     {
         if (ks)
         {
