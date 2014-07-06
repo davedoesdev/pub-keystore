@@ -1240,7 +1240,7 @@ describe('close', function ()
             ks.close(function (err)
             {
                 if (err) { return cb(err); }
-                ks.get_pub_key_by_issuer_id('foo', function (err, v)
+                ks.get_pub_key_by_issuer_id('foo', function (err)
                 {
                     expr(expect(err).to.exist);
                     expect(err.message).to.equal('not_open');
