@@ -31,7 +31,8 @@ global.couchdb_admin_password = 'admin';
 
 var couchdb_store_dir = path.join(__dirname, '..', 'couchdb', 'store');
 global.couchdb_store_paths = {
-    'pub-keys': path.join(couchdb_store_dir, 'pub-keys.couch')
+    'pub-keys': path.join(couchdb_store_dir, 'pub-keys.couch'),
+    'foobar': path.join(couchdb_store_dir, 'foobar.couch')
 };
 couchdb_store_paths[db_name] = path.join(couchdb_store_dir, db_name + '.couch');
 
@@ -67,6 +68,11 @@ before(function (cb)
 {
     rimraf(path.join(__dirname, '..', 'pouchdb', 'store', db_name), cb);
 });
+before(function (cb)
+{
+    rimraf(path.join(__dirname, '..', 'pouchdb', 'store', 'foobar'), cb);
+});
+
 
 // keystore.destroy is tested as part of the main test run
 before(function (cb)

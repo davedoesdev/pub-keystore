@@ -306,6 +306,7 @@ PubKeyStoreCouchDB.prototype._close_conn = function (cb)
 
     this._conn.close();
     this._conn = null;
+    this._db = null;
 
     cb();
 };
@@ -369,10 +370,7 @@ PubKeyStoreCouchDB.prototype.destroy = function (cb)
 
     this._stop(function ()
     {
-        if (!ths._db)
-        {
-            return ths._close_conn(cb);
-        }
+        if (!ths._db) { return cb(new Error('not_open')); }
 
         ths._db.destroy(function (err)
         {
@@ -383,7 +381,6 @@ PubKeyStoreCouchDB.prototype.destroy = function (cb)
             {
                 return cb(err);
             }
-            ths._db = null;
             ths._close_conn(cb);
         });
     });

@@ -1221,6 +1221,37 @@ describe('index', function ()
     });
 });
 
+describe('close', function ()
+{
+['pouchdb', 'couchdb'].forEach(function (db_type)
+{
+    it('should not perform operations after close', function (cb)
+    {
+        keystore(
+        {
+            db_type: db_type,
+            db_name: 'foobar',
+            no_changes: true,
+            username: couchdb_admin_username,
+            password: couchdb_admin_password
+        }, function (err, ks)
+        {
+            if (err) { return cb(err); }
+            ks.close(function (err)
+            {
+                if (err) { return cb(err); }
+                ks.get_pub_key_by_issuer_id('foo', function (err, v)
+                {
+                    expr(expect(err).to.exist);
+                    expect(err.message).to.equal('not_open');
+                    cb();
+                });
+            });
+        });
+    });
+});
+});
+
 var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
 
 [false, true].forEach(function (m)
