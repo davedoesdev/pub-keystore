@@ -316,6 +316,8 @@ PubKeyStorePouchDB.prototype.get_uris = function (cb)
 
 PubKeyStorePouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
 {
+    cb = cb || function () { return undefined; };
+
     if (!this._db) { return cb(new Error('not_open')); }
 
     var ths = this,
@@ -368,6 +370,8 @@ PubKeyStorePouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
 
 PubKeyStorePouchDB.prototype.remove_pub_key = function (uri, cb)
 {
+    cb = cb || function () { return undefined; };
+
     if (!this._db) { return cb(new Error('not_open')); }
 
     var ths = this;
@@ -437,6 +441,8 @@ PubKeyStorePouchDB.prototype.close = function (cb)
 
 PubKeyStorePouchDB.prototype.create = function (cb)
 {
+    cb = cb || function () { return undefined; };
+
     if (!this._db) { return cb(new Error('not_open')); }
 
     var by_issuer_id = {

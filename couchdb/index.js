@@ -213,6 +213,8 @@ PubKeyStoreCouchDB.prototype.get_pub_key_by_uri = function (uri, cb)
 
 PubKeyStoreCouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
 {
+    cb = cb || function () { return undefined; };
+
     if (!this._db) { return cb(new Error('not_open')); }
 
     var ths = this,
@@ -265,6 +267,8 @@ PubKeyStoreCouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
 
 PubKeyStoreCouchDB.prototype.remove_pub_key = function (uri, cb)
 {
+    cb = cb || function () { return undefined; };
+
     if (!this._db) { return cb(new Error('not_open')); }
 
     var ths = this;
@@ -325,6 +329,8 @@ PubKeyStoreCouchDB.prototype.close = function (cb)
 
 PubKeyStoreCouchDB.prototype.create = function (cb)
 {
+    cb = cb || function () { return undefined; };
+
     if (!this._db) { return cb(new Error('not_open')); }
 
     var ths = this;
@@ -403,7 +409,7 @@ PubKeyStoreCouchDB.prototype.replicate = function (opts, cb)
         cb();
     });
 
-    cb();
+    if (cb) { cb(); }
 };
 
 module.exports = function (config, cb)

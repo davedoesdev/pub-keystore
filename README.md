@@ -179,7 +179,7 @@ _Source: [docs.js](/docs.js)_
 
 <a name="pubkeystore"></a>
 
-## PubKeyStore.prototype.add_pub_key(uri, pub_key, cb)
+## PubKeyStore.prototype.add_pub_key(uri, pub_key, [cb])
 
 > Add a public key to the keystore.
 
@@ -193,7 +193,7 @@ _Source: [docs.js](/docs.js)_
 
 
 
-- `{Function} cb` Function to call once the key has been added. It will receive the following arguments:
+- `{Function} [cb]` Function to call once the key has been added. It will receive the following arguments:
 
 
   - `{Object} err` If an error occurred then details of the error, otherwise `null`.
@@ -204,7 +204,7 @@ _Source: [docs.js](/docs.js)_
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
-## PubKeyStore.prototype.remove_pub_key(uri, cb)
+## PubKeyStore.prototype.remove_pub_key(uri, [cb])
 
 > Remove a public key from the keystore.
 
@@ -214,7 +214,7 @@ _Source: [docs.js](/docs.js)_
 
 
 
-- `{Function} cb` Function to call once the key has been removed. It will receive the following argument:
+- `{Function} [cb]` Function to call once the key has been removed. It will receive the following argument:
 
 
   - `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
@@ -316,7 +316,7 @@ _Source: [docs.js](/docs.js)_
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
-## PubKeyStore.prototype.create(cb)
+## PubKeyStore.prototype.create([cb])
 
 > Create the store's backing database.
 
@@ -324,7 +324,7 @@ Unless you pass `db_already_created=true` when [opening the keystore](#moduleexp
 
 **Parameters:**
 
-- `{Function} cb` Function to call once the database has been created. It will receive the following arguments:
+- `{Function} [cb]` Function to call once the database has been created. It will receive the following arguments:
 
 
   - `{Object} err` If an error occurred then details of the error, otherwise `null`.

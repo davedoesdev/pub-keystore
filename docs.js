@@ -142,7 +142,7 @@ Add a public key to the keystore.
 
 @param {String} pub_key The public key itself. This can be in any format (e.g. [PEM](http://www.faqs.org/qa/qa-14736.html)).
 
-@param {Function} cb Function to call once the key has been added. It will receive the following arguments:
+@param {Function} [cb] Function to call once the key has been added. It will receive the following arguments:
 
 - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
@@ -157,7 +157,7 @@ Remove a public key from the keystore.
 
 @param {String} uri The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb).
 
-@param {Function} cb Function to call once the key has been removed. It will receive the following argument:
+@param {Function} [cb] Function to call once the key has been removed. It will receive the following argument:
 
 - `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
 */
@@ -237,7 +237,7 @@ Create the store's backing database.
 
 Unless you pass `db_already_created=true` when [opening the keystore](#moduleexportsconfig-cb), this method is automatically called for you when the store is opened. It is an idempotent operation so it doesn't matter if you call it twice.
 
-@param {Function} cb Function to call once the database has been created. It will receive the following arguments:
+@param {Function} [cb] Function to call once the database has been created. It will receive the following arguments:
 
 - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 */
