@@ -292,7 +292,7 @@ PubKeyStoreCouchDB.prototype._stop = function (cb)
     if (this._query && this._query.abort)
     {
         this._query.abort();
-        if (!this._query.req.socket)
+        if (this._query.req && !this._query.req.socket)
         {
             this._query.req.socket = { emit: function () { return undefined; } };
         }
