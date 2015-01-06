@@ -8,19 +8,18 @@ var events = require('events'),
     design = require('./design');
 
 // https://github.com/flatiron/cradle/pull/246
-cradle.Connection.prototype.close = function ()
-{
-    var addr;
+cradle.Connection.prototype.close = function () {
+    var agentSockets = this.agent.sockets,
+        sockets = agentSockets.forEach ? agentSockets :
+            Object.keys(agentSockets).map(function (addr) {
+                return agentSockets[addr];
+            }).reduce(function (x, y) {
+                return x.concat(y);
+            }, []);
 
-    function end(socket)
-    {
+    sockets.forEach(function (socket) {
         socket.end();
-    }
-
-    for (addr in this.agent.sockets)
-    {
-        this.agent.sockets[addr].forEach(end);
-    }    
+    });
 };
 
 function PubKeyStoreCouchDB(config, cb)
