@@ -1,7 +1,7 @@
 {
   "name": "pub-keystore",
   "description": "Simple store for public keys, with issuer IDs and change notification",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "homepage": "https://github.com/davedoesdev/pub-keystore",
   "author": {
     "name": "David Halls",

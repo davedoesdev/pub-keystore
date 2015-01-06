@@ -105,7 +105,7 @@ Opens a public keystore.
 
 - `{Boolean} [db_for_update]` (`db_type='pouchdb'`) PouchDB can only write to a database from one process at a time. If you want to run multiple processes against the same keystore, `pub-keystore` can work around this by writing to a master database and then replicating it to multiple reader databases (one for each process). When you're updating keys, pass `db_for_update=true` to write to the master database. Make sure you [`deploy`](#pubkeystoreprototypedeploycb) and close the master database after updating it so that your reader processes can open it for replication. Defaults to `false`.
 
-- `{String} [deploy_name]` (`db_type='pouchdb'`) Name of the replica database to use for this process (when `db_for_update=false`). Make sure you specify a different `deploy_name` for each process running against the same keystore. Defaults to `default`.
+- `{String} [deploy_name]` (`db_type='pouchdb'`) Name of the replica database to use for the current process (when `db_for_update=false`). Make sure you specify a different `deploy_name` for each process running against the same keystore. Defaults to `default`.
 
 - `{String} [db_dir]` (`db_type='pouchdb'`) Where to write the PouchDB database files. Defaults to a directory named `pouchdb/store/<db_name>` in the `pub_keystore` module directory.
 
@@ -123,7 +123,7 @@ Opens a public keystore.
 
 - `{String} [ca]` (`db_type='couchdb'`) When connecting using HTTPS, an authority certificate or array of authority certificates to check the remote host against. Defaults to `undefined` (no checking will be performed).
 
-- `{String} [username]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the name of the user here. Defaults to `undefined` (anonymous access).
+- `{String} [username]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the name of the user here. Defaults to `undefined` (anonymous access). Note that users updating the CouchDB database must have the `_db_name_-updater` role where `_db_name_` is the name of the database (see above, the default role required is `pub-keys-updater`).
 
 - `{String} [password]` (`db_type='couchdb'`) If you need to authenticate to your CouchDb server (e.g. to gain database update rights) then specify the user's password here. Defaults to `undefined` (anonymous access).
 
