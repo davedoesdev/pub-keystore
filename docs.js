@@ -123,7 +123,7 @@ Opens a public keystore.
 
 - `{String} [ca]` (`db_type='couchdb'`) When connecting using HTTPS, an authority certificate or array of authority certificates to check the remote host against. Defaults to `undefined` (no checking will be performed).
 
-- `{String} [username]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the name of the user here. Defaults to `undefined` (anonymous access). Note that users updating the CouchDB database must have the <code><em<db_name</em>_-updater</code> role, where _`db_name`_ is the name of the database (see above, the default role required is `pub-keys-updater`).
+- `{String} [username]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the name of the user here. Defaults to `undefined` (anonymous access). Note that users updating the CouchDB database must have the <code><em><db_name</em>_-updater</code> role, where _`db_name`_ is the name of the database (see above, the default role required is `pub-keys-updater`).
 
 - `{String} [password]` (`db_type='couchdb'`) If you need to authenticate to your CouchDb server (e.g. to gain database update rights) then specify the user's password here. Defaults to `undefined` (anonymous access).
 
