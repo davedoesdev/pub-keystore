@@ -161,7 +161,7 @@ _Source: [docs.js](/docs.js)_
 
   - `{String} [ca]` (`db_type='couchdb'`) When connecting using HTTPS, an authority certificate or array of authority certificates to check the remote host against. Defaults to `undefined` (no checking will be performed).
 
-  - `{String} [username]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the name of the user here. Defaults to `undefined` (anonymous access). Note that users updating the CouchDB database must have the &lt;em&gt;&lt;code&gt;db_name&lt;/code&gt;&lt;/em&gt;&lt;code&gt;-updater&lt;/code&gt; role, where _`db_name`_ is the name of the database (see above, the default role required is `pub-keys-updater`).
+  - `{String} [username]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the name of the user here. Defaults to `undefined` (anonymous access). Note that users updating the CouchDB database must have the `db_name-updater` role, where `db_name` is the name of the database (see above, the default role required is `pub-keys-updater`).
 
   - `{String} [password]` (`db_type='couchdb'`) If you need to authenticate to your CouchDb server (e.g. to gain database update rights) then specify the user's password here. Defaults to `undefined` (anonymous access).
 
