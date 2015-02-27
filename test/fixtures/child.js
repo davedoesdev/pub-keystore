@@ -35,7 +35,10 @@ keystore(config, function (err, ks)
         /*jslint forin: true */
         for (f in proto)
         {
-            ks[f] = ks[f].bind(ks);
+            if (typeof ks[f] === 'function')
+            {
+                ks[f] = ks[f].bind(ks);
+            }
         }
         /*jslint forin: false */
 

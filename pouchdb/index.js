@@ -505,10 +505,12 @@ module.exports = function (config, cb)
     {
         if (err && (err.code !== 'EEXIST')) { return cb(err); }
 
-        // create file if it doesn't exist but don't touch it and cause
-        // readers immediately to replicate
+        // create file if it doesn't exist but don't touch it because that
+        // would cause readers immediately to replicate
         fs.writeFile(deploy_file, '',
-                     { flag: constants.O_CREAT | constants.O_EXCL },
+                     { flag: constants.O_CREAT |
+                             constants.O_EXCL |
+                             constants.O_WRONLY },
         function (err)
         {
             if (err && (err.code !== 'EEXIST')) { return cb(err); }
