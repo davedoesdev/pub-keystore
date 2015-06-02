@@ -1,7 +1,7 @@
 {
   "name": "pub-keystore",
   "description": "Simple store for public keys, with issuer IDs and change notification",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "homepage": "https://github.com/davedoesdev/pub-keystore",
   "author": {
     "name": "David Halls",
@@ -15,12 +15,7 @@
   "bugs": {
     "url": "https://github.com/davedoesdev/pub-keystore/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/davedoesdev/pub-keystore/blob/master/LICENCE"
-    }
-  ],
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "test": "grunt lint test",
@@ -39,25 +34,25 @@
   },
   "dependencies": {
     "cradle": "~0.6.9",
-    "pouchdb": "~3.3.1",
-    "yargs": "~3.3.1",
-    "async": "~0.9.0",
+    "pouchdb": "~3.6.0",
+    "yargs": "~3.10.0",
+    "async": "~1.1.0",
     "touch": "~0.0.3",
     "prompt": "~0.2.14"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-cli": "~0.1.13",
-    "grunt-jslint": "~1.1.12",
+    "grunt-jslint": "~1.1.14",
     "grunt-cafe-mocha": "~0.1.13",
-    "grunt-apidox": "~0.1.4",
-    "chai": "~2.1.0",
-    "istanbul": "~0.3.6",
+    "grunt-apidox": "~0.1.7",
+    "chai": "~2.3.0",
+    "istanbul": "~0.3.14",
     "grunt-exec": "~0.4.6",
     "coveralls": "~2.11.2",
-    "rimraf": "~2.2.8",
+    "rimraf": "~2.3.4",
     "lsof": "~0.1.0",
-    "ursa": "~0.8.3",
-    "dnode": "~1.2.0"
+    "ursa": "~0.8.5",
+    "dnode": "~1.2.1"
   }
 }
