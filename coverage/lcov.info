@@ -605,7 +605,7 @@ FNDA:37,(anonymous_4)
 FNDA:866,PubKeyStoreCouchDB
 FNDA:2850,(anonymous_6)
 FNDA:650,(anonymous_7)
-FNDA:676,(anonymous_8)
+FNDA:675,(anonymous_8)
 FNDA:216,(anonymous_9)
 FNDA:228,(anonymous_10)
 FNDA:216,(anonymous_11)
@@ -674,8 +674,8 @@ DA:64,650
 DA:65,612
 DA:69,216
 DA:75,216
-DA:77,676
-DA:79,48
+DA:77,675
+DA:79,47
 DA:82,628
 DA:84,628
 DA:87,628
@@ -835,7 +835,7 @@ BRDA:63,8,0,0
 BRDA:63,8,1,650
 BRDA:64,9,0,38
 BRDA:64,9,1,612
-BRDA:77,10,0,48
+BRDA:77,10,0,47
 BRDA:77,10,1,628
 BRDA:82,11,0,628
 BRDA:82,11,1,0

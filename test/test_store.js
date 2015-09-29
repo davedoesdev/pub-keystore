@@ -77,8 +77,7 @@ function mp_keystore(config, cb)
         {
             if (!msg.has_ks) { return cb(msg.err); }
 
-            // weak leaks! https://github.com/substack/dnode/issues/150
-            client = dnode(null, { weak: false }).connect(port);
+            client = dnode.connect(port);
 
             client.on('remote', function (remote)
             {

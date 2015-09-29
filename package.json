@@ -1,7 +1,7 @@
 {
   "name": "pub-keystore",
   "description": "Simple store for public keys, with issuer IDs and change notification",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "homepage": "https://github.com/davedoesdev/pub-keystore",
   "author": {
     "name": "David Halls",
@@ -53,6 +53,6 @@
     "rimraf": "~2.3.4",
     "lsof": "~0.1.0",
     "ursa": "~0.8.5",
-    "dnode": "~1.2.1"
+    "dnode": "~1.2.2"
   }
 }
