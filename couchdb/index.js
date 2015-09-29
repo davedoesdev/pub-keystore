@@ -29,7 +29,8 @@ function PubKeyStoreCouchDB(config, cb)
     var ths = this,
         auth,
         orig_request,
-        called_back = false;
+        called_back = false,
+        maxSockets = config.maxSockets || Infinity;
 
     if (config.username)
     {
@@ -39,7 +40,9 @@ function PubKeyStoreCouchDB(config, cb)
     this.db_host = config.db_host || 'http://localhost';
     this.db_port = config.db_port || 5984;
     this._conn = new (cradle.Connection)(this.db_host, this.db_port,
-                                         { cache: false, auth: auth });
+                                         { cache: false,
+                                           auth: auth,
+                                           maxSockets: maxSockets });
 
     orig_request = this._conn.request;
 

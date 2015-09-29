@@ -30,14 +30,14 @@
     "PouchDB"
   ],
   "engines": {
-    "node": ">= 0.10"
+    "node": ">= 0.12"
   },
   "dependencies": {
     "cradle": "~0.6.9",
-    "pouchdb": "~3.6.0",
-    "yargs": "~3.10.0",
-    "async": "~1.1.0",
-    "touch": "~0.0.3",
+    "pouchdb": "~4.0.3",
+    "yargs": "~3.26.0",
+    "async": "~1.4.2",
+    "touch": "~1.0.0",
     "prompt": "~0.2.14"
   },
   "devDependencies": {
@@ -46,11 +46,11 @@
     "grunt-jslint": "~1.1.14",
     "grunt-cafe-mocha": "~0.1.13",
     "grunt-apidox": "~0.1.7",
-    "chai": "~2.3.0",
-    "istanbul": "~0.3.14",
+    "chai": "~3.3.0",
+    "istanbul": "~0.3.21",
     "grunt-exec": "~0.4.6",
-    "coveralls": "~2.11.2",
-    "rimraf": "~2.3.4",
+    "coveralls": "~2.11.4",
+    "rimraf": "~2.4.3",
     "lsof": "~0.1.0",
     "ursa": "~0.8.5",
     "dnode": "~1.2.2"
