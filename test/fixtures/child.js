@@ -79,7 +79,10 @@ keystore(config, function (err, ks)
         };
 
         // Stop dnode trying to serialize TLS sessions
-        ks._conn.agent._sessionCache = { map: {}, list: [] };
+        if (ks._conn)
+        {
+            ks._conn.agent._sessionCache = { map: {}, list: [] };
+        }
 
         server = dnode(ks);
 
