@@ -1,4 +1,4 @@
-/*jslint node: true */
+/*jslint node: true, nomen: true */
 "use strict";
 
 var dnode = require('dnode'),
