@@ -1,7 +1,7 @@
 {
   "name": "pub-keystore",
   "description": "Simple store for public keys, with issuer IDs and change notification",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/davedoesdev/pub-keystore",
   "author": {
     "name": "David Halls",
@@ -33,26 +33,26 @@
     "node": ">= 0.12"
   },
   "dependencies": {
-    "cradle": "~0.6.9",
-    "pouchdb": "~4.0.3",
-    "yargs": "~3.26.0",
-    "async": "~1.4.2",
+    "cradle": "~0.7.1",
+    "pouchdb": "~5.4.5",
+    "yargs": "~4.7.1",
+    "async": "~1.5.2",
     "touch": "~1.0.0",
-    "prompt": "~0.2.14"
+    "prompt": "~1.0.0"
   },
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-cli": "~0.1.13",
-    "grunt-jslint": "~1.1.14",
-    "grunt-cafe-mocha": "~0.1.13",
-    "grunt-apidox": "~0.1.7",
-    "chai": "~3.3.0",
-    "istanbul": "~0.3.21",
-    "grunt-exec": "~0.4.6",
-    "coveralls": "~2.11.4",
-    "rimraf": "~2.4.3",
+    "grunt": "~1.0.1",
+    "grunt-contrib-jshint": "~1.0.0",
+    "grunt-mocha-test": "~0.12.7",
+    "grunt-apidox": "~0.1.9",
+    "grunt-bg-shell": "~2.3.3",
+    "mocha": "~2.4.5",
+    "chai": "~3.5.0",
+    "istanbul": "~0.4.3",
+    "coveralls": "~2.11.9",
+    "rimraf": "~2.5.3",
     "lsof": "~0.1.0",
-    "ursa": "~0.9.1",
+    "ursa": "~0.9.4",
     "dnode": "~1.2.2"
   }
 }

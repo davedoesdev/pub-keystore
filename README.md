@@ -166,9 +166,9 @@ _Source: [docs.js](/docs.js)_
 - `{Integer} [maxSockets]` (`db_type='couchdb'`) Maximum number of concurrent sockets that can be opened to the CouchDB server. Defaults to `Infinity`.
 
 - `{Function} cb` Function called with the result of opening the keystore. It will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`. Note that for PouchDB-backed stores, if the database is already open by another process for update or replication, you will receive an error. It's up to you to retry as appropriate for your application.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`. Note that for PouchDB-backed stores, if the database is already open by another process for update or replication, you will receive an error. It's up to you to retry as appropriate for your application.
 
-- `{PubKeyStore} ks` The [`PubKeyStore`](#pubkeystore) object. Note that in the case of an error occuring _after_ the store has been open but before a successful changes feed has been established, you may receive `err` _and_ `ks`.
+  - `{PubKeyStore} ks` The [`PubKeyStore`](#pubkeystore) object. Note that in the case of an error occuring _after_ the store has been open but before a successful changes feed has been established, you may receive `err` _and_ `ks`.
 
 <sub>Go: [TOC](#tableofcontents) | [module](#toc_module)</sub>
 
@@ -185,11 +185,11 @@ _Source: [docs.js](/docs.js)_
 - `{String} uri` A known, permanent identifier for the public key's owner. You can use anything but a [URI](http://en.wikipedia.org/wiki/Uniform_resource_identifier) seems ideal. For example if you know the owner's email address then you could you a `mailto` URI (e.g. `mailto:dave@davedoesdev.com`). 
 - `{String} pub_key` The public key itself. This can be in any format (e.g. [PEM](http://www.faqs.org/qa/qa-14736.html)). 
 - `{Function} [cb]` Function to call once the key has been added. It will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
-- `{String} issuer_id` A unique, random string which you can use as an alternative when retrieving the public key. This is useful if you want to give out an identifier for the key without revealing its owner. Note that every time you add a key, a new `issuer_id` will be generated. If a key already exists for the `uri` then it will be overwritten.
+  - `{String} issuer_id` A unique, random string which you can use as an alternative when retrieving the public key. This is useful if you want to give out an identifier for the key without revealing its owner. Note that every time you add a key, a new `issuer_id` will be generated. If a key already exists for the `uri` then it will be overwritten.
 
-- `{String} rev` A revision string for the key. Like the `issuer_id`, this will change every time a key is added. Unlike the `issuer_id`, it is sent with [`change`](#pubkeystoreeventschangeuri-rev-deleted) events so you if you're caching keys then you can tell whether the cached version is up-to-date.
+  - `{String} rev` A revision string for the key. Like the `issuer_id`, this will change every time a key is added. Unlike the `issuer_id`, it is sent with [`change`](#pubkeystoreeventschangeuri-rev-deleted) events so you if you're caching keys then you can tell whether the cached version is up-to-date.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -201,7 +201,7 @@ _Source: [docs.js](/docs.js)_
 
 - `{String} uri` The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb). 
 - `{Function} [cb]` Function to call once the key has been removed. It will receive the following argument: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -213,13 +213,13 @@ _Source: [docs.js](/docs.js)_
 
 - `{String} uri` The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb). 
 - `{Function} cb` Function to call with the result. It will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
 
-- `{String} pub_key` The public key for the `uri`, or `null` if it wasn't found.
+  - `{String} pub_key` The public key for the `uri`, or `null` if it wasn't found.
 
-- `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idissuer_id-cb).
+  - `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idissuer_id-cb).
 
-- `{String} rev` The current revision string for the public key.
+  - `{String} rev` The current revision string for the public key.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -231,13 +231,13 @@ _Source: [docs.js](/docs.js)_
 
 - `{String} issuer_id` The unique identifier for the key. 
 - `{Function} cb` Function to call with the result. It will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
 
-- `{String} pub_key` The public key for the `issuer_id`, or `null` if it wasn't found.
+  - `{String} pub_key` The public key for the `issuer_id`, or `null` if it wasn't found.
 
-- `{String} uri` The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb).
+  - `{String} uri` The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb).
 
-- `{String} rev` The current revision string for the public key.
+  - `{String} rev` The current revision string for the public key.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -249,11 +249,11 @@ _Source: [docs.js](/docs.js)_
 
 - `{String} uri` The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb). 
 - `{Function} cb` Function to call with the result. It will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
 
-- `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idissuer_id-cb), or `null` if it wasn't found.
+  - `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idissuer_id-cb), or `null` if it wasn't found.
 
-- `{String} rev` The current revision string for the public key.
+  - `{String} rev` The current revision string for the public key.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -264,9 +264,9 @@ _Source: [docs.js](/docs.js)_
 **Parameters:**
 
 - `{Function} cb` Function to call with the result. It will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
-- `{Array} uris` URIs of all the public keys in the store.
+  - `{Array} uris` URIs of all the public keys in the store.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -277,7 +277,7 @@ _Source: [docs.js](/docs.js)_
 **Parameters:**
 
 - `{Function} [cb]` Function to call once the database has been closed. It will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -290,7 +290,7 @@ Unless you pass `db_already_created=true` when [opening the keystore](#moduleexp
 **Parameters:**
 
 - `{Function} [cb]` Function to call once the database has been created. It will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -301,7 +301,7 @@ Unless you pass `db_already_created=true` when [opening the keystore](#moduleexp
 **Parameters:**
 
 - `{Function} [cb]` Function to call once the database has been destoyed. It will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -314,7 +314,7 @@ For a CouchDB-backed keystore, this is a no-op.
 **Parameters:**
 
 - `{Function} [cb]` Function to call once the shared file has been `touch`ed. Note this will be before reader processes finish replicating. It will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -327,10 +327,10 @@ For a CouchDB-backed keystore, this is a no-op.
 **Parameters:**
 
 - `{Object} opts` Replication options. Valid properties: 
-- `{Boolean} no_retry` If replication fails (typically because the master database is open in another process also trying to replicate) then it is automatically retried after a random delay of between 1 and 2 seconds. Set `no_retry` to `true` to disable this behaviour. Defaults to `false`.
+  - `{Boolean} no_retry` If replication fails (typically because the master database is open in another process also trying to replicate) then it is automatically retried after a random delay of between 1 and 2 seconds. Set `no_retry` to `true` to disable this behaviour. Defaults to `false`.
 
 - `{Functon} [cb]` Function to call once replication has completed successfully (or failed if you set `opts.no_retry=true` and an error occurred). Alternatively you can listen for the [`replicated`](#pubkeystoreeventsreplicatedclose_master) event which is emitted on successful replication (for consistency, CouchDB-backed stores will raise this too, after the no-op). `cb` will receive the following arguments: 
-- `{Object} err` If an error occurred then details of the error, otherwise `null`.
+  - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
 
@@ -371,7 +371,7 @@ Emitted when a successful replication from the master database completes (PouchD
 **Parameters:**
 
 - `{Function} close_master` Function you can call to close the master database if you set `config.keep_master_open=true` when [opening the keystore](#moduleexportsconfig-cb). This lets you control when to close the master database yourself. If you didn't set `config.keep_master_open=true` then `close_master` is a no-op. `close_master` takes the following parameters: 
-- `{Function} cb(err)` This will be called after the master database is closed (or after the no-op).
+  - `{Function} cb(err)` This will be called after the master database is closed (or after the no-op).
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.events](#toc_pubkeystoreevents)</sub>
 

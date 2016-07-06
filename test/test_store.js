@@ -77,7 +77,8 @@ function mp_keystore(config, cb)
         {
             if (!msg.has_ks) { return cb(msg.err); }
 
-            client = dnode.connect(port);
+            //client = dnode.connect(port);
+            client = dnode(null, { weak: false }).connect(port);
 
             client.on('remote', function (remote)
             {

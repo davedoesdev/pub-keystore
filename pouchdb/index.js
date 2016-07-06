@@ -177,57 +177,50 @@ PubKeyStorePouchDB.prototype.replicate = function (opts, cb)
 
 PubKeyStorePouchDB.prototype._replicate = function (opts, cb)
 {
-    var ths = this;
+    var ths = this,
+        from_db = new PouchDB(this._from_db_path);
 
-    return new PouchDB(this._from_db_path, function (err, from_db)
+    function done(err)
     {
         if (err)
         {
             return ths._replicate_try_again(err, opts, cb);
         }
 
-        function done(err)
+        if (!ths._config.silent)
         {
-            if (err)
+            console.log('replicated from', ths._from_db_path);
+        }
+
+        ths.emit('replicated', function (cb)
+        {
+            if (ths._config.keep_master_open)
             {
-                return ths._replicate_try_again(err, opts, cb);
+                return from_db.close(cb);
             }
-
-            if (!ths._config.silent)
-            {
-                console.log('replicated from', ths._from_db_path);
-            }
-
-            ths.emit('replicated', function (cb)
-            {
-                if (ths._config.keep_master_open)
-                {
-                    return from_db.close(cb);
-                }
-
-                cb();
-            });
 
             cb();
-        }
+        });
 
-        function done2(err)
+        cb();
+    }
+
+    function done2(err)
+    {
+        if (!ths._config.keep_master_open)
         {
-            if (!ths._config.keep_master_open)
+            return from_db.close(function (err2)
             {
-                return from_db.close(function (err2)
-                {
-                    done(err || err2);
-                });
-            }
-
-            done(err);
+                done(err || err2);
+            });
         }
 
-        ths._db.replicate.from(from_db)
-            .on('error', done2)
-            .on('complete', function () { done2(); });
-    });
+        done(err);
+    }
+
+    ths._db.replicate.from(from_db)
+        .on('error', done2)
+        .on('complete', function () { done2(); });
 };
 
 PubKeyStorePouchDB.prototype._replicate_try_again = function (err, opts, cb)
@@ -515,12 +508,11 @@ module.exports = function (config, cb)
         {
             if (err && (err.code !== 'EEXIST')) { return cb(err); }
 
-            return new PouchDB(deploy_path,
-            function (err, db)
-            {
-                if (err) { return cb(err); }
-                return new PubKeyStorePouchDB(config, db_name, db_path, deploy_path, deploy_file, db, cb);
-            });
+            new PubKeyStorePouchDB(config,
+                                   db_name, db_path,
+                                   deploy_path, deploy_file,
+                                   new PouchDB(deploy_path),
+                                   cb);
         });
     });
 };
