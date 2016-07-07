@@ -35,7 +35,7 @@ module.exports = function (grunt)
         bgShell: {
             cover: {
                 cmd: './node_modules/.bin/istanbul cover -x couchdb/design.js -x pouchdb/design.js ./node_modules/.bin/grunt -- test --cover',
-                execopts: {
+                execOpts: {
                     maxBuffer: 0
                 }
             },
