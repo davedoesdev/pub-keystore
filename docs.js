@@ -93,41 +93,41 @@ Opens a public keystore.
 
 @param {Object} config Configures the keystore. Valid properties:
 
-- `{String} db_type` The type of database to use for backing the store. You must supply either `pouchdb` or `couchdb`.
+  - `{String} db_type` The type of database to use for backing the store. You must supply either `pouchdb` or `couchdb`.
 
-- `{String} [db_name]` Name of database to use for storing keys. Defaults to `pub-keys`.
+  - `{String} [db_name]` Name of database to use for storing keys. Defaults to `pub-keys`.
 
-- `{Boolean} [db_already_created]` If falsey then the database will be created. This is an idempotent operation so it doesn't matter if the database has already been created. However, if you know the database already exists then you can pass `true`. Defaults to `false`. If the database doesn't exist and you don't have permission to create it then `cb` will receive an error.
+  - `{Boolean} [db_already_created]` If falsey then the database will be created. This is an idempotent operation so it doesn't matter if the database has already been created. However, if you know the database already exists then you can pass `true`. Defaults to `false`. If the database doesn't exist and you don't have permission to create it then `cb` will receive an error.
 
-- `{Boolean} [no_changes]` Don't emit `change` events when a key is changed. Defaults to `false` (i.e. do emit `change` events).
+  - `{Boolean} [no_changes]` Don't emit `change` events when a key is changed. Defaults to `false` (i.e. do emit `change` events).
 
-- `{Boolean} [silent]` Don't write key changes, warnings and errors to `console`. Defaults to `false`.
+  - `{Boolean} [silent]` Don't write key changes, warnings and errors to `console`. Defaults to `false`.
 
-- `{Boolean} [db_for_update]` (`db_type='pouchdb'`) PouchDB can only write to a database from one process at a time. If you want to run multiple processes against the same keystore, `pub-keystore` can work around this by writing to a master database and then replicating it to multiple reader databases (one for each process). When you're updating keys, pass `db_for_update=true` to write to the master database. Make sure you [`deploy`](#pubkeystoreprototypedeploycb) and close the master database after updating it so that your reader processes can open it for replication. Defaults to `false`.
+  - `{Boolean} [db_for_update]` (`db_type='pouchdb'`) PouchDB can only write to a database from one process at a time. If you want to run multiple processes against the same keystore, `pub-keystore` can work around this by writing to a master database and then replicating it to multiple reader databases (one for each process). When you're updating keys, pass `db_for_update=true` to write to the master database. Make sure you [`deploy`](#pubkeystoreprototypedeploycb) and close the master database after updating it so that your reader processes can open it for replication. Defaults to `false`.
 
-- `{String} [deploy_name]` (`db_type='pouchdb'`) Name of the replica database to use for the current process (when `db_for_update=false`). Make sure you specify a different `deploy_name` for each process running against the same keystore. Defaults to `default`.
+  - `{String} [deploy_name]` (`db_type='pouchdb'`) Name of the replica database to use for the current process (when `db_for_update=false`). Make sure you specify a different `deploy_name` for each process running against the same keystore. Defaults to `default`.
 
-- `{String} [db_dir]` (`db_type='pouchdb'`) Where to write the PouchDB database files. Defaults to a directory named `pouchdb/store/<db_name>` in the `pub_keystore` module directory.
+  - `{String} [db_dir]` (`db_type='pouchdb'`) Where to write the PouchDB database files. Defaults to a directory named `pouchdb/store/<db_name>` in the `pub_keystore` module directory.
 
-- `{Boolean} [no_initial_replicate]` (`db_type='pouchdb'`) Whether to skip initial replication from the master database. Defaults to `false`. Note that replication will still occur whenever the master database is updated and [`deploy`](#pubkeystoreprototypedeploycb)ed.
+  - `{Boolean} [no_initial_replicate]` (`db_type='pouchdb'`) Whether to skip initial replication from the master database. Defaults to `false`. Note that replication will still occur whenever the master database is updated and [`deploy`](#pubkeystoreprototypedeploycb)ed.
 
-- `{Boolean} [keep_master_open]` (`db_type='pouchdb'`) Normally the master database is closed after replicating from it so that it can be updated or replicated from other processes. However, if you want to use master and replica databases from a single process then you'll need to specify `keep_master_open=true` to stop PouchDB getting confused. Defaults to `false`. Normally if only a single process is accessing the keystore then you can just open one instance with `db_for_update=true`.
+  - `{Boolean} [keep_master_open]` (`db_type='pouchdb'`) Normally the master database is closed after replicating from it so that it can be updated or replicated from other processes. However, if you want to use master and replica databases from a single process then you'll need to specify `keep_master_open=true` to stop PouchDB getting confused. Defaults to `false`. Normally if only a single process is accessing the keystore then you can just open one instance with `db_for_update=true`.
 
-- `{Boolean} [persistent_watch]` (`db_type='pouchdb'`) Reader processes monitor a shared file to know when [`deploy`](#pubkeystoreprototypedeploycb) has been called on the master database, using [`fs.watch`](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener). By default, the watch isn't persistent so it won't keep your process open if nothing else is going on. Pass `persistent_watch=true` to make it persistent.
+  - `{Boolean} [persistent_watch]` (`db_type='pouchdb'`) Reader processes monitor a shared file to know when [`deploy`](#pubkeystoreprototypedeploycb) has been called on the master database, using [`fs.watch`](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener). By default, the watch isn't persistent so it won't keep your process open if nothing else is going on. Pass `persistent_watch=true` to make it persistent.
 
-- `{String} [replicate_signal]` (`db_type='pouchdb'`) Name of a Unix signal (e.g. `SIGUSR2`) which can be sent to a reader process to force a replication from the master database. Defaults to `undefined` (no signal will be listened to). Replication normally happens when [`deploy`](#pubkeystoreprototypedeploycb) is called from the writing process or [`replicate`](#pubkeystoreprototypereplicateopts-cb) is called from the reading process.
+  - `{String} [replicate_signal]` (`db_type='pouchdb'`) Name of a Unix signal (e.g. `SIGUSR2`) which can be sent to a reader process to force a replication from the master database. Defaults to `undefined` (no signal will be listened to). Replication normally happens when [`deploy`](#pubkeystoreprototypedeploycb) is called from the writing process or [`replicate`](#pubkeystoreprototypereplicateopts-cb) is called from the reading process.
 
-- `{String} [db_host]` (`db_type='couchdb'`) URL of the CouchDB server. Defaults to `http://localhost`.
+  - `{String} [db_host]` (`db_type='couchdb'`) URL of the CouchDB server. Defaults to `http://localhost`.
 
-- `{Integer} [db_port]` (`db_type='couchdb'`) Port number of the CouchDB server. Defaults to `5984`.
+  - `{Integer} [db_port]` (`db_type='couchdb'`) Port number of the CouchDB server. Defaults to `5984`.
 
-- `{String} [ca]` (`db_type='couchdb'`) When connecting using HTTPS, an authority certificate or array of authority certificates to check the remote host against. Defaults to `undefined` (no checking will be performed).
+  - `{String} [ca]` (`db_type='couchdb'`) When connecting using HTTPS, an authority certificate or array of authority certificates to check the remote host against. Defaults to `undefined` (no checking will be performed).
 
-- `{String} [username]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the name of the user here. Defaults to `undefined` (anonymous access). Note that users updating the CouchDB database must have the `db_name-updater` role, where `db_name` is the name of the database (see above, the default role required is `pub-keys-updater`).
+  - `{String} [username]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the name of the user here. Defaults to `undefined` (anonymous access). Note that users updating the CouchDB database must have the `db_name-updater` role, where `db_name` is the name of the database (see above, the default role required is `pub-keys-updater`).
 
-- `{String} [password]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the user's password here. Defaults to `undefined` (anonymous access).
+  - `{String} [password]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the user's password here. Defaults to `undefined` (anonymous access).
 
-- `{Integer} [maxSockets]` (`db_type='couchdb'`) Maximum number of concurrent sockets that can be opened to the CouchDB server. Defaults to `Infinity`.
+  - `{Integer} [maxSockets]` (`db_type='couchdb'`) Maximum number of concurrent sockets that can be opened to the CouchDB server. Defaults to `Infinity`.
 
 @param {Function} cb Function called with the result of opening the keystore. It will receive the following arguments:
 
