@@ -35,17 +35,20 @@ module.exports = function (grunt)
         bgShell: {
             cover: {
                 cmd: './node_modules/.bin/istanbul cover -x couchdb/design.js -x pouchdb/design.js ./node_modules/.bin/grunt -- test --cover',
+                fail: true,
                 execOpts: {
                     maxBuffer: 0
                 }
             },
 
             check_cover: {
-                cmd: './node_modules/.bin/istanbul check-coverage --statement 78 --branch 65 --function 80 --line 80'
+                cmd: './node_modules/.bin/istanbul check-coverage --statement 78 --branch 65 --function 80 --line 80',
+                fail: true
             },
 
             coveralls: {
-                cmd: 'cat coverage/lcov.info | coveralls'
+                cmd: 'cat coverage/lcov.info | coveralls',
+                fail: true
             }
         }
     });
