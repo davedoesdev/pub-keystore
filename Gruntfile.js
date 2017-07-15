@@ -34,15 +34,20 @@ module.exports = function (grunt)
 
         bgShell: {
             cover: {
-                cmd: './node_modules/.bin/istanbul cover -x couchdb/design.js -x pouchdb/design.js ./node_modules/.bin/grunt -- test --cover',
+                cmd: "./node_modules/.bin/nyc -x Gruntfile.js -x 'test/**' -x couchdb/design.js -x pouchdb/design.js ./node_modules/.bin/grunt test --cover",
                 fail: true,
                 execOpts: {
                     maxBuffer: 0
                 }
             },
 
-            check_cover: {
-                cmd: './node_modules/.bin/istanbul check-coverage --statement 78 --branch 65 --function 80 --line 80',
+            cover_report: {
+                cmd: './node_modules/.bin/nyc report -r lcov',
+                fail: true
+            },
+
+            cover_check: {
+                cmd: './node_modules/.bin/nyc check-coverage --statements 78 --branches 65 --functions 80 --lines 80',
                 fail: true
             },
 
@@ -61,7 +66,9 @@ module.exports = function (grunt)
     grunt.registerTask('lint', 'jshint');
     grunt.registerTask('test', 'mochaTest');
     grunt.registerTask('docs', 'apidox');
-    grunt.registerTask('coverage', ['bgShell:cover', 'bgShell:check_cover']);
+    grunt.registerTask('coverage', ['bgShell:cover',
+                                    'bgShell:cover_report',
+                                    'bgShell:cover_check']);
     grunt.registerTask('coveralls', 'bgShell:coveralls');
     grunt.registerTask('default', ['lint', 'test']);
 };

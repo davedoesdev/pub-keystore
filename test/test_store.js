@@ -1,5 +1,4 @@
-/*global ursa: false,
-         child_process: false,
+/*global child_process: false,
          path: false,
          dnode: false,
          async: false,
@@ -23,10 +22,12 @@
 "use strict";
 
 var argv = require('yargs').argv,
+    keypair = require('keypair'),
     num_keys = 10,
     uri = 'mailto:dave@davedoesdev.com',
     mp_port,
-    mp_port_start = 5000;
+    mp_port_start = 5000,
+    long_timeout = 10 * 60 * 1000;
 
 function reset_mp_port()
 {
@@ -35,7 +36,7 @@ function reset_mp_port()
 
 function make_key()
 {
-    return ursa.generatePrivateKey().toPublicPem('utf8');
+    return keypair().public;
     //return crypto.randomBytes(1024).toString('hex');
 }
 
@@ -729,7 +730,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
 
     it('should support adding multiple public keys', function (cb)
     {
-        this.timeout(60000);
+        this.timeout(long_timeout);
 
         async.times(num_keys, function (n, cb)
         {
@@ -793,7 +794,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
 
     it('should support updating multiple keys', function (cb)
     {
-        this.timeout(60000);
+        this.timeout(long_timeout);
 
         async.times(states.length, function (n, cb)
         {
@@ -836,7 +837,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
 
     it('should update multiple public keys concurrently', function (cb)
     {
-        this.timeout(60000);
+        this.timeout(long_timeout);
 
         async.each(states, function (state, cb)
         {
@@ -1095,7 +1096,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
 {
     describe('keystore ' + db_type + ' functionality (separate store for each test, without changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
     {
-        this.timeout(60000);
+        this.timeout(long_timeout);
 
         var states = make_states(),
             make_query_stores = make_stores_for_query(multiprocess, num, db_type, db_name, false, states),
@@ -1114,7 +1115,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
 
     describe('keystore ' + db_type + ' functionality (one store for all tests, without changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
     {
-        this.timeout(60000);
+        this.timeout(long_timeout);
 
         var states = make_states(),
             make_query_stores = make_stores_for_query(multiprocess, num, db_type, db_name, false, states),
@@ -1145,7 +1146,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
 
     describe('keystore ' + db_type + ' functionality (separate store for each test, with changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
     {
-        this.timeout(60000);
+        this.timeout(long_timeout);
 
         var states = make_states(),
             make_query_stores = make_stores_for_query(multiprocess, num, db_type, db_name, true, states),
@@ -1164,7 +1165,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
 
     describe('keystore ' + db_type + ' functionality (one store for all tests, with changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
     {
-        this.timeout(60000);
+        this.timeout(long_timeout);
 
         var states = make_states(),
             make_query_stores = make_stores_for_query(multiprocess, num, db_type, db_name, true, states),

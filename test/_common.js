@@ -20,7 +20,6 @@ global.crypto = require('crypto');
 global.rimraf = require('rimraf');
 global.child_process = require('child_process');
 global.expect = require('chai').expect;
-global.ursa = require('ursa');
 global.async = require('async');
 global.dnode = require('dnode');
 global.keystore = require('..');
