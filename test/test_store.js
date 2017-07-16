@@ -22,7 +22,6 @@
 "use strict";
 
 var argv = require('yargs').argv,
-    keypair = require('keypair'),
     num_keys = 10,
     uri = 'mailto:dave@davedoesdev.com',
     mp_port,
@@ -36,8 +35,9 @@ function reset_mp_port()
 
 function make_key()
 {
-    return keypair().public;
-    //return crypto.randomBytes(1024).toString('hex');
+    return '-----BEGIN RSA PUBLIC KEY-----\n' +
+           crypto.randomBytes(1024).toString('base64') + '\n' +
+           '-----END RSA PUBLIC KEY-----\n';
 }
 
 function expr(v) { return v; }
