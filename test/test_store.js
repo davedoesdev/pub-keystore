@@ -568,11 +568,36 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
         {
             async.each(states[0].stores_for_update, function (ks, cb)
             {
+                if (multiprocess)
+                {
+                    ks.save_db_nano();
+                }
+                else
+                {
+                    ks._db_save = ks._db;
+                    ks._nano_save = ks._nano;
+                }
                 ks.destroy(cb);
             }, function (err)
             {
                 if (err) { return cb(err); }
-                close_update_stores(cb);
+                async.each(states[0].stores_for_update, function (ks, cb)
+                {
+                    if (multiprocess)
+                    {
+                        ks.restore_db_nano();
+                    }
+                    else
+                    {
+                        ks._db = ks._db_save;
+                        ks._nano = ks._nano_save;
+                    }
+                    ks.destroy(cb);
+                }, function (err)
+                {
+                    if (err) { return cb(err); }
+                    close_update_stores(cb);
+                });
             });
         });
     }
@@ -1094,7 +1119,7 @@ function make_states()
 
 function setup(multiprocess, num, db_type, db_host, db_port, ssl)
 {
-    describe('keystore ' + db_type + ' functionality (separate store for each test, without changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
+    describe('keystore ' + db_type + ' functionality (separate store for each test, without changes, num=' + num + ', multiprocess=' + multiprocess + ', ssl=' + ssl + ')', function ()
     {
         this.timeout(long_timeout);
 
@@ -1113,7 +1138,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
         tests(states, multiprocess, true, false, make_query_stores, close_query_stores, close_update_stores);
     });
 
-    describe('keystore ' + db_type + ' functionality (one store for all tests, without changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
+    describe('keystore ' + db_type + ' functionality (one store for all tests, without changes, num=' + num + ' multiprocess=' + multiprocess + ', ssl=' + ssl + ')', function ()
     {
         this.timeout(long_timeout);
 
@@ -1144,7 +1169,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
         tests(states, multiprocess, multiprocess, false, make_query_stores, close_query_stores, close_update_stores);
     });
 
-    describe('keystore ' + db_type + ' functionality (separate store for each test, with changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
+    describe('keystore ' + db_type + ' functionality (separate store for each test, with changes, num=' + num + ' multiprocess=' + multiprocess + ', ssl=' + ssl + ')', function ()
     {
         this.timeout(long_timeout);
 
@@ -1163,7 +1188,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
         tests(states, multiprocess, true, true, make_query_stores, close_query_stores, close_update_stores);
     });
 
-    describe('keystore ' + db_type + ' functionality (one store for all tests, with changes, num=' + num + ' multiprocess=' + multiprocess + ')', function ()
+    describe('keystore ' + db_type + ' functionality (one store for all tests, with changes, num=' + num + ' multiprocess=' + multiprocess + ', ssl=' + ssl + ')', function ()
     {
         this.timeout(long_timeout);
 

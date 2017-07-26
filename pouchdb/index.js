@@ -297,7 +297,7 @@ PubKeyStorePouchDB.prototype.get_uris = function (cb)
         {
             key = res.rows[i].key;
 
-            if (key.indexOf('_design/') !== 0)
+            if (key.lastIndexOf('_design/', 0) !== 0)
             {
                 uris.push(key);
             }
@@ -422,7 +422,8 @@ PubKeyStorePouchDB.prototype.close = function (cb)
         {
             if (err &&
                 (err.error !== 'precondition_failed') &&
-                (err.name !== 'precondition_failed'))
+                (err.name !== 'precondition_failed') &&
+                (err.message !== 'database is destroyed'))
             {
                 return cb(err);
             }
@@ -468,7 +469,8 @@ PubKeyStorePouchDB.prototype.destroy = function (cb)
         {
             if (err &&
                 (err.error !== 'precondition_failed') &&
-                (err.name !== 'precondition_failed'))
+                (err.name !== 'precondition_failed') &&
+                (err.message !== 'database is destroyed'))
             {
                 return cb(err);
             }

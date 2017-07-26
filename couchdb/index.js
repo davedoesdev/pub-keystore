@@ -4,72 +4,55 @@
 var events = require('events'),
     util = require('util'),
     crypto = require('crypto'),
-    cradle = require('cradle'),
-    design = require('./design');
-
-// https://github.com/flatiron/cradle/pull/246
-cradle.Connection.prototype.close = function () {
-    var agentSockets = this.agent.sockets,
-        sockets = agentSockets.forEach ? agentSockets :
-            Object.keys(agentSockets).map(function (addr) {
-                return agentSockets[addr];
-            }).reduce(function (x, y) {
-                return x.concat(y);
-            }, []);
-
-    sockets.forEach(function (socket) {
-        socket.end();
-    });
-};
+    nano = require('nano'),
+    design = require('./design'),
+    status_not_found = 404,
+    status_conflict = 409,
+    status_db_exists = 412;
 
 function PubKeyStoreCouchDB(config, cb)
 {
     events.EventEmitter.call(this);
 
     var ths = this,
-        auth,
-        orig_request,
-        called_back = false,
-        maxSockets = config.maxSockets || Infinity;
-
-    if (config.username)
-    {
-        auth = { username: config.username, password: config.password };
-    }
+        called_back = false;
 
     this.db_host = config.db_host || 'http://localhost';
     this.db_port = config.db_port || 5984;
-    this._conn = new (cradle.Connection)(this.db_host, this.db_port,
-                                         { cache: false,
-                                           auth: auth,
-                                           maxSockets: maxSockets });
 
-    orig_request = this._conn.request;
-
-    if (config.ca)
+    this._nano = nano(
     {
-        this._conn.request = function (options, callback)
-        {
-            options.strictSSL = true;
-            this.agent.options.ca = config.ca;
-            return orig_request.call(this, options, callback);
-        };
-    }
+        url: this.db_host + ':' + this.db_port,
+        requestDefaults: {
+            auth: config.username ? {
+                username: config.username,
+                password: config.password
+            } : undefined,
+            strictSSL: true,
+            ca: config.ca,
+            pool: {
+                maxSockets: config.maxSockets || Infinity
+            }
+        }
+    });
 
     this.db_name = config.db_name || 'pub-keys';
-    this._db = this._conn.database(this.db_name);
+    this._db = this._nano.db.use(this.db_name);
 
     if (config.no_changes)
     {
-        return this._db.exists(function (err, exists)
+        return this._db.info(function (err)
         {
-            if (err) { return cb(err, ths); }
-            if (!exists) { return cb(new Error('not_found'), ths); }
-            cb(null, ths);
+            if (err && (err.statusCode === status_not_found))
+            {
+                return cb(new Error('not_found'), ths);
+            }
+
+            return cb(err, ths);
         });
     }
     
-    this._feed = this._db.changes(
+    this._feed = this._db.follow(
     {
         since: 'now',
         request: { strictSSL: true, ca: config.ca }
@@ -117,7 +100,7 @@ function PubKeyStoreCouchDB(config, cb)
         if (err.message)
         {
             if (err.message.lastIndexOf(
-                    'Bad DB response: {"error":"not_found"') === 0)
+                    'Bad DB response: {"error":"not_found"', 0) === 0)
             {
                 err.message = 'not_found';
             }
@@ -147,6 +130,8 @@ function PubKeyStoreCouchDB(config, cb)
             cb(null, ths);
         }
     });
+
+    this._feed.follow();
 }
 
 util.inherits(PubKeyStoreCouchDB, events.EventEmitter);
@@ -155,14 +140,14 @@ PubKeyStoreCouchDB.prototype.get_pub_key_by_issuer_id = function (issuer_id, cb)
 {
     if (!this._db) { return cb(new Error('not_open')); }
 
-    this._db.view('pub_keys/by_issuer_id',
+    this._db.view('pub_keys', 'by_issuer_id',
     {
         key: issuer_id
     }, function (err, res)
     {
         if (err) { return cb(err); }
-        if (res.length === 0) { return cb(null, null); }
-        var res0 = res[0];
+        if (res.rows.length === 0) { return cb(null, null); }
+        var res0 = res.rows[0];
         cb(null, res0.value.pub_key, res0.id, res0.value.rev);
     });
 };
@@ -171,17 +156,17 @@ PubKeyStoreCouchDB.prototype.get_uris = function (cb)
 {
     if (!this._db) { return cb(new Error('not_open')); }
 
-    this._db.all(function (err, res)
+    this._db.list(function (err, res)
     {
         if (err) { return cb(err); }
 
         var i, key, uris = [];
 
-        for (i = 0; i < res.length; i += 1)
+        for (i = 0; i < res.rows.length; i += 1)
         {
-            key = res[i].key;
+            key = res.rows[i].key;
 
-            if (key.indexOf('_design/') !== 0)
+            if (key.lastIndexOf('_design/', 0) !== 0)
             {
                 uris.push(key);
             }
@@ -197,7 +182,7 @@ PubKeyStoreCouchDB.prototype.get_issuer_id = function (uri, cb)
 
     this._db.get(uri, function (err, doc)
     {
-        if (err) { return cb(err.error === 'not_found' ? null : err, null); }
+        if (err) { return cb(err.statusCode === status_not_found ? null : err, null); }
         cb(null, doc.issuer_id, doc._rev);
     });
 };
@@ -208,7 +193,7 @@ PubKeyStoreCouchDB.prototype.get_pub_key_by_uri = function (uri, cb)
 
     this._db.get(uri, function (err, doc)
     {
-        if (err) { return cb(err.error === 'not_found' ? null : err, null); }
+        if (err) { return cb(err.statusCode === status_not_found ? null : err, null); }
         cb(null, doc.pub_key, doc.issuer_id, doc._rev);
     });
 };
@@ -228,7 +213,7 @@ PubKeyStoreCouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
     // revision 2. When replicating, if the replica has a doc with a higher
     // revision, the deletion is lost.
 
-    this._db.all({ keys: [ uri ] }, function (err, res)
+    this._db.fetch({ keys: [ uri ] }, function (err, res)
     {
         if (err) { return cb(err); }
 
@@ -245,13 +230,13 @@ PubKeyStoreCouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
 
         if (!ths._db) { return cb(new Error('not_open')); }
         
-        ths._db.save(uri, doc, function (err, res)
+        ths._db.insert(doc, uri, function (err, res)
         {
             // if conflict then try again
 
             if (err)
             {
-                if (err.error === 'conflict')
+                if (err.statusCode === status_conflict)
                 {
                     return setTimeout(function ()
                     {
@@ -277,9 +262,9 @@ PubKeyStoreCouchDB.prototype.remove_pub_key = function (uri, cb)
 
     this._db.get(uri, function (err, doc)
     {
-        if (err) { return cb(err.error === 'not_found' ? null : err); }
+        if (err) { return cb(err.statusCode === status_not_found ? null : err); }
         if (!ths._db) { return cb(new Error('not_open')); }
-        ths._db.remove(uri, doc._rev, cb);
+        ths._db.destroy(uri, doc._rev, cb);
     });
 };
 
@@ -310,12 +295,11 @@ PubKeyStoreCouchDB.prototype._stop = function (cb)
     cb();
 };
 
-PubKeyStoreCouchDB.prototype._close_conn = function (cb)
+PubKeyStoreCouchDB.prototype._close_nano = function (cb)
 {
-    if (!this._conn) { return cb(new Error('not_open')); }
+    if (!this._nano) { return cb(new Error('not_open')); }
 
-    this._conn.close();
-    this._conn = null;
+    this._nano = null;
     this._db = null;
 
     cb();
@@ -329,7 +313,7 @@ PubKeyStoreCouchDB.prototype.close = function (cb)
 
     this._stop(function ()
     {
-        ths._close_conn(cb);
+        ths._close_nano(cb);
     });
 };
 
@@ -341,31 +325,31 @@ PubKeyStoreCouchDB.prototype.create = function (cb)
 
     var ths = this;
 
-    this._db.create(function (err)
+    this._nano.db.create(this.db_name, function (err)
     {
-        if (err && (err.error !== 'file_exists')) { return cb(err); }
+        if (err && (err.statusCode !== status_db_exists)) { return cb(err); }
         if (!ths._db) { return cb(new Error('not_open')); }
 
         /*jslint unparam: true */
-        ths._db.save('_design/_auth', 
+        ths._db.insert(
         {
             views: {},
-            validate_doc_update: design.validate.toString().replace('DB_NAME', ths._db.name)
-        }, function (err)
+            validate_doc_update: design.validate.toString().replace('DB_NAME', ths.db_name)
+        }, '_design/_auth', function (err)
         {
-            if (err && (err.error !== 'conflict')) { return cb(err); }
+            if (err && (err.statusCode !== status_conflict)) { return cb(err); }
             if (!ths._db) { return cb(new Error('not_open')); }
 
-            ths._db.save('_design/pub_keys',
+            ths._db.insert(
             {
                 views: {
                     by_issuer_id: {
                         map: design.by_issuer_id
                     }
                 }
-            }, function (err)
+            }, '_design/pub_keys', function (err)
             {
-                if (err && (err.error !== 'conflict')) { return cb(err); }
+                if (err && (err.statusCode !== status_conflict)) { return cb(err); }
                 if (!ths._db) { return cb(new Error('not_open')); }
                 cb();
             });
@@ -384,16 +368,13 @@ PubKeyStoreCouchDB.prototype.destroy = function (cb)
     {
         if (!ths._db) { return cb(new Error('not_open')); }
 
-        ths._db.destroy(function (err)
+        ths._nano.db.destroy(ths.db_name, function (err)
         {
-            if (err &&
-                ((err.error !== 'not_found') ||
-                 ((err.reason !== 'no_db_file') &&
-                  (err.reason !== 'missing'))))
+            if (err && (err.statusCode != status_not_found))
             {
                 return cb(err);
             }
-            ths._close_conn(cb);
+            ths._close_nano(cb);
         });
     });
 };

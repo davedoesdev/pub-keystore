@@ -1,7 +1,8 @@
 /*jslint node: true, nomen: true */
 "use strict";
 
-var dnode = require('dnode'),
+var https = require('https'),
+    dnode = require('dnode'),
     keystore = require('../..'),    
     port = parseInt(process.argv[2], 10),
     config = JSON.parse(process.argv[3]);
@@ -20,6 +21,7 @@ keystore(config, function (err, ks)
     {
         if (err)
         {
+            console.log(err);
             err = { message: err.message, feed_error: err.feed_error };
             console.log(err, config);
         }
@@ -79,10 +81,31 @@ keystore(config, function (err, ks)
         };
 
         // Stop dnode trying to serialize TLS sessions
-        if (ks._conn)
+        /*jslint forin: true */
+        if (ks._nano)
         {
-            ks._conn.agent._sessionCache = { map: {}, list: [] };
+            var pool = ks._nano.config.requestDefaults.pool;
+            for (var k in pool)
+            {
+                if (pool[k] instanceof https.Agent)
+                {
+                    pool[k]._sessionCache = { map: {}, list: [] };
+                }
+            }
+            /*jslint forin: false */
         }
+
+        ks.save_db_nano = function ()
+        {
+            ks._db_save = ks._db;
+            ks._nano_save = ks._nano;
+        };
+
+        ks.restore_db_nano = function ()
+        {
+            ks._db = ks._db_save;
+            ks._nano = ks._nano_save;
+        };
 
         server = dnode(ks);
 
