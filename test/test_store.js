@@ -564,7 +564,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
    
     if (one_for_each)
     {
-        it('should not error when trying to destroy a non-existent store', function (cb)
+        it.only('should not error when trying to destroy a non-existent store', function (cb)
         {
             async.each(states[0].stores_for_update, function (ks, cb)
             {
@@ -1006,7 +1006,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
         });
     });
 
-    it('should destroy the stores', function (cb)
+    it.only('should destroy the stores', function (cb)
     {
         var db_type = states[0].stores_for_update[0].db_type;
 
@@ -1278,15 +1278,15 @@ describe('close', function ()
 });
 });
 
-var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
+var nkeys = [2];// argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
 
-[false, true].forEach(function (m)
+[false/*, true*/].forEach(function (m)
 {
     nkeys.forEach(function (n)
     {
         setup(m, n, 'couchdb');
-        setup(m, n, 'couchdb', 'https://localhost', 6984, true);
-        setup(m, n, 'pouchdb');
+        //setup(m, n, 'couchdb', 'https://localhost', 6984, true);
+        //setup(m, n, 'pouchdb');
     });
 });
 

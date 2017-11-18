@@ -159,7 +159,7 @@ PubKeyStorePouchDB.prototype.replicate = function (opts, cb)
         {
             if (err && !ths._config.silent)
             {
-                console.error(err.toString());
+                console.error(err);
             }
         };
     }
@@ -227,7 +227,7 @@ PubKeyStorePouchDB.prototype._replicate_try_again = function (err, opts, cb)
 {
     if (!this._config.silent)
     {
-        console.error(err.toString());
+        console.error(err);
     }
 
     this.emit('replicate_error', err);
