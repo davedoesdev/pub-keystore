@@ -1,7 +1,7 @@
 {
   "name": "pub-keystore",
   "description": "Simple store for public keys, with issuer IDs and change notification",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "homepage": "https://github.com/davedoesdev/pub-keystore",
   "author": {
     "name": "David Halls",
@@ -33,24 +33,24 @@
     "node": ">=4"
   },
   "dependencies": {
-    "nano": "~6.4.0",
+    "nano": "~6.4.2",
     "pouchdb": "~6.3.4",
-    "yargs": "~8.0.2",
-    "async": "~2.5.0",
+    "yargs": "~10.0.3",
+    "async": "~2.6.0",
     "touch": "~3.1.0",
     "prompt": "~1.0.0"
   },
   "devDependencies": {
     "grunt": "~1.0.1",
     "grunt-contrib-jshint": "~1.1.0",
-    "grunt-mocha-test": "~0.13.2",
-    "grunt-apidox": "~0.1.10",
+    "grunt-mocha-test": "~0.13.3",
+    "grunt-apidox": "~0.1.11",
     "grunt-bg-shell": "~2.3.3",
-    "mocha": "~3.4.2",
-    "chai": "~4.1.0",
-    "nyc": "~11.0.3",
-    "coveralls": "~2.13.1",
-    "rimraf": "~2.6.1",
+    "mocha": "~4.0.1",
+    "chai": "~4.1.2",
+    "nyc": "~11.3.0",
+    "coveralls": "~3.0.0",
+    "rimraf": "~2.6.2",
     "lsof": "~0.1.0",
     "dnode": "~1.2.2"
   }
