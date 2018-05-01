@@ -297,6 +297,9 @@ PubKeyStoreCouchDB.prototype._stop = function (cb)
 
 PubKeyStoreCouchDB.prototype._close_nano = function (cb)
 {
+    console.log("CLOSE_NANO", this._nano);
+    console.trace();
+
     if (!this._nano) { return cb(new Error('not_open')); }
 
     this._nano = null;
