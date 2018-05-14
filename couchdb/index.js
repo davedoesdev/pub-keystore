@@ -51,13 +51,13 @@ function PubKeyStoreCouchDB(config, cb)
             return cb(err, ths);
         });
     }
-    
+
     this._feed = this._db.follow(
     {
         since: 'now',
         request: { strictSSL: true, ca: config.ca }
     });
-    
+
     this._feed.on('change', function (change)
     {
         if (change.id.lastIndexOf('_design/', 0) === 0)
@@ -93,7 +93,17 @@ function PubKeyStoreCouchDB(config, cb)
 
     this._feed.on('error', function (err)
     {
-        if (!ths._feed) { return; } // aborted
+        if (!ths._feed)
+        {
+            // aborted
+            var stop_cb = ths._stop_cb;
+            ths._stop_cb = null;
+            if (stop_cb)
+            {
+                process.nextTick(stop_cb);
+            }
+            return;
+        }
 
         err.feed_error = true;
 
@@ -277,19 +287,13 @@ PubKeyStoreCouchDB.prototype._stop = function (cb)
         feed.stop();
     }
 
-    if (this._query && this._query.abort)
+    var query = this._query;
+    if (query)
     {
-        this._query.abort();
-        if (!this._query.req)
-        {
-            this._query.req = {};
-        }
-        if (!this._query.req.socket)
-        {
-            this._query.req.socket = { emit: function () { return undefined; } };
-        }
-        this._query.emit('response', { body: 'aborted' });
         this._query = null;
+        this._stop_cb = cb;
+        query.abort();
+        return query.emit('response', { body: 'aborted' });
     }
 
     cb();
@@ -297,9 +301,6 @@ PubKeyStoreCouchDB.prototype._stop = function (cb)
 
 PubKeyStoreCouchDB.prototype._close_nano = function (cb)
 {
-    console.log("CLOSE_NANO", this._nano);
-    console.trace();
-
     if (!this._nano) { return cb(new Error('not_open')); }
 
     this._nano = null;

@@ -3,9 +3,24 @@
 
 var https = require('https'),
     dnode = require('dnode'),
+    Feed = require('cloudant-follow').Feed,
     keystore = require('../..'),    
     port = parseInt(process.argv[2], 10),
-    config = JSON.parse(process.argv[3]);
+    config = JSON.parse(process.argv[3]),
+    orig_stringify = JSON.stringify;
+
+JSON.stringify = function (v, f)
+{
+    return orig_stringify.call(JSON, v, function (k, v)
+    {
+        if (v instanceof Feed)
+        {
+            return undefined;
+        }
+
+        return (typeof f === 'function') ? f.call(this, k, v) : v;
+    });
+};
 
 process.on('message', function (msg)
 {
