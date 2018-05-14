@@ -30,7 +30,7 @@
     "PouchDB"
   ],
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "dependencies": {
     "nano": "~6.4.4",
