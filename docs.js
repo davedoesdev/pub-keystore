@@ -5,7 +5,7 @@ A simple store for public keys in Node.js.
 
 - Index keys by URI and issuer IDs.
 - Listen to key updates.
-- Backed by [PouchDB](http://pouchdb.com/) or [CouchDB](http://couchdb.apache.org/).
+- Backed by [PouchDB](http://pouchdb.com/) or [CouchDB 2](http://couchdb.apache.org/).
 - Keys can be in any format (or even not keys!).
 - Supports access from multiple processes.
 - Full set of unit tests.

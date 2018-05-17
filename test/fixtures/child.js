@@ -13,7 +13,9 @@ JSON.stringify = function (v, f)
 {
     return orig_stringify.call(JSON, v, function (k, v)
     {
-        if (v instanceof Feed)
+        // Stop dnode trying to serialize change feed and TLS sessions
+        if ((v instanceof Feed) ||
+            (v instanceof https.Agent))
         {
             return undefined;
         }
@@ -94,21 +96,6 @@ keystore(config, function (err, ks)
             expect_done = true;
             done();
         };
-
-        // Stop dnode trying to serialize TLS sessions
-        /*jslint forin: true */
-        if (ks._nano)
-        {
-            var pool = ks._nano.config.requestDefaults.pool;
-            for (var k in pool)
-            {
-                if (pool[k] instanceof https.Agent)
-                {
-                    pool[k]._sessionCache = { map: {}, list: [] };
-                }
-            }
-            /*jslint forin: false */
-        }
 
         ks.save_db_nano = function ()
         {

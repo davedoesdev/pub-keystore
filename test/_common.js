@@ -1,5 +1,4 @@
 /*global path: false,
-         couchdb_store_paths: false,
          db_name: false,
          fs: false,
          before: false,
@@ -27,13 +26,6 @@ global.keystore = require('..');
 global.db_name = 'test';
 global.couchdb_admin_username = 'admin';
 global.couchdb_admin_password = 'admin';
-
-var couchdb_store_dir = path.join(__dirname, '..', 'couchdb', 'store');
-global.couchdb_store_paths = {
-    'pub-keys': path.join(couchdb_store_dir, 'pub-keys.couch'),
-    'foobar': path.join(couchdb_store_dir, 'foobar.couch')
-};
-couchdb_store_paths[db_name] = path.join(couchdb_store_dir, db_name + '.couch');
 
 before(function (cb)
 {
@@ -72,24 +64,6 @@ before(function (cb)
     rimraf(path.join(__dirname, '..', 'pouchdb', 'store', 'foobar'), cb);
 });
 
-
-// keystore.destroy is tested as part of the main test run
-before(function (cb)
-{
-    async.each(Object.keys(couchdb_store_paths), function (name, cb)
-    {
-        fs.unlink(couchdb_store_paths[name], function (err)
-        {
-            if (err && (err.code !== 'ENOENT'))
-            {
-                return cb(err);
-            }
-
-            cb();
-        });
-    }, cb);
-});
-
 // run couchdb with local config so we can add SSL support with a known cert
 before(function (cb)
 {
@@ -118,6 +92,31 @@ before(function (cb)
     }
 
     check();
+});
+
+// keystore.destroy is tested as part of the main test run
+before(function (cb)
+{
+    async.each(['pub-keys', 'foobar', db_name], function (name, cb)
+    {
+        require('nano')(
+        {
+            url: 'http://localhost:5984',
+            requestDefaults: {
+                auth: {
+                    username: couchdb_admin_username,
+                    password: couchdb_admin_password
+                }
+            }
+        }).db.destroy(name, function (err)
+        {
+            if (err && (err.statusCode !== 404))
+            {
+                return cb(err);
+            }
+            cb();
+        });
+    }, cb);
 });
 
 after(function ()
