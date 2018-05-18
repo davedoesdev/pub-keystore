@@ -1077,8 +1077,14 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                             if (err)
                             {
                                 console.log(err);
-                                expect(err.error).to.equal('not_found');
-                                expect(err.reason).to.equal('Database does not exist.');
+                                expect(err.error).to.be.oneOf([
+                                    'not_found',
+                                    'internal_server_error'
+                                ]);
+                                expect(err.reason).to.be.oneOf([
+                                    'Database does not exist.',
+                                    'No DB shards could be opened.'
+                                ]);
                             }
                             else
                             {
