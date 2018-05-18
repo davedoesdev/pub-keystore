@@ -1076,6 +1076,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                         {
                             if (err)
                             {
+                                console.log(err);
                                 expect(err.error).to.equal('not_found');
                                 expect(err.reason).to.equal('Database does not exist.');
                             }
