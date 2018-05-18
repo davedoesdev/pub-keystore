@@ -1076,6 +1076,12 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                         {
                             if (err)
                             {
+                                // Note: not_found is usually returned but
+                                // CouchDB seems to delete files in the
+                                // background after returning response to client
+                                // so if this request comes in quickly then
+                                // we can get an error that it can't open the
+                                // shard file
                                 console.log(err);
                                 expect(err.error).to.be.oneOf([
                                     'not_found',
