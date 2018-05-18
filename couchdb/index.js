@@ -331,15 +331,7 @@ PubKeyStoreCouchDB.prototype.create = function (cb)
 
     this._nano.db.create(this.db_name, function (err)
     {
-        if (err &&
-            (err.statusCode !== status_db_exists) &&
-            // Sometimes we get 500 conflict if database was deleted
-            // then created immediately before this create request
-            (err.reason !== 'conflict'))
-        {
-            return cb(err);
-        }
-
+        if (err && (err.statusCode !== status_db_exists)) { return cb(err); }
         if (!ths._db) { return cb(new Error('not_open')); }
 
         /*jslint unparam: true */

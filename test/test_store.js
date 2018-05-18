@@ -262,7 +262,13 @@ function make_stores_for_update(multiprocess, num, db_type, db_host, db_port, db
                 password: couchdb_admin_password
             }, function (err, store)
             {
-                if (err) { console.log(err); return cb(err); }
+                // Sometimes we get 500 conflict if database was deleted
+                // then created immediately before this create request
+                if (err && (err.reason !== 'conflict'))
+                {
+                    console.log(err);
+                    return cb(err);
+                }
                 cb(null, store);
             });
         }, function (err, stores)
