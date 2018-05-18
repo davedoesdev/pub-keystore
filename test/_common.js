@@ -104,8 +104,8 @@ before(function (cb)
             url: 'http://localhost:5984',
             requestDefaults: {
                 auth: {
-                    username: couchdb_admin_username,
-                    password: couchdb_admin_password
+                    username: global.couchdb_admin_username,
+                    password: global.couchdb_admin_password
                 }
             }
         }).db.destroy(name, function (err)
