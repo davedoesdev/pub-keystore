@@ -17,6 +17,8 @@ function PubKeyStoreCouchDB(config, cb)
     var ths = this,
         called_back = false;
 
+    this._config = config;
+
     this.db_host = config.db_host || 'http://localhost';
     this.db_port = config.db_port || 5984;
 
@@ -217,6 +219,15 @@ PubKeyStoreCouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
     var ths = this,
         issuer_id = crypto.randomBytes(64).toString('hex'),
         doc = { issuer_id: issuer_id, pub_key: pub_key };
+
+    if (this._config.no_updates)
+    {
+        return this._db.insert(doc, uri, function (err, res)
+        {
+            if (err) { return cb(err); }
+            cb(null, issuer_id, res.rev);
+        });
+    }    
 
     // Find existing revision first otherwise revision may start from 1
     // (if doc has been deleted), meaning subsequent deletions will have

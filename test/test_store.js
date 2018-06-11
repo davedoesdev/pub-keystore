@@ -1315,3 +1315,40 @@ var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
     });
 });
 
+describe('no updates', function ()
+{
+['pouchdb', 'couchdb'].forEach(function (db_type)
+{
+    it('should not update key', function (cb)
+    {
+        keystore(
+        {
+            db_type: db_type,
+            db_name: db_name,
+            db_for_update: true,
+            username: couchdb_admin_username,
+            password: couchdb_admin_password,
+            no_changes: true,
+            no_updates: true
+        }, function (err, store)
+        {
+            store.create(function (err)
+            {
+                if (err) { return cb(err); }
+                store.add_pub_key('update_test', 'update_key', function (err, issuer_id, rev)
+                {
+                    if (err) { return cb(err); }
+                    expr(expect(issuer_id).to.exist);
+                    expr(expect(rev).to.exist);
+                    store.add_pub_key('update_test', 'update_key', function (err)
+                    {
+                        expect(db_type === 'pouchdb' ? err.status : err.statusCode).to.equal(409);
+                        expect(db_type === 'pouchdb' ? err.name : err.error).to.equal('conflict');
+                        store.close(cb);
+                    });
+                });
+            });
+        });
+    });
+});
+});

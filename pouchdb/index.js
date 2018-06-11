@@ -317,6 +317,15 @@ PubKeyStorePouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
         issuer_id = crypto.randomBytes(64).toString('hex'),
         doc = { _id: uri, issuer_id: issuer_id, pub_key: pub_key };
 
+    if (this._config.no_updates)
+    {
+        return this._db.put(doc, function (err, res)
+        {
+            if (err) { return cb(err); }
+            cb(null, issuer_id, res.rev);
+        });
+    }
+
     // Find existing revision first otherwise revision may start from 1
     // (if doc has been deleted), meaning subsequent deletions will have
     // revision 2. When replicating, if the replica has a doc with a higher
