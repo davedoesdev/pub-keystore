@@ -185,7 +185,7 @@ _Source: [docs.js](/docs.js)_
 **Parameters:**
 
 - `{String} uri` A known, permanent identifier for the public key's owner. You can use anything but a [URI](http://en.wikipedia.org/wiki/Uniform_resource_identifier) seems ideal. For example if you know the owner's email address then you could you a `mailto` URI (e.g. `mailto:dave@davedoesdev.com`).
-- `{String} pub_key` The public key itself. This can be in any format (e.g. [PEM](http://www.faqs.org/qa/qa-14736.html)).
+- `{String | Object} pub_key` The public key itself. This can be in any format (e.g. [PEM](http://www.faqs.org/qa/qa-14736.html)).
 - `{Function} [cb]` Function to call once the key has been added. It will receive the following arguments:
   - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
@@ -217,7 +217,7 @@ _Source: [docs.js](/docs.js)_
 - `{Function} cb` Function to call with the result. It will receive the following arguments:
   - `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
 
-  - `{String} pub_key` The public key for the `uri`, or `null` if it wasn't found.
+  - `{String|Object} pub_key` The public key for the `uri`, or `null` if it wasn't found.
 
   - `{String} issuer_id` The current unique, random string you can use to retrieve the key using [`get_pub_key_by_issuer_id`](#pubkeystoreprototypeget_pub_key_by_issuer_idissuer_id-cb).
 
@@ -235,7 +235,7 @@ _Source: [docs.js](/docs.js)_
 - `{Function} cb` Function to call with the result. It will receive the following arguments:
   - `{Object} err` If an error occurred then details of the error, otherwise `null`. A non-existent key is _not_ treated as an error.
 
-  - `{String} pub_key` The public key for the `issuer_id`, or `null` if it wasn't found.
+  - `{String|Object} pub_key` The public key for the `issuer_id`, or `null` if it wasn't found.
 
   - `{String} uri` The permanent identifier you gave to the key when adding it using [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb).
 

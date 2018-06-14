@@ -1352,3 +1352,55 @@ describe('no updates', function ()
     });
 });
 });
+
+describe.only('objects as public keys', function ()
+{
+['pouchdb', 'couchdb'].forEach(function (db_type)
+{
+    it('should add object as public key', function (cb)
+    {
+        keystore(
+        {
+            db_type: db_type,
+            db_name: db_name,
+            db_for_update: true,
+            username: couchdb_admin_username,
+            password: couchdb_admin_password,
+            no_changes: true
+        }, function (err, store)
+        {
+            store.create(function (err)
+            {
+                if (err) { return cb(err); }
+                const pub_key = {
+                    pub_key: 'some key',
+                    metadata: 'some metadata'
+                };
+                store.add_pub_key('obj_test', pub_key, function (err, issuer_id, rev)
+                {
+                    if (err) { return cb(err); }
+                    expr(expect(issuer_id).to.exist);
+                    expr(expect(rev).to.exist);
+                    store.get_pub_key_by_uri('obj_test', function (err, pub_key2, issuer_id2, rev2)
+                    {
+                        if (err) { return cb(err); }
+                        expect(issuer_id2).to.equal(issuer_id);
+                        expect(rev2).to.equal(rev);
+                        expect(pub_key2).to.eql(pub_key);
+                        store.get_pub_key_by_issuer_id(issuer_id, function (err, pub_key3, uri, rev3)
+                        {
+                            if (err) { return cb(err); }
+                            expect(uri).to.equal('obj_test');
+                            expect(rev3).to.equal(rev);
+                            expect(pub_key3).to.eql(pub_key);
+                            store.close(cb);
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+});
+
+
