@@ -1353,7 +1353,7 @@ describe('no updates', function ()
 });
 });
 
-describe.only('objects as public keys', function ()
+describe('objects as public keys', function ()
 {
 ['pouchdb', 'couchdb'].forEach(function (db_type)
 {
