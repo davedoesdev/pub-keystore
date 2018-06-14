@@ -1372,7 +1372,7 @@ describe.only('objects as public keys', function ()
             store.create(function (err)
             {
                 if (err) { return cb(err); }
-                const pub_key = {
+                var pub_key = {
                     pub_key: 'some key',
                     metadata: 'some metadata'
                 };
