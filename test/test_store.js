@@ -1402,5 +1402,3 @@ describe('objects as public keys', function ()
     });
 });
 });
-
-
