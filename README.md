@@ -189,7 +189,7 @@ _Source: [docs.js](/docs.js)_
 - `{Function} [cb]` Function to call once the key has been added. It will receive the following arguments:
   - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
-  - `{String} issuer_id` A unique, random string which you can use as an alternative when retrieving the public key. This is useful if you want to give out an identifier for the key without revealing its owner. Note that every time you add a key, a new `issuer_id` will be generated. If a key already exists for the `uri` then it will be overwritten.
+  - `{String} issuer_id` A unique, hex-encoded, random string which you can use as an alternative when retrieving the public key. This is useful if you want to give out an identifier for the key without revealing its owner. Note that every time you add a key, a new `issuer_id` will be generated. If a key already exists for the `uri` then it will be overwritten.
 
   - `{String} rev` A revision string for the key. Like the `issuer_id`, this will change every time a key is added. Unlike the `issuer_id`, it is sent with [`change`](#pubkeystoreeventschangeuri-rev-deleted) events so you if you're caching keys then you can tell whether the cached version is up-to-date.
 
