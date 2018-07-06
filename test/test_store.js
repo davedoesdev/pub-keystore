@@ -202,6 +202,70 @@ function query_checks(states, concurrent)
         }, cb);
     });
 
+    it('should not retrieve an existing public key by null uri', function (cb)
+    {
+        async.each(states[0].stores_for_query, function (ks, cb)
+        {
+            async.each(states, function (state, cb)
+            {
+                ks.get_pub_key_by_uri(undefined, function (err, pub_key)
+                {
+                    if (err) { return cb(err); }
+                    expect(pub_key).to.equal(null);
+                    cb();
+                });
+            }, cb);
+        }, cb);
+    });
+
+    it('should not retrieve an existing public key by undefined uri', function (cb)
+    {
+        async.each(states[0].stores_for_query, function (ks, cb)
+        {
+            async.each(states, function (state, cb)
+            {
+                ks.get_pub_key_by_uri(undefined, function (err, pub_key)
+                {
+                    if (err) { return cb(err); }
+                    expect(pub_key).to.equal(null);
+                    cb();
+                });
+            }, cb);
+        }, cb);
+    });
+
+    it('should not retrieve an existing public key by null issuer id', function (cb)
+    {
+        async.each(states[0].stores_for_query, function (ks, cb)
+        {
+            async.each(states, function (state, cb)
+            {
+                ks.get_pub_key_by_issuer_id(null, function (err, pub_key)
+                {
+                    if (err) { return cb(err); }
+                    expect(pub_key).to.equal(null);
+                    cb();
+                });
+            }, cb);
+        }, cb);
+    });
+
+    it('should not retrieve an existing public key by undefined issuer id', function (cb)
+    {
+        async.each(states[0].stores_for_query, function (ks, cb)
+        {
+            async.each(states, function (state, cb)
+            {
+                ks.get_pub_key_by_issuer_id(undefined, function (err, pub_key)
+                {
+                    if (err) { return cb(err); }
+                    expect(pub_key).to.equal(null);
+                    cb();
+                });
+            }, cb);
+        }, cb);
+    });
+
     it('should get the issuer id for a uri', function (cb)
     {
         async.each(states[0].stores_for_query, function (ks, cb)
@@ -235,6 +299,38 @@ function query_checks(states, concurrent)
                         expect(rev).to.equal(state.rev);
                         cb();
                     }
+                });
+            }, cb);
+        }, cb);
+    });
+
+    it('should not get the issuer id for null uri', function (cb)
+    {
+        async.each(states[0].stores_for_query, function (ks, cb)
+        {
+            async.each(states, function (state, cb)
+            {
+                ks.get_issuer_id(null, function (err, issuer_id)
+                {
+                    if (err) { return cb(err); }
+                    expect(issuer_id).to.equal(null);
+                    cb();
+                });
+            }, cb);
+        }, cb);
+    });
+
+    it('should not get the issuer id for undefined uri', function (cb)
+    {
+        async.each(states[0].stores_for_query, function (ks, cb)
+        {
+            async.each(states, function (state, cb)
+            {
+                ks.get_issuer_id(undefined, function (err, issuer_id)
+                {
+                    if (err) { return cb(err); }
+                    expect(issuer_id).to.equal(null);
+                    cb();
                 });
             }, cb);
         }, cb);
@@ -738,6 +834,26 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
 
     query_checks(states);
 
+    it('should not add public with null uri', function (cb)
+    {
+        states[0].stores_for_update[0].add_pub_key(null, states[0].key,
+        function (err)
+        {
+            expect(err.message).to.equal('invalid_uri');
+            cb();
+        });
+    });
+
+    it('should not add public with undefined uri', function (cb)
+    {
+        states[0].stores_for_update[0].add_pub_key(undefined, states[0].key,
+        function (err)
+        {
+            expect(err.message).to.equal('invalid_uri');
+            cb();
+        });
+    });
+
     it('should replace public key', function (cb)
     {
         var new_key = make_key();
@@ -923,6 +1039,24 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
     });
 
     query_checks(states, true);
+
+    it('should not remove public key with null uri', function (cb)
+    {
+        states[0].stores_for_update[0].remove_pub_key(null, function (err)
+        {
+            expect(err.message).to.equal('invalid_uri');
+            cb();
+        });
+    });
+
+    it('should not remove public key with undefined uri', function (cb)
+    {
+        states[0].stores_for_update[0].remove_pub_key(undefined, function (err)
+        {
+            expect(err.message).to.equal('invalid_uri');
+            cb();
+        });
+    });
 
     it('should remove public keys', function (cb)
     {

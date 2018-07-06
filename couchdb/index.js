@@ -152,6 +152,11 @@ PubKeyStoreCouchDB.prototype.get_pub_key_by_issuer_id = function (issuer_id, cb)
 {
     if (!this._db) { return cb(new Error('not_open')); }
 
+    if ((issuer_id === null) || (issuer_id === undefined))
+    {
+        return cb(null, null);
+    }
+
     this._db.view('pub_keys', 'by_issuer_id',
     {
         key: issuer_id
@@ -192,6 +197,11 @@ PubKeyStoreCouchDB.prototype.get_issuer_id = function (uri, cb)
 {
     if (!this._db) { return cb(new Error('not_open')); }
 
+    if ((uri === null) || (uri === undefined))
+    {
+        return cb(null, null);
+    }
+
     this._db.get(uri, function (err, doc)
     {
         if (err) { return cb(err.statusCode === status_not_found ? null : err, null); }
@@ -202,6 +212,11 @@ PubKeyStoreCouchDB.prototype.get_issuer_id = function (uri, cb)
 PubKeyStoreCouchDB.prototype.get_pub_key_by_uri = function (uri, cb)
 {
     if (!this._db) { return cb(new Error('not_open')); }
+
+    if ((uri === null) || (uri === undefined))
+    {
+        return cb(null, null);
+    }
 
     this._db.get(uri, function (err, doc)
     {
@@ -215,6 +230,11 @@ PubKeyStoreCouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
     cb = cb || function () { return undefined; };
 
     if (!this._db) { return cb(new Error('not_open')); }
+
+    if ((uri === null) || (uri === undefined))
+    {
+        return cb(new Error('invalid_uri'));
+    }
 
     var ths = this,
         issuer_id = crypto.randomBytes(64).toString('hex'),
@@ -278,6 +298,11 @@ PubKeyStoreCouchDB.prototype.remove_pub_key = function (uri, cb)
     cb = cb || function () { return undefined; };
 
     if (!this._db) { return cb(new Error('not_open')); }
+
+    if ((uri === null) || (uri === undefined))
+    {
+        return cb(new Error('invalid_uri'));
+    }
 
     var ths = this;
 
