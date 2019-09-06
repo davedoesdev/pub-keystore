@@ -109,7 +109,7 @@ keystore(config, function (err, ks)
             ks._nano = ks._nano_save;
         };
 
-        server = dnode(ks);
+        server = dnode(ks, { weak: false });
 
         server.on('error', function (err2)
         {

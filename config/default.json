@@ -1,0 +1,8 @@
+{
+  "db": {
+    "host": "/var/run/postgresql",
+    "database": "pub-keystore",
+    "migrations-dir": "sql/pg-migrations",
+    "user": "postgres"
+  }
+}

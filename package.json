@@ -1,7 +1,7 @@
 {
   "name": "pub-keystore",
   "description": "Simple store for public keys, with issuer IDs and change notification",
-  "version": "3.1.4",
+  "version": "3.2.0",
   "homepage": "https://github.com/davedoesdev/pub-keystore",
   "author": {
     "name": "David Halls",
@@ -19,6 +19,7 @@
   "main": "index.js",
   "scripts": {
     "test": "grunt lint test",
+    "pg-migrate": "node-pg-migrate",
     "travis-test": "grunt lint coverage coveralls"
   },
   "directories": {
@@ -33,25 +34,30 @@
     "node": ">=6"
   },
   "dependencies": {
-    "nano": "~6.4.4",
-    "pouchdb": "^7.0.0",
-    "yargs": "~11.0.0",
-    "async": "~2.6.1",
-    "touch": "~3.1.0",
-    "prompt": "~1.0.0"
+    "async": "^3.1.0",
+    "iferr": "^1.0.2",
+    "nano": "^8.1.0",
+    "node-pg-migrate": "^3.22.0",
+    "pg": "^7.12.1",
+    "pouchdb": "^7.1.1",
+    "prompt": "^1.0.0",
+    "sqlite3": "^4.1.0",
+    "touch": "^3.1.0",
+    "yargs": "^14.0.0"
   },
   "devDependencies": {
-    "grunt": "^1.0.3",
-    "grunt-contrib-jshint": "~1.1.0",
-    "grunt-mocha-test": "~0.13.3",
-    "grunt-apidox": "~2.0.1",
-    "grunt-bg-shell": "~2.3.3",
-    "mocha": "^5.2.0",
-    "chai": "~4.1.2",
-    "nyc": "^12.0.2",
-    "coveralls": "^3.0.1",
-    "rimraf": "~2.6.2",
-    "lsof": "~0.1.0",
-    "dnode": "~1.2.2"
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.6",
+    "dnode": "^1.2.2",
+    "grunt": "^1.0.4",
+    "grunt-apidox": "^2.0.7",
+    "grunt-bg-shell": "^2.3.3",
+    "grunt-contrib-jshint": "^2.1.0",
+    "grunt-mocha-test": "^0.13.3",
+    "lsof": "^0.1.0",
+    "migrate": "^1.6.2",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "rimraf": "^3.0.0"
   }
 }

@@ -6,7 +6,11 @@ module.exports = function (grunt)
     grunt.initConfig(
     {
         jshint: {
-            src: [ 'Gruntfile.js', 'index.js', 'couchdb/*.js', 'pouchdb/*.js', 'test/**/*.js', 'scripts/*.js' ]
+            src: [ 'Gruntfile.js', 'index.js', 'couchdb/*.js', 'pouchdb/*.js', 'test/**/*.js', 'scripts/*.js', 'sql/**/*.js' ],
+            options: {
+                esversion: 6,
+                node: true
+            }
         },
 
         mochaTest: {
