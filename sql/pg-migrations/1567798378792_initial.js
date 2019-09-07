@@ -24,6 +24,10 @@ exports.up = pgm => {
         }
     });
 
+    pgm.createIndex('pub_keys', 'uri', {
+        name: 'by_uri'
+    });
+
     pgm.createIndex('pub_keys', 'issuer_id', {
         name: 'by_issuer_id'
     });

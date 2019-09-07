@@ -9,20 +9,16 @@ deleted BOOLEAN
 For feed, we find the highest id first
 Then we poll, asking for rows with ids higher than the last we found
 
-When we update, we remove the old row first and add a new row so we get
-a new id.
-
-When we delete, we remove the old row first and add a new row with new id
-and uri but no issuer_id or pub_key. Set deleted to TRUE
-
 We can use the id as the rev.
 
 TODO:
 For PG, is it worth using a trigger too?
 stop the poll
+json objects?
 */
 
 const { EventEmitter } = require('events');
+const { randomBytes } = require('crypto');
 const { Database } = require('sqlite3');
 const { Client } = require('pg');
 const { queue } = require('async');
@@ -108,7 +104,7 @@ class PubKeyStoreSQL extends EventEmitter {
                     if (r === undefined) {
                         return cb(null, null);
                     }
-                    cb(null, r.pub_key, r.issuer_id, r.id);
+                    cb(null, r.pub_key, r.issuer_id, r.id.toString());
                 }));
         }, this._busy(cb, () => this.get_pub_key_by_uri(uri, cb)));
     }
@@ -122,7 +118,7 @@ class PubKeyStoreSQL extends EventEmitter {
                     if (r === undefined) {
                         return cb(null, null);
                     }
-                    cb(null, r.pub_key, r.uri, r.id);
+                    cb(null, r.pub_key, r.uri, r.id.toString());
                 }));
         }, this._busy(cb, () => this.get_pub_key_by_issuer_id(issuer_id, cb)));
     }
@@ -153,14 +149,52 @@ class PubKeyStoreSQL extends EventEmitter {
     }
 
     add_pub_key(uri, pub_key, cb) {
-
+        const issuer_id = randomBytes(64).toString('hex');
+        const b = this._busy(cb, () => this.add_pub_key(uri, cb);
+        this._in_transaction(b, cb => {
+            this._queue.unshift(cb => {
+                this._run(
+                    'DELETE FROM pub_keys WHERE uri = $1;',
+                    [uri],
+                    iferr(cb, () => {
+                        this._run(
+                            'INSERT INTO pub_keys (uri, issuer_id, pub_key, deleted) VALUES ($1, $2, $3, $4)',
+                            [uri, issuer_id, pub_key, this._false],
+                            iferr(cb, () => {
+                                this._get(
+                                    'SELECT id FROM pub_keys WHERE uri = $1;',
+                                    [uri],
+                                    iferr(cb, r => {
+                                        cb(null, issuer_id, r.id.toString());
+                                    }));
+                            });
+                    }))
+            });
+        });
     }
 
     remove_pub_key(uri, cb) {
         const b = this._busy(cb, () => this.remove_pub_key(uri, cb);
-
         this._in_transaction(b, cb => {
-            // delete and if it existed before, add deleted entry
+            this._queue.unshift(cb => {
+                this._get(
+                    'SELECT id FROM pub_keys WHERE uri = $1;',
+                    [uri],
+                    iferr(cb, r => {
+                        if (r === undefined) {
+                            return cb(null);
+                        }
+                        this._run(
+                            'DELETE FROM pub_keys WHERE id = $1;',
+                            [r.id],
+                            iferr(cb, () => {
+                                this._run(
+                                    'INSERT INTO pub_keys (uri, deleted) VALUES ($1, $2)',
+                                    [uri, this._true]
+                                    cb));
+                            }));
+                    }));
+            });
         });
     }
 
