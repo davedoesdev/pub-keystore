@@ -1443,9 +1443,10 @@ var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
 {
     nkeys.forEach(function (n)
     {
-        setup(m, n, 'couchdb');
-        setup(m, n, 'couchdb', 'https://localhost', 6984, true);
-        setup(m, n, 'pouchdb');
+        setup(m, n, 'sql');
+        //setup(m, n, 'couchdb');
+        //setup(m, n, 'couchdb', 'https://localhost', 6984, true);
+        //setup(m, n, 'pouchdb');
     });
 });
 

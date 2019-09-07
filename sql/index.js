@@ -1,19 +1,6 @@
-/*Have table
-
-id AUTOINCREMENT
-uri TEXT (or whatever) UNIQUE
-issuer_id TEXT UNIQUE?
-pub_key TEXT
-deleted BOOLEAN
-
-For feed, we find the highest id first
-Then we poll, asking for rows with ids higher than the last we found
-
-We can use the id as the rev.
-
+/*
 TODO:
 For PG, is it worth using a trigger too?
-stop the poll
 json objects?
 */
 
@@ -21,7 +8,7 @@ const { EventEmitter } = require('events');
 const { randomBytes } = require('crypto');
 const { Database } = require('sqlite3');
 const { Client } = require('pg');
-const { queue } = require('async');
+const { queue, series } = require('async');
 const iferr = require('iferr');
 
 class PubKeyStoreSQL extends EventEmitter {
@@ -29,43 +16,10 @@ class PubKeyStoreSQL extends EventEmitter {
         super();
 
         this._options = Object.assign({
-            db_type: 'sqlite',
-            busy_wait: 1000
+            driver: 'sqlite',
+            busy_wait: 1000,
+            check_interval: 1000
         }, options);
-
-        let db;
-
-        const cb2 = err => {
-            db.removeListener('error', cb2);
-            if (!err) {
-                db.on('error', () => this.emit('error', err);
-                this._db = db;
-            }
-            cb(err);
-        };
-
-        switch (this._options.db_type) {
-        case 'sqlite':
-            db = new Database(this._options.db_filename, this._options.db_mode);
-            db.on('open', cb2);
-            this._true = 1;
-            this._false = 0;
-            this._busy_code = 'SQLITE_BUSY';
-            break;
-
-        case 'pg':
-            db = new Client(this._options.db);
-            db.connect(cb2);
-            this._true = true;
-            this._false = false;
-            this._busy_code = '40001';
-            break;
-
-        default:
-            return cb(new Error(`invalid database type: ${this._options.db_type}`);
-        }
-
-        db.on('error', cb2);
 
         // We need to queue queries on a db connection:
         // https://github.com/mapbox/node-sqlite3/issues/304
@@ -74,25 +28,92 @@ class PubKeyStoreSQL extends EventEmitter {
         // this if required (to achieve more parallelism) by
         // creating many Atributo objects.
         this._queue = queue((task, cb) => task(cb));
+
+        series([
+            cb => {
+                switch (this._options.driver) {
+                case 'sqlite':
+                    this._db = new Database(this._options.sqlite_filename,
+                                            this._options.sqlite_mode);
+                    this._db.on('open', cb);
+                    this._true = 1;
+                    this._false = 0;
+                    this._busy_code = 'SQLITE_BUSY';
+                    break;
+
+                case 'pg':
+                    this._db = new Client(this._options.pg);
+                    this._db.connect(cb);
+                    this._true = true;
+                    this._false = false;
+                    this._busy_code = '40001';
+                    break;
+
+                default:
+                    cb(new Error(`invalid database type: ${this._options.driver}`));
+                    break;
+                }
+            },
+
+            cb => {
+                if (this._options.no_changes) {
+                    return cb();
+                }
+
+                this._get(
+                    'SELECT id FROM pub_keys ORDER BY id DESC LIMIT 1',
+                    [],
+                    iferr(cb, r => {
+                        if (r !== undefined) {
+                            this._last_id = r.id;
+                        }
+                        this._db.on('error', () => this.emit('error', err));
+                        this._check();
+                        cb();
+                    }));
+            }
+        ], iferr(cb, () => cb(null, this)));
+    }
+
+    _check() {
+        this._check_timeout = setTimeout(() => {
+            this._queue.push(cb => {
+                let sql = 'SELECT id, uri, deleted FROM pub_keys';
+                let args = [];
+                if (this._last_id !== undefined) {
+                    sql += ' WHERE id > $1';
+                    args.push(this._last_id);
+                }
+                sql += ' ORDER BY id';
+                this._all(
+                    sql,
+                    args,
+                    iferr(cb, r => {
+                        for (let [id, uri, deleted] of r) {
+                            this.emit('change', uri, id.toString(), deleted);
+                            this._last_id = id;
+                        }
+                        this._check();
+                        cb();
+                    }));
+            }, this._busy(cb, () => this._check()));
+        }, this._options.check_interval);
     }
 
     close(cb) {
-        const cb2 = err => {
-            if (!err) {
-                this._db = null;
+        this._queue.push(cb => {
+            clearTimeout(this._check_timeout);
+
+            switch (this._options.driver) {
+            case 'sqlite':
+                this._db.close(cb2);
+                break;
+
+            case 'pg':
+                this._db.end(cb2);
+                break;
             }
-            if (cb) { cb(err); }
-        };
-
-        switch (this._options.db_type) {
-        case 'sqlite':
-            this._db.close(cb2);
-            break;
-
-        case 'pg':
-            this._db.end(cb2);
-            break;
-        }
+        }, cb);
     }
 
     get_pub_key_by_uri(uri, cb) {
@@ -150,7 +171,7 @@ class PubKeyStoreSQL extends EventEmitter {
 
     add_pub_key(uri, pub_key, cb) {
         const issuer_id = randomBytes(64).toString('hex');
-        const b = this._busy(cb, () => this.add_pub_key(uri, cb);
+        const b = this._busy(cb, () => this.add_pub_key(uri, cb));
         this._in_transaction(b, cb => {
             this._queue.unshift(cb => {
                 this._run(
@@ -167,14 +188,14 @@ class PubKeyStoreSQL extends EventEmitter {
                                     iferr(cb, r => {
                                         cb(null, issuer_id, r.id.toString());
                                     }));
-                            });
-                    }))
+                            }));
+                    }));
             });
         });
     }
 
     remove_pub_key(uri, cb) {
-        const b = this._busy(cb, () => this.remove_pub_key(uri, cb);
+        const b = this._busy(cb, () => this.remove_pub_key(uri, cb));
         this._in_transaction(b, cb => {
             this._queue.unshift(cb => {
                 this._get(
@@ -190,8 +211,8 @@ class PubKeyStoreSQL extends EventEmitter {
                             iferr(cb, () => {
                                 this._run(
                                     'INSERT INTO pub_keys (uri, deleted) VALUES ($1, $2)',
-                                    [uri, this._true]
-                                    cb));
+                                    [uri, this._true],
+                                    cb);
                             }));
                     }));
             });
@@ -253,7 +274,7 @@ class PubKeyStoreSQL extends EventEmitter {
                 this._run('END TRANSACTION',
                           [],
                           cb);
-            }, this._options.db_type === 'sqlite' ?
+            }, this._options.driver === 'sqlite' ?
                 this._busy(cb2,
                            () => f(err, ...args),
                            true) :
@@ -266,7 +287,7 @@ class PubKeyStoreSQL extends EventEmitter {
     _in_transaction(cb, f) {
         let isolation_level;
 
-        switch (this._options.db_type) {
+        switch (this._options.driver) {
         case 'sqlite':
             isolation_level = ''; // SQLite transactions are serializable
             break;
@@ -288,7 +309,7 @@ class PubKeyStoreSQL extends EventEmitter {
     // second parameter to second $something etc.
 
     _run(sql, values, cb) {
-        switch (this._options.db_type) {
+        switch (this._options.driver) {
         case 'sqlite':
             this._db.run(sql, ...values, cb);
             break;
@@ -300,7 +321,7 @@ class PubKeyStoreSQL extends EventEmitter {
     }
 
     _all(sql, values, cb) {
-        switch (this._options.db_type) {
+        switch (this._options.driver) {
         case 'sqlite':
             this._db.all(sql, ...values, cb);
             break;
@@ -312,7 +333,7 @@ class PubKeyStoreSQL extends EventEmitter {
     }
 
     _get(sql, values, cb) {
-        switch (this._options.db_type) {
+        switch (this._options.driver) {
         case 'sqlite':
             this._db.get(sql, ...values, cb);
             break;
@@ -325,5 +346,5 @@ class PubKeyStoreSQL extends EventEmitter {
 }
 
 module.exports = function (config, cb) {
-    return new PubKeyStoreSQL(config, cb);
+    new PubKeyStoreSQL(config, cb);
 };
