@@ -19,7 +19,8 @@
   "main": "index.js",
   "scripts": {
     "test": "grunt lint test",
-    "pg-migrate": "node-pg-migrate",
+    "migrate": "cd sql && ../node_modules/.bin/migrate up && cp pub-keystore.empty.sqlite3 ../test/pub-keystore.sqlite3",
+    "pg-migrate": "node-pg-migrate up",
     "travis-test": "grunt lint coverage coveralls"
   },
   "directories": {

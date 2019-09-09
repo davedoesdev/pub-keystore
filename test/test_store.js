@@ -355,7 +355,8 @@ function make_stores_for_update(multiprocess, num, db_type, db_host, db_port, db
                 db_for_update: true,
                 no_changes: true,
                 username: couchdb_admin_username,
-                password: couchdb_admin_password
+                password: couchdb_admin_password,
+                db_filename: path.join(__dirname, 'pub-keystore.sqlite3')
             }, function (err, store)
             {
                 // Sometimes we get 500 conflict if database was deleted
@@ -410,7 +411,8 @@ function make_stores_for_query(multiprocess, num, db_type, db_name, changes, sta
                 no_changes: !changes,
                 keep_master_open: !multiprocess,
                 no_initial_replicate: multiprocess,
-                db_already_created: true
+                db_already_created: true,
+                db_filename: path.join(__dirname, 'pub-keystore.sqlite3')
             }, function (err, store)
             {
                 if (check_error(err))
@@ -693,7 +695,13 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                         ks._db = ks._db_save;
                         ks._nano = ks._nano_save;
                     }
-                    ks.destroy(cb);
+                    ks.destroy(err => {
+                        if (ks.driver === 'sql') {
+                            expect(err.message).to.equal('not_open');
+                            return cb();
+                        }
+                        cb(err);
+                    });
                 }, function (err)
                 {
                     if (err) { return cb(err); }
@@ -1443,7 +1451,7 @@ var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
 {
     nkeys.forEach(function (n)
     {
-        setup(m, n, 'sql');
+        setup(m, n, 'sqlite');
         //setup(m, n, 'couchdb');
         //setup(m, n, 'couchdb', 'https://localhost', 6984, true);
         //setup(m, n, 'pouchdb');
