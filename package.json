@@ -49,7 +49,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "coveralls": "^3.0.6",
-    "dnode": "^1.2.2",
+    "@davedoesdev/dnode": "^1.2.3",
     "grunt": "^1.0.4",
     "grunt-apidox": "^2.0.7",
     "grunt-bg-shell": "^2.3.3",

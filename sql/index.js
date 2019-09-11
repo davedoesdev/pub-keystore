@@ -91,9 +91,17 @@ class PubKeyStoreSQL extends EventEmitter {
         });
     }
 
+    _ifopen(cb) {
+        return (...args) => {
+            if (this._open) {
+                cb.call(this, ...args);
+            }
+        };
+    }
+
     _check() {
-        this._check_timeout = setTimeout(() => {
-            this._queue.push(cb => {
+        this._check_timeout = setTimeout(this._ifopen(() => {
+            this._queue.push(this._ifopen(cb => {
                 let sql = 'SELECT id, uri, deleted FROM pub_keys';
                 let args = [];
                 if (this._last_id !== undefined) {
@@ -109,11 +117,12 @@ class PubKeyStoreSQL extends EventEmitter {
                             this.emit('change', uri, id.toString(), deleted === this._true);
                             this._last_id = id;
                         }
-                        this._check();
                         cb();
                     }));
-            }, this._busy(err => this.emit('error', err), () => this._check()));
-        }, this._options.check_interval);
+            }), this._busy(iferr(err => this.emit('error', err),
+                                 this._ifopen(this._check)),
+                           this._ifopen(this._check)));
+        }), this._options.check_interval);
     }
 
     close(cb) {
@@ -145,10 +154,10 @@ class PubKeyStoreSQL extends EventEmitter {
     get_pub_key_by_uri(uri, cb) {
         this._queue.push(cb => {
             this._get(
-                'SELECT pub_key, issuer_id, id FROM pub_keys WHERE uri = $1 AND NOT deleted;',
+                'SELECT pub_key, issuer_id, id, deleted FROM pub_keys WHERE uri = $1 ORDER BY id DESC LIMIT 1;',
                 [uri],
                 iferr(cb, r => {
-                    if (r === undefined) {
+                    if ((r === undefined) || r.deleted) {
                         return cb(null, null);
                     }
                     cb(null, r.pub_key, r.issuer_id, r.id.toString());
@@ -157,26 +166,37 @@ class PubKeyStoreSQL extends EventEmitter {
     }
 
     get_pub_key_by_issuer_id(issuer_id, cb) {
-        this._queue.push(cb => {
-            this._get(
-                'SELECT pub_key, uri, id FROM pub_keys WHERE issuer_id = $1 AND NOT deleted;',
-                [issuer_id],
-                iferr(cb, r => {
-                    if (r === undefined) {
-                        return cb(null, null);
-                    }
-                    cb(null, r.pub_key, r.uri, r.id.toString());
-                }));
-        }, this._busy(cb, () => this.get_pub_key_by_issuer_id(issuer_id, cb)));
+        const b = this._busy(cb, () => this.get_pub_key_by_issuer_id(issuer_id, cb));
+        this._in_transaction(b, cb => {
+            this._queue.unshift(cb => {
+                this._get(
+                    'SELECT uri FROM pub_keys WHERE issuer_id = $1;',
+                    [issuer_id],
+                    iferr(cb, r => {
+                        if (r === undefined) {
+                            return cb(null, null);
+                        }
+                        this._get(
+                            'SELECT pub_key, issuer_id, id, deleted FROM pub_keys WHERE uri = $1 ORDER BY id DESC LIMIT 1;',
+                            [r.uri],
+                            iferr(cb, r2 => {
+                                if (r2.deleted || (r2.issuer_id !== issuer_id)) {
+                                    return cb(null, null);
+                                }
+                                cb(null, r2.pub_key, r.uri, r2.id.toString());
+                            }));
+                    }));
+            }, cb);
+        });
     }
 
     get_issuer_id(uri, cb) {
         this._queue.push(cb => {
             this._get(
-                'SELECT issuer_id, id FROM pub_keys WHERE uri = $1 AND NOT deleted;',
+                'SELECT issuer_id, id, deleted FROM pub_keys WHERE uri = $1 ORDER BY id DESC LIMIT 1;',
                 [uri],
                 iferr(cb, r => {
-                    if (r === undefined) {
+                    if ((r === undefined) || r.deleted) {
                         return cb(null, null);
                     }
                     cb(null, r.issuer_id, r.id.toString());
@@ -187,7 +207,7 @@ class PubKeyStoreSQL extends EventEmitter {
     get_uris(cb) {
         this._queue.push(cb => {
             this._all(
-                'SELECT uri FROM pub_keys WHERE NOT deleted;',
+                'SELECT uri FROM (SELECT uri, deleted, row_number() OVER(PARTITION BY uri ORDER BY id DESC) AS rn FROM pub_keys) WHERE rn = 1 AND NOT deleted;',
                 [],
                 iferr(cb, r => {
                     cb(null, r.map(row => row.uri));
@@ -200,23 +220,18 @@ class PubKeyStoreSQL extends EventEmitter {
             return cb(new Error('invalid_uri'));
         }
         const issuer_id = randomBytes(64).toString('hex');
-        const b = this._busy(cb, () => this.add_pub_key(uri, cb));
+        const b = this._busy(cb, () => this.add_pub_key(uri, pub_key, cb));
         this._in_transaction(b, cb => {
             this._queue.unshift(cb => {
                 this._run(
-                    'DELETE FROM pub_keys WHERE uri = $1;',
-                    [uri],
+                    'INSERT INTO pub_keys (uri, issuer_id, pub_key, deleted) VALUES ($1, $2, $3, $4)',
+                    [uri, issuer_id, pub_key, this._false],
                     iferr(cb, () => {
-                        this._run(
-                            'INSERT INTO pub_keys (uri, issuer_id, pub_key, deleted) VALUES ($1, $2, $3, $4)',
-                            [uri, issuer_id, pub_key, this._false],
-                            iferr(cb, () => {
-                                this._get(
-                                    'SELECT id FROM pub_keys WHERE uri = $1;',
-                                    [uri],
-                                    iferr(cb, r => {
-                                        cb(null, issuer_id, r.id.toString());
-                                    }));
+                        this._get(
+                            'SELECT id FROM pub_keys WHERE issuer_id = $1;',
+                            [issuer_id],
+                            iferr(cb, r => {
+                                cb(null, issuer_id, r.id.toString());
                             }));
                     }));
             }, cb);
@@ -231,21 +246,16 @@ class PubKeyStoreSQL extends EventEmitter {
         this._in_transaction(b, cb => {
             this._queue.unshift(cb => {
                 this._get(
-                    'SELECT id FROM pub_keys WHERE uri = $1 AND NOT deleted;',
+                    'SELECT deleted FROM pub_keys WHERE uri = $1 ORDER BY id DESC LIMIT 1;',
                     [uri],
                     iferr(cb, r => {
-                        if (r === undefined) {
-                            return cb(null);
+                        if ((r === undefined) || r.deleted) {
+                            return cb();
                         }
                         this._run(
-                            'DELETE FROM pub_keys WHERE id = $1;',
-                            [r.id],
-                            iferr(cb, () => {
-                                this._run(
-                                    'INSERT INTO pub_keys (uri, deleted) VALUES ($1, $2)',
-                                    [uri, this._true],
-                                    cb);
-                            }));
+                            'INSERT INTO pub_keys (uri, deleted) VALUES ($1, $2)',
+                            [uri, this._true],
+                            cb);
                     }));
             }, cb);
         });

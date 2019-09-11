@@ -8,8 +8,7 @@ exports.up = pgm => {
         },
         uri: {
             type: 'text',
-            notNull: true,
-            unique: true
+            notNull: true
         },
         issuer_id: {
             type: 'text',

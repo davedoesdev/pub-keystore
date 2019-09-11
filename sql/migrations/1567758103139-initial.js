@@ -18,7 +18,7 @@ exports.up = function (next) {
             cb => {
                 this.run('CREATE TABLE pub_keys (' +
                          '  id INTEGER PRIMARY KEY AUTOINCREMENT,' +
-                         '  uri TEXT NOT NULL UNIQUE,' + 
+                         '  uri TEXT NOT NULL,' + 
                          '  issuer_id TEXT UNIQUE,' +
                          '  pub_key TEXT,' +
                          '  deleted BOOLEAN NOT NULL);',

@@ -2,7 +2,7 @@
 "use strict";
 
 var https = require('https'),
-    dnode = require('dnode'),
+    dnode = require('@davedoesdev/dnode'),
     Feed = require('cloudant-follow').Feed,
     keystore = require('../..'),    
     port = parseInt(process.argv[2], 10),
@@ -52,7 +52,7 @@ keystore(config, function (err, ks)
             f, orig_on, orig_once, server, expect_done = true;
 
         /*jslint forin: true */
-        for (f in proto)
+        for (f of Object.getOwnPropertyNames(proto))
         {
             if (typeof ks[f] === 'function')
             {
@@ -109,7 +109,7 @@ keystore(config, function (err, ks)
             ks._nano = ks._nano_save;
         };
 
-        server = dnode(ks, { weak: false });
+        server = dnode(ks);
 
         server.on('error', function (err2)
         {

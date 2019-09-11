@@ -77,8 +77,7 @@ function mp_keystore(config, cb)
         {
             if (!msg.has_ks) { return cb(msg.err); }
 
-            //client = dnode.connect(port);
-            client = dnode(null, { weak: false }).connect(port);
+            client = dnode.connect(port);
 
             client.on('remote', function (remote)
             {
@@ -363,7 +362,7 @@ function make_stores_for_update(multiprocess, num, db_type, db_host, db_port, db
                 // then created immediately before this create request
                 if (err && (err.reason !== 'conflict'))
                 {
-                    console.log(err);
+                    console.error(err);
                     return cb(err);
                 }
                 cb(null, store);
@@ -1451,7 +1450,8 @@ var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
 {
     nkeys.forEach(function (n)
     {
-        setup(m, n, 'sqlite');
+        //setup(m, n, 'sqlite');
+        setup(m, n, 'pg');
         //setup(m, n, 'couchdb');
         //setup(m, n, 'couchdb', 'https://localhost', 6984, true);
         //setup(m, n, 'pouchdb');

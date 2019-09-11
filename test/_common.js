@@ -20,7 +20,7 @@ global.rimraf = require('rimraf');
 global.child_process = require('child_process');
 global.expect = require('chai').expect;
 global.async = require('async');
-global.dnode = require('dnode');
+global.dnode = require('@davedoesdev/dnode');
 global.keystore = require('..');
 
 global.db_name = 'test';
