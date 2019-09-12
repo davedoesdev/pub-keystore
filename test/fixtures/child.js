@@ -11,7 +11,13 @@ var https = require('https'),
 
 JSON.stringify = function (v, f)
 {
-    return orig_stringify.call(JSON, v, function (k, v)
+    let db;
+    if (v && v.arguments && v.arguments[0] && v.arguments[0]._db)
+    {
+        db = v.arguments[0]._db;
+        delete v.arguments[0]._db;
+    }
+    const r = orig_stringify.call(JSON, v, function (k, v)
     {
         // Stop dnode trying to serialize change feed and TLS sessions
         if ((v instanceof Feed) ||
@@ -22,6 +28,11 @@ JSON.stringify = function (v, f)
 
         return (typeof f === 'function') ? f.call(this, k, v) : v;
     });
+    if (db)
+    {
+        v.arguments[0]._db = db;
+    }
+    return r;
 };
 
 process.on('message', function (msg)

@@ -207,7 +207,7 @@ class PubKeyStoreSQL extends EventEmitter {
     get_uris(cb) {
         this._queue.push(cb => {
             this._all(
-                'SELECT uri FROM (SELECT uri, deleted, row_number() OVER(PARTITION BY uri ORDER BY id DESC) AS rn FROM pub_keys) WHERE rn = 1 AND NOT deleted;',
+                'SELECT uri FROM (SELECT uri, deleted, row_number() OVER(PARTITION BY uri ORDER BY id DESC) AS rn FROM pub_keys) sub WHERE rn = 1 AND NOT deleted;',
                 [],
                 iferr(cb, r => {
                     cb(null, r.map(row => row.uri));

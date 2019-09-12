@@ -21,6 +21,7 @@
 "use strict";
 
 var argv = require('yargs').argv,
+    config = require('config'),
     num_keys = 10,
     uri = 'mailto:dave@davedoesdev.com',
     mp_port,
@@ -355,7 +356,8 @@ function make_stores_for_update(multiprocess, num, db_type, db_host, db_port, db
                 no_changes: true,
                 username: couchdb_admin_username,
                 password: couchdb_admin_password,
-                db_filename: path.join(__dirname, 'pub-keystore.sqlite3')
+                db_filename: path.join(__dirname, 'pub-keystore.sqlite3'),
+                db: config.db
             }, function (err, store)
             {
                 // Sometimes we get 500 conflict if database was deleted
@@ -411,7 +413,8 @@ function make_stores_for_query(multiprocess, num, db_type, db_name, changes, sta
                 keep_master_open: !multiprocess,
                 no_initial_replicate: multiprocess,
                 db_already_created: true,
-                db_filename: path.join(__dirname, 'pub-keystore.sqlite3')
+                db_filename: path.join(__dirname, 'pub-keystore.sqlite3'),
+                db: config.db
             }, function (err, store)
             {
                 if (check_error(err))
@@ -1450,11 +1453,11 @@ var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
 {
     nkeys.forEach(function (n)
     {
-        //setup(m, n, 'sqlite');
+        setup(m, n, 'couchdb');
+        setup(m, n, 'couchdb', 'https://localhost', 6984, true);
+        setup(m, n, 'pouchdb');
+        setup(m, n, 'sqlite');
         setup(m, n, 'pg');
-        //setup(m, n, 'couchdb');
-        //setup(m, n, 'couchdb', 'https://localhost', 6984, true);
-        //setup(m, n, 'pouchdb');
     });
 });
 
