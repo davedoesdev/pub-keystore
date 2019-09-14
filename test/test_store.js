@@ -595,8 +595,17 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
         }
         else
         {
-            after_deploy = done;
-            do_deploy();
+            after_deploy = () => {};
+
+            uks.once('replicated', function (close)
+            {
+                close(done);
+            }, multiprocess ? () => uks.replicate(do_deploy) : undefined);
+
+            if (!multiprocess)
+            {
+                uks.replicate(do_deploy);
+            }
         }
     }
 
@@ -1400,6 +1409,14 @@ describe('index', function ()
         });
     });
 
+    it('should callback with error when unknown sql db_type is passed', function (cb) {
+        require('../sql')({ db_type: 'foobar' }, function (err)
+        {
+            expr(expect(err).to.exist);
+            cb();
+        });
+    });
+
     it("should callback with error if database doesn't exist and can't create", function (cb)
     {
         keystore(
@@ -1418,7 +1435,7 @@ describe('index', function ()
 
 describe('close', function ()
 {
-['pouchdb', 'couchdb'].forEach(function (db_type)
+['pouchdb', 'couchdb', 'sqlite', 'pg'].forEach(function (db_type)
 {
     it('should not perform operations after close', function (cb)
     {
@@ -1428,7 +1445,9 @@ describe('close', function ()
             db_name: 'foobar',
             no_changes: true,
             username: couchdb_admin_username,
-            password: couchdb_admin_password
+            password: couchdb_admin_password,
+            db_filename: path.join(__dirname, 'pub-keystore.sqlite3'),
+            db: config.db
         }, function (err, ks)
         {
             if (err) { return cb(err); }
@@ -1453,17 +1472,17 @@ var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
 {
     nkeys.forEach(function (n)
     {
-        setup(m, n, 'couchdb');
-        setup(m, n, 'couchdb', 'https://localhost', 6984, true);
-        setup(m, n, 'pouchdb');
+        //setup(m, n, 'couchdb');
+        //setup(m, n, 'couchdb', 'https://localhost', 6984, true);
+        //setup(m, n, 'pouchdb');
         setup(m, n, 'sqlite');
-        setup(m, n, 'pg');
+        //setup(m, n, 'pg');
     });
 });
 
 describe('no updates', function ()
 {
-['pouchdb', 'couchdb'].forEach(function (db_type)
+['pouchdb', 'couchdb', 'sqlite', 'pg'].forEach(function (db_type)
 {
     it('should not update key', function (cb)
     {
@@ -1475,7 +1494,9 @@ describe('no updates', function ()
             username: couchdb_admin_username,
             password: couchdb_admin_password,
             no_changes: true,
-            no_updates: true
+            no_updates: true,
+            db_filename: path.join(__dirname, 'pub-keystore.sqlite3'),
+            db: config.db
         }, function (err, store)
         {
             store.create(function (err)
@@ -1490,7 +1511,17 @@ describe('no updates', function ()
                     {
                         expect(db_type === 'pouchdb' ? err.status : err.statusCode).to.equal(409);
                         expect(db_type === 'pouchdb' ? err.name : err.error).to.equal('conflict');
-                        store.close(cb);
+                        store.remove_pub_key('update_test', function (err)
+                        {
+                            if (err) { return cb(err); }
+                            store.add_pub_key('update_test', 'update_key', function (err, issuer_id, rev)
+                            {
+                                if (err) { return cb(err); }
+                                expr(expect(issuer_id).to.exist);
+                                expr(expect(rev).to.exist);
+                                store.close(cb);
+                            });
+                        });
                     });
                 });
             });
@@ -1501,7 +1532,7 @@ describe('no updates', function ()
 
 describe('objects as public keys', function ()
 {
-['pouchdb', 'couchdb'].forEach(function (db_type)
+['pouchdb', 'couchdb', 'sqlite', 'pg'].forEach(function (db_type)
 {
     it('should add object as public key', function (cb)
     {
@@ -1512,7 +1543,9 @@ describe('objects as public keys', function ()
             db_for_update: true,
             username: couchdb_admin_username,
             password: couchdb_admin_password,
-            no_changes: true
+            no_changes: true,
+            db_filename: path.join(__dirname, 'pub-keystore.sqlite3'),
+            db: config.db
         }, function (err, store)
         {
             store.create(function (err)

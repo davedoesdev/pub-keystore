@@ -28,7 +28,7 @@ class PubKeyStoreSQL extends EventEmitter {
         // Alternative would be to create a separate connection
         // for each query. The calling application can still do
         // this if required (to achieve more parallelism) by
-        // creating many Atributo objects.
+        // creating many keystores.
         this._queue = queue((task, cb) => {
             if (!this._open) {
                 return cb(new Error('not_open'));
@@ -78,25 +78,16 @@ class PubKeyStoreSQL extends EventEmitter {
                         if (r !== undefined) {
                             this._last_id = r.id;
                         }
-                        db.on('error', () => this.emit('error', err));
+                        db.on('error', this.emit.bind(this, 'error'));
                         this._check();
                         cb();
                     }));
             }
-        ], err => {
-            if (err) {
-                return this.close(() => cb(err));
-            }
-            cb(null, this);
-        });
+        ], iferr(err => this.close(() => cb(err)), () => cb(null, this)));
     }
 
     _ifopen(cb) {
-        return (...args) => {
-            if (this._open) {
-                cb.call(this, ...args);
-            }
-        };
+        return (...args) => !this._open || cb.call(this, ...args);
     }
 
     _check() {
@@ -119,7 +110,7 @@ class PubKeyStoreSQL extends EventEmitter {
                         }
                         cb();
                     }));
-            }), this._busy(iferr(err => this.emit('error', err),
+            }), this._busy(iferr(this.emit.bind(this, 'error'),
                                  this._ifopen(this._check)),
                            this._ifopen(this._check)));
         }), this._options.check_interval);
@@ -160,13 +151,13 @@ class PubKeyStoreSQL extends EventEmitter {
                     if ((r === undefined) || r.deleted) {
                         return cb(null, null);
                     }
-                    cb(null, r.pub_key, r.issuer_id, r.id.toString());
+                    cb(null, JSON.parse(r.pub_key), r.issuer_id, r.id.toString());
                 }));
-        }, this._busy(cb, () => this.get_pub_key_by_uri(uri, cb)));
+        }, this._busy(cb, this.get_pub_key_by_uri.bind(this, uri, cb)));
     }
 
     get_pub_key_by_issuer_id(issuer_id, cb) {
-        const b = this._busy(cb, () => this.get_pub_key_by_issuer_id(issuer_id, cb));
+        const b = this._busy(cb, this.get_pub_key_by_issuer_id.bind(this, issuer_id, cb));
         this._in_transaction(b, cb => {
             this._queue.unshift(cb => {
                 this._get(
@@ -183,7 +174,7 @@ class PubKeyStoreSQL extends EventEmitter {
                                 if (r2.deleted || (r2.issuer_id !== issuer_id)) {
                                     return cb(null, null);
                                 }
-                                cb(null, r2.pub_key, r.uri, r2.id.toString());
+                                cb(null, JSON.parse(r2.pub_key), r.uri, r2.id.toString());
                             }));
                     }));
             }, cb);
@@ -201,7 +192,7 @@ class PubKeyStoreSQL extends EventEmitter {
                     }
                     cb(null, r.issuer_id, r.id.toString());
                 }));
-        }, this._busy(cb, () => this.get_issuer_id(uri, cb)));
+        }, this._busy(cb, this.get_issuer_id.bind(this, uri, cb)));
     }
 
     get_uris(cb) {
@@ -212,7 +203,7 @@ class PubKeyStoreSQL extends EventEmitter {
                 iferr(cb, r => {
                     cb(null, r.map(row => row.uri));
                 }));
-        }, this._busy(cb, () => this.get_uris(cb)));
+        }, this._busy(cb, this.get_uris.bind(this, cb)));
     }
 
     add_pub_key(uri, pub_key, cb) {
@@ -220,18 +211,31 @@ class PubKeyStoreSQL extends EventEmitter {
             return cb(new Error('invalid_uri'));
         }
         const issuer_id = randomBytes(64).toString('hex');
-        const b = this._busy(cb, () => this.add_pub_key(uri, pub_key, cb));
+        const b = this._busy(cb, this.add_pub_key.bind(this, uri, pub_key, cb));
         this._in_transaction(b, cb => {
             this._queue.unshift(cb => {
-                this._run(
-                    'INSERT INTO pub_keys (uri, issuer_id, pub_key, deleted) VALUES ($1, $2, $3, $4)',
-                    [uri, issuer_id, pub_key, this._false],
-                    iferr(cb, () => {
-                        this._get(
-                            'SELECT id FROM pub_keys WHERE issuer_id = $1;',
-                            [issuer_id],
-                            iferr(cb, r => {
-                                cb(null, issuer_id, r.id.toString());
+                this._get(
+                    'SELECT deleted FROM pub_keys WHERE uri = $1 ORDER BY id DESC LIMIT 1;',
+                    [uri],
+                    iferr(cb, r => {
+                        if (this._options.no_updates &&
+                            (r !== undefined) &&
+                            !r.deleted) {
+                            const err = new Error('already exists');
+                            err.statusCode = 409;
+                            err.error = 'conflict';
+                            return cb(err);
+                        }
+                        this._run(
+                            'INSERT INTO pub_keys (uri, issuer_id, pub_key, deleted) VALUES ($1, $2, $3, $4)',
+                            [uri, issuer_id, JSON.stringify(pub_key), this._false],
+                            iferr(cb, () => {
+                                this._get(
+                                    'SELECT id FROM pub_keys WHERE issuer_id = $1;',
+                                    [issuer_id],
+                                    iferr(cb, r => {
+                                        cb(null, issuer_id, r.id.toString());
+                                    }));
                             }));
                     }));
             }, cb);
@@ -242,7 +246,7 @@ class PubKeyStoreSQL extends EventEmitter {
         if ((uri === null) || (uri === undefined)) {
             return cb(new Error('invalid_uri'));
         }
-        const b = this._busy(cb, () => this.remove_pub_key(uri, cb));
+        const b = this._busy(cb, this.remove_pub_key.bind(this, uri, cb));
         this._in_transaction(b, cb => {
             this._queue.unshift(cb => {
                 this._get(
@@ -262,28 +266,24 @@ class PubKeyStoreSQL extends EventEmitter {
     }
 
     create(cb) {
-        if (cb) { cb(); }
+        !cb || cb();
     }
 
     destroy(cb) {
         this._queue.push(cb => {
             this._run('DELETE FROM pub_keys', [], cb);
-        }, this._busy(iferr(cb, () => this.close(cb)),
-                      () => this.destroy(cb)));
+        }, this._busy(iferr(cb, this.close.bind(this, cb)),
+                      this.destroy.bind(this, cb)));
     }
 
     replicate(opts, cb) {
-        if (typeof opts === 'function') {
-            cb = opts;
-        }
-
+        (typeof opts !== 'function') || (cb = opts);
         this.emit('replicated', cb => cb());
-
-        if (cb) { cb(); }
+        !cb || cb();
     }
 
     deploy(cb) {
-        if (cb) { cb(); }
+        !cb || cb();
     }
 
     _busy(f, retry, block) {
@@ -309,7 +309,7 @@ class PubKeyStoreSQL extends EventEmitter {
                               [],
                               cb);
                 }, this._busy(err2 => cb(err2 || err, ...args),
-                              () => f(err, ...args),
+                              f.bind(this, err, ...args),
                               true));
             }
 
@@ -321,7 +321,7 @@ class PubKeyStoreSQL extends EventEmitter {
                           cb);
             }, this._options.db_type === 'sqlite' ?
                 this._busy(cb2,
-                           () => f(err, ...args),
+                           f.bind(this, err, ...args),
                            true) :
                 cb2);
         };

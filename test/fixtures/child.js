@@ -63,7 +63,7 @@ keystore(config, function (err, ks)
             f, orig_on, orig_once, server, expect_done = true;
 
         /*jslint forin: true */
-        for (f of Object.getOwnPropertyNames(proto))
+        for (f of ['emit', ...Object.getOwnPropertyNames(proto)])
         {
             if (typeof ks[f] === 'function')
             {
@@ -105,7 +105,10 @@ keystore(config, function (err, ks)
             expect_done = false;
             orig_once.call(ks, event, cb);
             expect_done = true;
-            done();
+            if (done)
+            {
+                done();
+            }
         };
 
         ks.save_db_nano = function ()

@@ -119,6 +119,29 @@ before(function (cb)
     }, cb);
 });
 
+const iferr = require('iferr');
+
+before(function (cb) {
+    const { Database } = require('sqlite3');
+    const db = new Database(path.join(__dirname, 'pub-keystore.sqlite3'));
+    db.on('open', iferr(cb, () => {
+        db.run('DELETE FROM pub_keys', iferr(cb, () => {
+            db.close(cb);
+        }));
+    }));
+});
+
+before(function (cb) {
+    const { Client } = require('pg');
+    const config = require('config');
+    const db = new Client(config.db);
+    db.connect(iferr(cb, () => {
+        db.query('DELETE FROM pub_keys', iferr(cb, () => {
+            db.end(cb);
+        }));
+    }));
+});
+
 after(function ()
 {
     couchdb_process.kill();
