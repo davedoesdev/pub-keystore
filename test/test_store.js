@@ -1409,14 +1409,6 @@ describe('index', function ()
         });
     });
 
-    it('should callback with error when unknown sql db_type is passed', function (cb) {
-        require('../sql')({ db_type: 'foobar' }, function (err)
-        {
-            expr(expect(err).to.exist);
-            cb();
-        });
-    });
-
     it("should callback with error if database doesn't exist and can't create", function (cb)
     {
         keystore(
@@ -1472,10 +1464,10 @@ var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
 {
     nkeys.forEach(function (n)
     {
-        //setup(m, n, 'couchdb');
+        setup(m, n, 'couchdb');
         //setup(m, n, 'couchdb', 'https://localhost', 6984, true);
         //setup(m, n, 'pouchdb');
-        setup(m, n, 'sqlite');
+        //setup(m, n, 'sqlite');
         //setup(m, n, 'pg');
     });
 });
@@ -1580,4 +1572,47 @@ describe('objects as public keys', function ()
         });
     });
 });
+});
+
+describe('sql', function ()
+{
+    it('should callback with error when unknown sql db_type is passed', function (cb) {
+        require('../sql')({ db_type: 'foobar' }, function (err)
+        {
+            expr(expect(err).to.exist);
+            cb();
+        });
+    });
+
+    it('should retry commit', function (cb)
+    {
+        keystore(
+        {
+            db_type: 'sqlite',
+            db_filename: path.join(__dirname, 'pub-keystore.sqlite3'),
+        }, function (err, store)
+        {
+            const orig_busy = store._busy;
+            let called = 0;
+            store._busy = function (f, retry, block)
+            {
+                const b = orig_busy.call(this, f, retry, block);
+                return (err, ...args) =>
+                {
+                    if (block && (++called < 3))
+                    {
+                        return b.call(this, { code: 'SQLITE_BUSY' }, ...args);
+                    }
+
+                    return b.call(this, err, ...args);
+                }
+            };
+            store.add_pub_key('foo', 'bar', function (err)
+            {
+                expect(err.message).to.equal('SQLITE_ERROR: cannot commit - no transaction is active');
+                expect(err.code).to.equal('SQLITE_ERROR');
+                store.close(cb);
+            });
+        });
+    });
 });
