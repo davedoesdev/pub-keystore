@@ -29,17 +29,6 @@ global.couchdb_admin_password = 'admin';
 
 before(function (cb)
 {
-    fs.readFile(path.join(__dirname, '..', 'couchdb', 'keys', 'ca.crt'), 'utf8',
-    function (err, ca)
-    {
-        if (err) { return cb(err); }
-        global.cert_authority = ca;
-        cb();
-    });
-});
-
-before(function (cb)
-{
     global.temp_store_dir = path.join(os.tmpdir(), 'pub-keystore-stores');
 
     async.series([

@@ -6,7 +6,6 @@
          expect: false,
          keystore: false,
          temp_store_dir: false,
-         cert_authority: false,
          couchdb_admin_username: false,
          couchdb_admin_password: false,
          fs: false,
@@ -337,7 +336,7 @@ function query_checks(states, concurrent)
     });
 }
 
-function make_stores_for_update(multiprocess, num, db_type, db_host, db_port, db_name, ssl, states)
+function make_stores_for_update(multiprocess, num, db_type, db_name, states)
 {
     return function (cb)
     {
@@ -348,10 +347,7 @@ function make_stores_for_update(multiprocess, num, db_type, db_host, db_port, db
             {
                 db_type: db_type,
                 db_dir: num > 1 ? temp_store_dir : undefined,
-                db_host: db_host,
-                db_port: db_port,
                 db_name: num === 1 ? db_name : undefined,
-                ca: ssl ? cert_authority : undefined,
                 db_for_update: true,
                 no_changes: true,
                 username: couchdb_admin_username,
@@ -1295,9 +1291,9 @@ function make_states()
     return [{ uri: uri }];
 }
 
-function setup(multiprocess, num, db_type, db_host, db_port, ssl)
+function setup(multiprocess, num, db_type)
 {
-    describe('keystore ' + db_type + ' functionality (separate store for each test, without changes, num=' + num + ', multiprocess=' + multiprocess + ', ssl=' + ssl + ')', function ()
+    describe('keystore ' + db_type + ' functionality (separate store for each test, without changes, num=' + num + ', multiprocess=' + multiprocess + ')', function ()
     {
         this.timeout(long_timeout);
 
@@ -1307,7 +1303,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
             close_update_stores = close_stores_for_update(states);
 
         beforeEach(reset_mp_port);
-        beforeEach(make_stores_for_update(multiprocess, num, db_type, db_host, db_port, db_name, ssl, states));
+        beforeEach(make_stores_for_update(multiprocess, num, db_type, db_name, states));
         beforeEach(make_query_stores);
         
         afterEach(close_update_stores);
@@ -1316,7 +1312,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
         tests(states, multiprocess, true, false, make_query_stores, close_query_stores, close_update_stores);
     });
 
-    describe('keystore ' + db_type + ' functionality (one store for all tests, without changes, num=' + num + ', multiprocess=' + multiprocess + ', ssl=' + ssl + ')', function ()
+    describe('keystore ' + db_type + ' functionality (one store for all tests, without changes, num=' + num + ', multiprocess=' + multiprocess + ')', function ()
     {
         this.timeout(long_timeout);
 
@@ -1338,7 +1334,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
         }
 
         bef(reset_mp_port);
-        bef(make_stores_for_update(multiprocess, num, db_type, db_host, db_port, db_name, ssl, states));
+        bef(make_stores_for_update(multiprocess, num, db_type, db_name, states));
         bef(make_query_stores);
         
         aft(close_update_stores);
@@ -1347,7 +1343,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
         tests(states, multiprocess, multiprocess, false, make_query_stores, close_query_stores, close_update_stores);
     });
 
-    describe('keystore ' + db_type + ' functionality (separate store for each test, with changes, num=' + num + ', multiprocess=' + multiprocess + ', ssl=' + ssl + ')', function ()
+    describe('keystore ' + db_type + ' functionality (separate store for each test, with changes, num=' + num + ', multiprocess=' + multiprocess + ')', function ()
     {
         this.timeout(long_timeout);
 
@@ -1357,7 +1353,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
             close_update_stores = close_stores_for_update(states);
 
         beforeEach(reset_mp_port);
-        beforeEach(make_stores_for_update(multiprocess, num, db_type, db_host, db_port, db_name, ssl, states));
+        beforeEach(make_stores_for_update(multiprocess, num, db_type, db_name, states));
         beforeEach(make_query_stores);
         
         afterEach(close_update_stores);
@@ -1366,7 +1362,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
         tests(states, multiprocess, true, true, make_query_stores, close_query_stores, close_update_stores);
     });
 
-    describe('keystore ' + db_type + ' functionality (one store for all tests, with changes, num=' + num + ', multiprocess=' + multiprocess + ', ssl=' + ssl + ')', function ()
+    describe('keystore ' + db_type + ' functionality (one store for all tests, with changes, num=' + num + ', multiprocess=' + multiprocess + ')', function ()
     {
         this.timeout(long_timeout);
 
@@ -1388,7 +1384,7 @@ function setup(multiprocess, num, db_type, db_host, db_port, ssl)
         }
 
         bef(reset_mp_port);
-        bef(make_stores_for_update(multiprocess, num, db_type, db_host, db_port, db_name, ssl, states));
+        bef(make_stores_for_update(multiprocess, num, db_type, db_name, states));
         bef(make_query_stores);
         
         aft(close_update_stores);
@@ -1465,10 +1461,9 @@ var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
     nkeys.forEach(function (n)
     {
         setup(m, n, 'couchdb');
-        //setup(m, n, 'couchdb', 'https://localhost', 6984, true);
-        //setup(m, n, 'pouchdb');
-        //setup(m, n, 'sqlite');
-        //setup(m, n, 'pg');
+        setup(m, n, 'pouchdb');
+        setup(m, n, 'sqlite');
+        setup(m, n, 'pg');
     });
 });
 
@@ -1605,7 +1600,7 @@ describe('sql', function ()
                     }
 
                     return b.call(this, err, ...args);
-                }
+                };
             };
             store.add_pub_key('foo', 'bar', function (err)
             {

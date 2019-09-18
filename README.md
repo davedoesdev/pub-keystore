@@ -4,7 +4,7 @@ A simple store for public keys in Node.js.
 
 - Index keys by URI and issuer IDs.
 - Listen to key updates.
-- Backed by [PouchDB](http://pouchdb.com/) or [CouchDB 2](http://couchdb.apache.org/).
+- Backed by [PouchDB](http://pouchdb.com/), [CouchDB 2](http://couchdb.apache.org/), [SQLite](https://www.sqlite.org) or [PostgreSQL](https://www.postgresql.org).
 - Keys can be in any format (or even not keys!).
 - Supports access from multiple processes.
 - Full set of unit tests.
@@ -129,11 +129,11 @@ _Source: [docs.js](/docs.js)_
 **Parameters:**
 
 - `{Object} config` Configures the keystore. Valid properties:
-  - `{String} db_type` The type of database to use for backing the store. You must supply either `pouchdb` or `couchdb`.
+  - `{String} db_type` The type of database to use for backing the store. You must supply `pouchdb`, `couchdb`, `sqlite` or `pg`.
 
-  - `{String} [db_name]` Name of database to use for storing keys. Defaults to `pub-keys`.
+  - `{String} [db_name]` (`db_type='pouchdb'` or `db_type='couchdb'`) Name of database to use for storing keys. Defaults to `pub-keys`.
 
-  - `{Boolean} [db_already_created]` If falsey then the database will be created. This is an idempotent operation so it doesn't matter if the database has already been created. However, if you know the database already exists then you can pass `true`. Defaults to `false`. If the database doesn't exist and you don't have permission to create it then `cb` will receive an error.
+  - `{Boolean} [db_already_created]` (`db_type='pouchdb'` or `db_type='couchdb'`) If falsey then the database will be created. This is an idempotent operation so it doesn't matter if the database has already been created. However, if you know the database already exists then you can pass `true`. Defaults to `false`. If the database doesn't exist and you don't have permission to create it then `cb` will receive an error. You must create SQLite and PostgreSQL databases beforehand. For SQLite, use a _copy_ of [`sql/pub-keystore.empty.sqlite3`](sql/pub-keystore.empty.sqlite3).
 
   - `{Boolean} [no_changes]` Don't emit `change` events when a key is changed. Defaults to `false` (i.e. do emit `change` events).
 
@@ -166,6 +166,16 @@ _Source: [docs.js](/docs.js)_
   - `{String} [password]` (`db_type='couchdb'`) If you need to authenticate to your CouchDB server (e.g. to gain database update rights) then specify the user's password here. Defaults to `undefined` (anonymous access).
 
   - `{Integer} [maxSockets]` (`db_type='couchdb'`) Maximum number of concurrent sockets that can be opened to the CouchDB server. Defaults to `Infinity`.
+
+  - `{Integer} [busy_wait]` (`db_type='sqlite'` or `db_type='pg'`) Number of milliseconds to wait for retrying if another keystore has the database file locked or is performing a transaction. Defaults to 1000.
+
+  - `{Integer} [check_interval]` (`db_type='sqlite'` or `db_type='pg'`) Number of milliseconds between checking the database for changes. Defaults to 1000.
+
+  - `{String} db_filename` (`db_type='sqlite'`) Filename in which to store public keys. You should use a _copy_ of [`sqlite/pub-keystore.empty.sqlite3`](sqlite/pub-keystore.empty.sqlite3).
+
+  - `{Integer} [db_mode]` (`db_type='sqlite'`) Mode to open the file in. See the [sqlite3](https://github.com/mapbox/node-sqlite3/wiki/API#new-sqlite3databasefilename-mode-callback) documentation.
+
+  - `{Object} db` (`db_type='pg'`) [`node-postgres` configuration](https://node-postgres.com/api/client).
 
 - `{Function} cb` Function called with the result of opening the keystore. It will receive the following arguments:
   - `{Object} err` If an error occurred then details of the error, otherwise `null`. Note that for PouchDB-backed stores, if the database is already open by another process for update or replication, you will receive an error. It's up to you to retry as appropriate for your application.
@@ -289,6 +299,8 @@ _Source: [docs.js](/docs.js)_
 
 Unless you pass `db_already_created=true` when [opening the keystore](#moduleexportsconfig-cb), this method is automatically called for you when the store is opened. It is an idempotent operation so it doesn't matter if you call it twice.
 
+For SQLite- and PostgreSQL-backed databases, this is a no-op: you must create the database beforehand.
+
 **Parameters:**
 
 - `{Function} [cb]` Function to call once the database has been created. It will receive the following arguments:
@@ -300,9 +312,11 @@ Unless you pass `db_already_created=true` when [opening the keystore](#moduleexp
 
 > Close the store and destroy its backing database. This will delete all public keys!
 
+For SQLite- and PostgreSQL-backed databases, this deletes the keys but doesn't destroy the database.
+
 **Parameters:**
 
-- `{Function} [cb]` Function to call once the database has been destoyed. It will receive the following arguments:
+- `{Function} [cb]` Function to call once the database has been destroyed. It will receive the following arguments:
   - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
 <sub>Go: [TOC](#tableofcontents) | [PubKeyStore.prototype](#toc_pubkeystoreprototype)</sub>
@@ -311,7 +325,7 @@ Unless you pass `db_already_created=true` when [opening the keystore](#moduleexp
 
 > (PouchDB) Notify reader processes to replicate from the master database. You should call this when you've [opened the keystore](#moduleexportsconfig-cb) with `db_for_update=true`, performed some updates and want other processes reading from the store to receive the updates. Internally it uses [`touch`](https://github.com/isaacs/node-touch) and [`fs.watch`](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) on a shared file.
 
-For a CouchDB-backed keystore, this is a no-op.
+For CouchDB-, SQLite- and PostgreSQL-backed keystores, this is a no-op.
 
 **Parameters:**
 
@@ -324,7 +338,7 @@ For a CouchDB-backed keystore, this is a no-op.
 
 > (PouchDB) Force replication from the master database. Usually you shouldn't need to call this because reader processes (where the keystore is [opened](#moduleexportsconfig-cb) _without_ `db_for_update=true`) will replicate when the keystore is opened and when they detect that a writer process has called [`deploy`](#pubkeystoreprototypedeploycb).
 
-For a CouchDB-backed keystore, this is a no-op.
+For CouchDB-, SQLite- and PostgreSQL-backed keystores, this is a no-op.
 
 **Parameters:**
 
@@ -368,7 +382,7 @@ Emmited when an error occurs in the changes feed from the database. This may mea
 
 > `replicated` event
 
-Emitted when a successful replication from the master database completes (PouchDB-backed keystores). CouchDB-backed stores emit this too for consistency, after [`replicate`](#pubkeystoreprototypereplicateopts-cb) is called.
+Emitted when a successful replication from the master database completes (PouchDB-backed keystores). CouchDB-, SQLite- and PostgreSQL-backed stores emit this too for consistency, after [`replicate`](#pubkeystoreprototypereplicateopts-cb) is called.
 
 **Parameters:**
 

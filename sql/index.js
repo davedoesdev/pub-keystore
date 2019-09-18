@@ -1,8 +1,4 @@
-/*
-TODO:
-For PG, is it worth using a trigger too?
-json objects?
-*/
+/*jslint node: true */
 
 const { EventEmitter } = require('events');
 const { randomBytes } = require('crypto');
@@ -104,6 +100,8 @@ class PubKeyStoreSQL extends EventEmitter {
                     sql,
                     args,
                     iferr(cb, r => {
+                        /* jshint expr: true */
+                        this._options.silent || console.log('database change', r);
                         for (let { id, uri, deleted } of r) {
                             this.emit('change', uri, id.toString(), deleted === this._true);
                             this._last_id = id;
@@ -266,6 +264,7 @@ class PubKeyStoreSQL extends EventEmitter {
     }
 
     create(cb) {
+        /* jshint expr: true */
         !cb || cb();
     }
 
@@ -277,12 +276,14 @@ class PubKeyStoreSQL extends EventEmitter {
     }
 
     replicate(opts, cb) {
+        /* jshint expr: true */
         (typeof opts !== 'function') || (cb = opts);
         this.emit('replicated', cb => cb());
         !cb || cb();
     }
 
     deploy(cb) {
+        /* jshint expr: true */
         !cb || cb();
     }
 
