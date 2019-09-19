@@ -108,17 +108,13 @@ before(function (cb)
     }, cb);
 });
 
-const iferr = require('iferr');
-
 before(function (cb) {
-    const { Database } = require('sqlite3');
-    const db = new Database(path.join(__dirname, 'pub-keystore.sqlite3'));
-    db.on('open', iferr(cb, () => {
-        db.run('DELETE FROM pub_keys', iferr(cb, () => {
-            db.close(cb);
-        }));
-    }));
+    fs.copyFile(path.join(__dirname, '..', 'sql', 'pub-keystore.empty.sqlite3'),
+                path.join(__dirname, 'pub-keystore.sqlite3'),
+                cb);
 });
+
+const iferr = require('iferr');
 
 before(function (cb) {
     const { Client } = require('pg');

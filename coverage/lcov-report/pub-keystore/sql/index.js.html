@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for pub-keystore/couchdb/index.js</title>
+    <title>Code coverage report for pub-keystore/sql/index.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -16,28 +16,28 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../index.html">All files</a> / <a href="index.html">pub-keystore/couchdb</a> index.js
+      <a href="../../index.html">All files</a> / <a href="index.html">pub-keystore/sql</a> index.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">84.79% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>184/217</span>
+        <span class='fraction'>172/172</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">72.73% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>112/154</span>
+        <span class='fraction'>76/76</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">87.8% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>36/41</span>
+        <span class='fraction'>71/71</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">92.93% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>171/184</span>
+        <span class='fraction'>160/160</span>
       </div>
     </div>
     <p class="quiet">
@@ -442,83 +442,115 @@
 <a name='L394'></a><a href='#L394'>394</a>
 <a name='L395'></a><a href='#L395'>395</a>
 <a name='L396'></a><a href='#L396'>396</a>
-<a name='L397'></a><a href='#L397'>397</a>
-<a name='L398'></a><a href='#L398'>398</a>
-<a name='L399'></a><a href='#L399'>399</a>
-<a name='L400'></a><a href='#L400'>400</a>
-<a name='L401'></a><a href='#L401'>401</a>
-<a name='L402'></a><a href='#L402'>402</a>
-<a name='L403'></a><a href='#L403'>403</a>
-<a name='L404'></a><a href='#L404'>404</a>
-<a name='L405'></a><a href='#L405'>405</a>
-<a name='L406'></a><a href='#L406'>406</a>
-<a name='L407'></a><a href='#L407'>407</a>
-<a name='L408'></a><a href='#L408'>408</a>
-<a name='L409'></a><a href='#L409'>409</a>
-<a name='L410'></a><a href='#L410'>410</a>
-<a name='L411'></a><a href='#L411'>411</a>
-<a name='L412'></a><a href='#L412'>412</a>
-<a name='L413'></a><a href='#L413'>413</a>
-<a name='L414'></a><a href='#L414'>414</a>
-<a name='L415'></a><a href='#L415'>415</a>
-<a name='L416'></a><a href='#L416'>416</a>
-<a name='L417'></a><a href='#L417'>417</a>
-<a name='L418'></a><a href='#L418'>418</a>
-<a name='L419'></a><a href='#L419'>419</a>
-<a name='L420'></a><a href='#L420'>420</a>
-<a name='L421'></a><a href='#L421'>421</a>
-<a name='L422'></a><a href='#L422'>422</a>
-<a name='L423'></a><a href='#L423'>423</a>
-<a name='L424'></a><a href='#L424'>424</a>
-<a name='L425'></a><a href='#L425'>425</a>
-<a name='L426'></a><a href='#L426'>426</a>
-<a name='L427'></a><a href='#L427'>427</a>
-<a name='L428'></a><a href='#L428'>428</a>
-<a name='L429'></a><a href='#L429'>429</a>
-<a name='L430'></a><a href='#L430'>430</a>
-<a name='L431'></a><a href='#L431'>431</a>
-<a name='L432'></a><a href='#L432'>432</a>
-<a name='L433'></a><a href='#L433'>433</a>
-<a name='L434'></a><a href='#L434'>434</a>
-<a name='L435'></a><a href='#L435'>435</a>
-<a name='L436'></a><a href='#L436'>436</a>
-<a name='L437'></a><a href='#L437'>437</a>
-<a name='L438'></a><a href='#L438'>438</a>
-<a name='L439'></a><a href='#L439'>439</a>
-<a name='L440'></a><a href='#L440'>440</a>
-<a name='L441'></a><a href='#L441'>441</a>
-<a name='L442'></a><a href='#L442'>442</a>
-<a name='L443'></a><a href='#L443'>443</a>
-<a name='L444'></a><a href='#L444'>444</a>
-<a name='L445'></a><a href='#L445'>445</a>
-<a name='L446'></a><a href='#L446'>446</a>
-<a name='L447'></a><a href='#L447'>447</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L397'></a><a href='#L397'>397</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3313x</span>
+<span class="cline-any cline-yes">3313x</span>
+<span class="cline-any cline-yes">3313x</span>
+<span class="cline-any cline-yes">3313x</span>
+<span class="cline-any cline-yes">3313x</span>
+<span class="cline-any cline-yes">3313x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-yes">1657x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5000x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5000x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5000x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5000x</span>
+<span class="cline-any cline-yes">41523x</span>
+<span class="cline-any cline-yes">371x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">41152x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5000x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5000x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2500x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2500x</span>
 <span class="cline-any cline-yes">2500x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2500x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2500x</span>
 <span class="cline-any cline-yes">2500x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2500x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2499x</span>
+<span class="cline-any cline-yes">2499x</span>
+<span class="cline-any cline-yes">2499x</span>
+<span class="cline-any cline-yes">2499x</span>
+<span class="cline-any cline-yes">2499x</span>
+<span class="cline-any cline-yes">2499x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4999x</span>
+<span class="cline-any cline-yes">4999x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4999x</span>
+<span class="cline-any cline-yes">3750x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1249x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1249x</span>
+<span class="cline-any cline-yes">1117x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1249x</span>
+<span class="cline-any cline-yes">1249x</span>
+<span class="cline-any cline-yes">1249x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4999x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2053x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1450x</span>
+<span class="cline-any cline-yes">201x</span>
+<span class="cline-any cline-yes">201x</span>
+<span class="cline-any cline-yes">201x</span>
+<span class="cline-any cline-yes">201x</span>
+<span class="cline-any cline-yes">177x</span>
+<span class="cline-any cline-yes">177x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">201x</span>
+<span class="cline-any cline-yes">201x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">201x</span>
+<span class="cline-any cline-yes">201x</span>
+<span class="cline-any cline-yes">1257x</span>
+<span class="cline-any cline-yes">1257x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">201x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -527,863 +559,681 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5216x</span>
+<span class="cline-any cline-yes">4999x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4999x</span>
+<span class="cline-any cline-yes">4999x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4999x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2500x</span>
 <span class="cline-any cline-yes">2500x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2500x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1876x</span>
+<span class="cline-any cline-yes">2499x</span>
+<span class="cline-any cline-yes">2499x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1876x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">40x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4999x</span>
+<span class="cline-any cline-yes">4999x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1836x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5666x</span>
+<span class="cline-any cline-yes">5618x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
+<span class="cline-any cline-yes">5618x</span>
+<span class="cline-any cline-yes">3936x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">628x</span>
+<span class="cline-any cline-yes">1682x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">628x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">628x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6196x</span>
+<span class="cline-any cline-yes">6196x</span>
+<span class="cline-any cline-yes">6146x</span>
+<span class="cline-any cline-yes">6146x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">628x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">628x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">628x</span>
-<span class="cline-any cline-yes">628x</span>
+<span class="cline-any cline-yes">6146x</span>
+<span class="cline-any cline-yes">3408x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">628x</span>
+<span class="cline-any cline-yes">2738x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">628x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2738x</span>
+<span class="cline-any cline-yes">1056x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">628x</span>
+<span class="cline-any cline-yes">1682x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5136x</span>
+<span class="cline-any cline-yes">5088x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-yes">624x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3098x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3073x</span>
+<span class="cline-any cline-yes">5088x</span>
+<span class="cline-any cline-yes">3408x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1680x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1393x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1393x</span>
-<span class="cline-any cline-yes">1393x</span>
-<span class="cline-any cline-yes">841x</span>
-<span class="cline-any cline-yes">841x</span>
+<span class="cline-any cline-yes">384x</span>
+<span class="cline-any cline-yes">384x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">192x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">192x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">192x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">168x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">168x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1176x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1176x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">840x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">168x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2568x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2544x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1680x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">864x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">864x</span>
-<span class="cline-any cline-yes">840x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
+<span class="cline-any cline-yes">1452x</span>
+<span class="cline-any cline-yes">64x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2833x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2809x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1680x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1129x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1129x</span>
-<span class="cline-any cline-yes">841x</span>
+<span class="cline-any cline-yes">1388x</span>
+<span class="cline-any cline-yes">1388x</span>
+<span class="cline-any cline-yes">1388x</span>
+<span class="cline-any cline-yes">1388x</span>
+<span class="cline-any cline-yes">1388x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
+<span class="cline-any cline-yes">1388x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">756x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">756x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">756x</span>
+<span class="cline-any cline-yes">1386x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1304x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1297x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">788x</span>
+<span class="cline-any cline-yes">64x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">724x</span>
 <span class="cline-any cline-yes">724x</span>
 <span class="cline-any cline-yes">724x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">724x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">724x</span>
+<span class="cline-any cline-yes">352x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">372x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2603x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120x</span>
+<span class="cline-any cline-yes">84x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">288x</span>
+<span class="cline-any cline-yes">288x</span>
+<span class="cline-any cline-yes">288x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">288x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23984x</span>
+<span class="cline-any cline-yes">23984x</span>
+<span class="cline-any cline-yes">135x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">133x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23849x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">721x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">721x</span>
+<span class="cline-any cline-yes">8258x</span>
+<span class="cline-any cline-yes">8260x</span>
+<span class="cline-any cline-yes">105x</span>
+<span class="cline-any cline-yes">105x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">721x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">721x</span>
+<span class="cline-any cline-yes">105x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">177x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">544x</span>
+<span class="cline-any cline-yes">8155x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8155x</span>
+<span class="cline-any cline-yes">8155x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">721x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">721x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">721x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">88x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">88x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">88x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8258x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">633x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8308x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4148x</span>
+<span class="cline-any cline-yes">4148x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
+<span class="cline-any cline-yes">4160x</span>
+<span class="cline-any cline-yes">4160x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">385x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">385x</span>
+<span class="cline-any cline-yes">8308x</span>
+<span class="cline-any cline-yes">8258x</span>
+<span class="cline-any cline-yes">8258x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">385x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">353x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">353x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">353x</span>
-<span class="cline-any cline-yes">177x</span>
-<span class="cline-any cline-yes">177x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
+<span class="cline-any cline-yes">18360x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2655x</span>
+<span class="cline-any cline-yes">9163x</span>
+<span class="cline-any cline-yes">9163x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-yes">624x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9197x</span>
+<span class="cline-any cline-yes">9197x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2655x</span>
-<span class="cline-any cline-yes">2655x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-yes">624x</span>
-<span class="cline-any cline-yes">624x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2031x</span>
+<span class="cline-any cline-yes">585x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">297x</span>
+<span class="cline-any cline-yes">297x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2655x</span>
+<span class="cline-any cline-yes">288x</span>
+<span class="cline-any cline-yes">288x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2517x</span>
-<span class="cline-any cline-yes">2517x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2517x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
+<span class="cline-any cline-yes">24255x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2595x</span>
+<span class="cline-any cline-yes">12106x</span>
+<span class="cline-any cline-yes">12106x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2595x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2595x</span>
+<span class="cline-any cline-yes">12149x</span>
+<span class="cline-any cline-yes">12149x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2595x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
+<span class="cline-any cline-yes">3313x</span>
+<span class="cline-any cline-yes">5000x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1302x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1302x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1302x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1302x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1302x</span>
-<span class="cline-any cline-yes">1301x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1301x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1301x</span>
-<span class="cline-any cline-yes">1301x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1301x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1301x</span>
-<span class="cline-any cline-yes">1301x</span>
-<span class="cline-any cline-yes">1301x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">60x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">60x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">60x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">60x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">60x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">60x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">60x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">144x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">144x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">144x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">144x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">144x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">144x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1657x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2500x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*jslint node: true, nomen: true, forin: true */
-"use strict";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*jslint node: true */
 &nbsp;
-var events = require('events'),
-    util = require('util'),
-    crypto = require('crypto'),
-    nano = require('nano'),
-    design = require('./design'),
-    status_not_found = 404,
-    status_conflict = 409,
-    status_db_exists = 412;
+const { EventEmitter } = require('events');
+const { randomBytes } = require('crypto');
+const { Database } = require('sqlite3');
+const { Client } = require('pg');
+const { queue, waterfall } = require('async');
+const iferr = require('iferr');
 &nbsp;
-function PubKeyStoreCouchDB(config, cb)
-{
-    events.EventEmitter.call(this);
+class PubKeyStoreSQL extends EventEmitter {
+    constructor(options, cb) {
+        super();
 &nbsp;
-    var ths = this,
-        called_back = false;
+        this._options = Object.assign({
+            db_type: 'sqlite',
+            busy_wait: 1000,
+            check_interval: 1000
+        }, options);
 &nbsp;
-    this._config = config;
+        this._open = false;
 &nbsp;
-    this.db_host = config.db_host || 'http://localhost';
-    this.db_port = config.db_port || 5984;
-&nbsp;
-    this._nano = nano(
-    {
-        url: this.db_host + ':' + this.db_port,
-        requestDefaults: {
-            auth: config.username ? {
-                username: config.username,
-                password: config.password
-            } : undefined,
-            strictSSL: true,
-            ca: config.ca,
-            pool: {
-                maxSockets: config.maxSockets || Infinity
+        // We need to queue queries on a db connection:
+        // https://github.com/mapbox/node-sqlite3/issues/304
+        // Alternative would be to create a separate connection
+        // for each query. The calling application can still do
+        // this if required (to achieve more parallelism) by
+        // creating many keystores.
+        this._queue = queue((task, cb) =&gt; {
+            if (!this._open) {
+                return cb(new Error('not_open'));
             }
-        }
-    });
+            task(cb);
+        });
 &nbsp;
-    this.db_name = config.db_name || 'pub-keys';
-    this._db = this._nano.db.use(this.db_name);
+        waterfall([
+            cb =&gt; {
+                let db;
+                switch (this._options.db_type) {
+                case 'sqlite':
+                    db = new Database(this._options.db_filename,
+                                      this._options.db_mode);
+                    db.on('open', err =&gt; cb(err, db));
+                    this._true = 1;
+                    this._false = 0;
+                    this._busy_code = 'SQLITE_BUSY';
+                    break;
 &nbsp;
-    if (config.no_changes)
-    {
-        return this._db.info(function (err)
-        {
-            if (err &amp;&amp; (err.statusCode === status_not_found))
-            {
-                return cb(new Error('not_found'), ths);
+                case 'pg':
+                    db = new Client(this._options.db);
+                    db.connect(err =&gt; cb(err, db));
+                    this._true = true;
+                    this._false = false;
+                    this._busy_code = '40001';
+                    break;
+&nbsp;
+                default:
+                    cb(new Error(`invalid database type: ${this._options.db_type}`));
+                    break;
+                }
+            },
+&nbsp;
+            (db, cb) =&gt; {
+                this._open = true;
+                this._db = db;
+&nbsp;
+                if (this._options.no_changes) {
+                    return cb();
+                }
+&nbsp;
+                this._get(
+                    'SELECT id FROM pub_keys ORDER BY id DESC LIMIT 1',
+                    [],
+                    iferr(cb, r =&gt; {
+                        if (r !== undefined) {
+                            this._last_id = r.id;
+                        }
+                        db.on('error', this.emit.bind(this, 'error'));
+                        this._check();
+                        cb();
+                    }));
             }
+        ], iferr(err =&gt; this.close(() =&gt; cb(err)), () =&gt; cb(null, this)));
+    }
 &nbsp;
-            return cb(err, ths);
+    _ifopen(cb) {
+        return (...args) =&gt; !this._open || cb.call(this, ...args);
+    }
+&nbsp;
+    _check() {
+        this._check_timeout = setTimeout(this._ifopen(() =&gt; {
+            this._queue.push(this._ifopen(cb =&gt; {
+                let sql = 'SELECT id, uri, deleted FROM pub_keys';
+                let args = [];
+                if (this._last_id !== undefined) {
+                    sql += ' WHERE id &gt; $1';
+                    args.push(this._last_id);
+                }
+                sql += ' ORDER BY id';
+                this._all(
+                    sql,
+                    args,
+                    iferr(cb, r =&gt; {
+                        /* jshint expr: true */
+                        this._options.silent || console.log('database change', r);
+                        for (let { id, uri, deleted } of r) {
+                            this.emit('change', uri, id.toString(), deleted === this._true);
+                            this._last_id = id;
+                        }
+                        cb();
+                    }));
+            }), this._busy(iferr(this.emit.bind(this, 'error'),
+                                 this._ifopen(this._check)),
+                           this._ifopen(this._check)));
+        }), this._options.check_interval);
+    }
+&nbsp;
+    close(cb) {
+        this._queue.push(cb =&gt; {
+            waterfall([
+                cb =&gt; {
+                    clearTimeout(this._check_timeout);
+                    cb();
+                },
+                cb =&gt; {
+                    switch (this._options.db_type) {
+                    case 'sqlite':
+                        this._db.close(cb);
+                        break;
+&nbsp;
+                    case 'pg':
+                        this._db.end(cb);
+                        break;
+                    }
+                },
+                cb =&gt; {
+                    this._open = false;
+                    cb();
+                }
+            ], cb);
+        }, cb);
+    }
+&nbsp;
+    get_pub_key_by_uri(uri, cb) {
+        this._queue.push(cb =&gt; {
+            this._get(
+                'SELECT pub_key, issuer_id, id, deleted FROM pub_keys WHERE uri = $1 ORDER BY id DESC LIMIT 1;',
+                [uri],
+                iferr(cb, r =&gt; {
+                    if ((r === undefined) || r.deleted) {
+                        return cb(null, null);
+                    }
+                    cb(null, JSON.parse(r.pub_key), r.issuer_id, r.id.toString());
+                }));
+        }, this._busy(cb, this.get_pub_key_by_uri.bind(this, uri, cb)));
+    }
+&nbsp;
+    get_pub_key_by_issuer_id(issuer_id, cb) {
+        const b = this._busy(cb, this.get_pub_key_by_issuer_id.bind(this, issuer_id, cb));
+        this._in_transaction(b, cb =&gt; {
+            this._queue.unshift(cb =&gt; {
+                this._get(
+                    'SELECT uri FROM pub_keys WHERE issuer_id = $1;',
+                    [issuer_id],
+                    iferr(cb, r =&gt; {
+                        if (r === undefined) {
+                            return cb(null, null);
+                        }
+                        this._get(
+                            'SELECT pub_key, issuer_id, id, deleted FROM pub_keys WHERE uri = $1 ORDER BY id DESC LIMIT 1;',
+                            [r.uri],
+                            iferr(cb, r2 =&gt; {
+                                if (r2.deleted || (r2.issuer_id !== issuer_id)) {
+                                    return cb(null, null);
+                                }
+                                cb(null, JSON.parse(r2.pub_key), r.uri, r2.id.toString());
+                            }));
+                    }));
+            }, cb);
         });
     }
 &nbsp;
-    this._feed = this._db.follow(
-    {
-        since: 'now',
-        request: { strictSSL: true, ca: config.ca }
-    });
+    get_issuer_id(uri, cb) {
+        this._queue.push(cb =&gt; {
+            this._get(
+                'SELECT issuer_id, id, deleted FROM pub_keys WHERE uri = $1 ORDER BY id DESC LIMIT 1;',
+                [uri],
+                iferr(cb, r =&gt; {
+                    if ((r === undefined) || r.deleted) {
+                        return cb(null, null);
+                    }
+                    cb(null, r.issuer_id, r.id.toString());
+                }));
+        }, this._busy(cb, this.get_issuer_id.bind(this, uri, cb)));
+    }
 &nbsp;
-    this._feed.on('change', function (change)
-    {
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (change.id.lastIndexOf('_design/', 0) === 0)
-        {
-<span class="cstat-no" title="statement not covered" >            return;</span>
+    get_uris(cb) {
+        this._queue.push(cb =&gt; {
+            this._all(
+                'SELECT uri FROM (SELECT uri, deleted, row_number() OVER(PARTITION BY uri ORDER BY id DESC) AS rn FROM pub_keys) sub WHERE rn = 1 AND NOT deleted;',
+                [],
+                iferr(cb, r =&gt; {
+                    cb(null, r.map(row =&gt; row.uri));
+                }));
+        }, this._busy(cb, this.get_uris.bind(this, cb)));
+    }
+&nbsp;
+    add_pub_key(uri, pub_key, cb) {
+        if ((uri === null) || (uri === undefined)) {
+            return cb(new Error('invalid_uri'));
         }
+        const issuer_id = randomBytes(64).toString('hex');
+        const b = this._busy(cb, this.add_pub_key.bind(this, uri, pub_key, cb));
+        this._in_transaction(b, cb =&gt; {
+            this._queue.unshift(cb =&gt; {
+                this._get(
+                    'SELECT deleted FROM pub_keys WHERE uri = $1 ORDER BY id DESC LIMIT 1;',
+                    [uri],
+                    iferr(cb, r =&gt; {
+                        if (this._options.no_updates &amp;&amp;
+                            (r !== undefined) &amp;&amp;
+                            !r.deleted) {
+                            const err = new Error('already exists');
+                            err.statusCode = 409;
+                            err.error = 'conflict';
+                            return cb(err);
+                        }
+                        this._run(
+                            'INSERT INTO pub_keys (uri, issuer_id, pub_key, deleted) VALUES ($1, $2, $3, $4)',
+                            [uri, issuer_id, JSON.stringify(pub_key), this._false],
+                            iferr(cb, () =&gt; {
+                                this._get(
+                                    'SELECT id FROM pub_keys WHERE issuer_id = $1;',
+                                    [issuer_id],
+                                    iferr(cb, r =&gt; {
+                                        cb(null, issuer_id, r.id.toString());
+                                    }));
+                            }));
+                    }));
+            }, cb);
+        });
+    }
 &nbsp;
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (!config.silent)
-        {
-            console.log('database change', change);
+    remove_pub_key(uri, cb) {
+        if ((uri === null) || (uri === undefined)) {
+            return cb(new Error('invalid_uri'));
         }
+        const b = this._busy(cb, this.remove_pub_key.bind(this, uri, cb));
+        this._in_transaction(b, cb =&gt; {
+            this._queue.unshift(cb =&gt; {
+                this._get(
+                    'SELECT deleted FROM pub_keys WHERE uri = $1 ORDER BY id DESC LIMIT 1;',
+                    [uri],
+                    iferr(cb, r =&gt; {
+                        if ((r === undefined) || r.deleted) {
+                            return cb();
+                        }
+                        this._run(
+                            'INSERT INTO pub_keys (uri, deleted) VALUES ($1, $2)',
+                            [uri, this._true],
+                            cb);
+                    }));
+            }, cb);
+        });
+    }
 &nbsp;
-        var rev, changes = change.changes, i, chng, crev;
+    create(cb) {
+        /* jshint expr: true */
+        !cb || cb();
+    }
 &nbsp;
-        for (i = 0; i &lt; changes.length; i += 1)
-        {
-            chng = changes[i];
-            crev = chng.rev;
+    destroy(cb) {
+        this._queue.push(cb =&gt; {
+            this._run('DELETE FROM pub_keys', [], cb);
+        }, this._busy(iferr(cb, this.close.bind(this, cb)),
+                      this.destroy.bind(this, cb)));
+    }
 &nbsp;
-            <span class="missing-if-branch" title="else path not taken" >E</span>if (crev !== undefined)
-            {
-                rev = crev;
+    replicate(opts, cb) {
+        /* jshint expr: true */
+        (typeof opts !== 'function') || (cb = opts);
+        this.emit('replicated', cb =&gt; cb());
+        !cb || cb();
+    }
+&nbsp;
+    deploy(cb) {
+        /* jshint expr: true */
+        !cb || cb();
+    }
+&nbsp;
+    _busy(f, retry, block) {
+        return (err, ...args) =&gt; {
+            if (err &amp;&amp; (err.code === this._busy_code)) {
+                if (block) {
+                    return this._queue.unshift(cb =&gt; setTimeout(cb, this._options.busy_wait),
+                                               retry);
+                }
+&nbsp;
+                return setTimeout(retry, this._options.busy_wait);
             }
-        }
 &nbsp;
-        ths.emit('change', change.id, rev, !!change.deleted);
-    });
+            f(err, ...args);
+        };
+    }
 &nbsp;
-    this._feed.on('query', function (req)
-    {
-        ths._query = req;
-    });
-&nbsp;
-    this._feed.on('error', function (err)
-    {
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (!ths._feed)
-        {
-            // aborted
-            var stop_cb = ths._stop_cb;
-            ths._stop_cb = null;
-            <span class="missing-if-branch" title="else path not taken" >E</span>if (stop_cb)
-            {
-                process.nextTick(stop_cb);
+    _end_transaction(cb) {
+        let f = (err, ...args) =&gt; {
+            if (err) {
+                return this._queue.unshift(cb =&gt; {
+                    this._run('ROLLBACK',
+                              [],
+                              cb);
+                }, this._busy(err2 =&gt; cb(err2 || err, ...args),
+                              f.bind(this, err, ...args),
+                              true));
             }
-            return;
+&nbsp;
+            const cb2 = err =&gt; cb(err, ...args);
+&nbsp;
+            this._queue.unshift(cb =&gt; {
+                this._run('END TRANSACTION',
+                          [],
+                          cb);
+            }, this._options.db_type === 'sqlite' ?
+                this._busy(cb2,
+                           f.bind(this, err, ...args),
+                           true) :
+                cb2);
+        };
+&nbsp;
+        return f;
+    }
+&nbsp;
+    _in_transaction(cb, f) {
+        let isolation_level;
+&nbsp;
+        switch (this._options.db_type) {
+        case 'sqlite':
+            isolation_level = ''; // SQLite transactions are serializable
+            break;
+&nbsp;
+        case 'pg':
+            isolation_level = 'ISOLATION LEVEL SERIALIZABLE';
+            break;
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        err.feed_error = true;</span>
+        this._queue.push(cb2 =&gt;
+            this._run(`BEGIN TRANSACTION ${isolation_level}`, [], cb2),
+            iferr(cb, () =&gt; f(this._end_transaction(cb))));
+    }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (err.message)</span>
-        {
-<span class="cstat-no" title="statement not covered" >            if (err.message.lastIndexOf(</span>
-                    'Bad DB response: {"error":"not_found"', 0) === 0)
-            {
-<span class="cstat-no" title="statement not covered" >                err.message = 'not_found';</span>
-            }
-            else <span class="cstat-no" title="statement not covered" >if (err.message.lastIndexOf(</span>
-                    'Database deleted after change:', 0) === 0)
-            {
-<span class="cstat-no" title="statement not covered" >                err.message = 'deleted';</span>
-            }
-        }
+    // Note: $1, $2 placeholders in SQL statements are PostgreSQL syntax.
+    // However, as long as they appear _in order_ (i.e. never $2 before $1)
+    // then they work in SQLite too. This is because when $ is used, SQLite
+    // binds first parameter in array to first $whatever in the statement,
+    // second parameter to second $something etc.
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (called_back)</span>
-        {
-<span class="cstat-no" title="statement not covered" >            ths.emit('error', err);</span>
-        }
-        else
-        {
-<span class="cstat-no" title="statement not covered" >            called_back = true;</span>
-<span class="cstat-no" title="statement not covered" >            cb(err, ths);</span>
-        }
-    });
+    _run(sql, values, cb) {
+        switch (this._options.db_type) {
+        case 'sqlite':
+            this._db.run(sql, ...values, cb);
+            break;
 &nbsp;
-    this._feed.on('confirm', function ()
-    {
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (!called_back)
-        {
-            called_back = true;
-            cb(null, ths);
+        case 'pg':
+            this._db.query(sql, values, iferr(cb, () =&gt; cb()));
+            break;
         }
-    });
+    }
 &nbsp;
-    this._feed.follow();
+    _all(sql, values, cb) {
+        switch (this._options.db_type) {
+        case 'sqlite':
+            this._db.all(sql, ...values, cb);
+            break;
+&nbsp;
+        case 'pg':
+            this._db.query(sql, values, iferr(cb, r =&gt; cb(null, r.rows)));
+            break;
+        }
+    }
+&nbsp;
+    _get(sql, values, cb) {
+        switch (this._options.db_type) {
+        case 'sqlite':
+            this._db.get(sql, ...values, cb);
+            break;
+&nbsp;
+        case 'pg':
+            this._db.query(sql, values, iferr(cb, r =&gt; cb(null, r.rows[0])));
+            break;
+        }
+    }
 }
 &nbsp;
-util.inherits(PubKeyStoreCouchDB, events.EventEmitter);
-&nbsp;
-PubKeyStoreCouchDB.prototype.get_pub_key_by_issuer_id = function (issuer_id, cb)
-{
-    if (!this._db) { return cb(new Error('not_open')); }
-&nbsp;
-    if ((issuer_id === null) || (issuer_id === undefined))
-    {
-        return cb(null, null);
-    }
-&nbsp;
-    this._db.view('pub_keys', 'by_issuer_id',
-    {
-        key: issuer_id
-    }, function (err, res)
-    {
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (err) { <span class="cstat-no" title="statement not covered" >return cb(err); </span>}
-        if (res.rows.length === 0) { return cb(null, null); }
-        var res0 = res.rows[0];
-        cb(null, res0.value.pub_key, res0.id, res0.value.rev);
-    });
+module.exports = function (config, cb) {
+    new PubKeyStoreSQL(config, cb);
 };
-&nbsp;
-PubKeyStoreCouchDB.prototype.get_uris = function (cb)
-{
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this._db) { <span class="cstat-no" title="statement not covered" >return cb(new Error('not_open')); </span>}
-&nbsp;
-    this._db.list(function (err, res)
-    {
-        if (err) { return cb(err); }
-&nbsp;
-        var i, key, uris = [];
-&nbsp;
-        for (i = 0; i &lt; res.rows.length; i += 1)
-        {
-            key = res.rows[i].key;
-&nbsp;
-            if (key.lastIndexOf('_design/', 0) !== 0)
-            {
-                uris.push(key);
-            }
-        }
-&nbsp;
-        cb(null, uris);
-    });
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype.get_issuer_id = function (uri, cb)
-{
-    if (!this._db) { return cb(new Error('not_open')); }
-&nbsp;
-    if ((uri === null) || (uri === undefined))
-    {
-        return cb(null, null);
-    }
-&nbsp;
-    this._db.get(uri, function (err, doc)
-    {
-        if (err) { return cb(err.statusCode === status_not_found ? null : <span class="branch-1 cbranch-no" title="branch not covered" >err,</span> null); }
-        cb(null, doc.issuer_id, doc._rev);
-    });
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype.get_pub_key_by_uri = function (uri, cb)
-{
-    if (!this._db) { return cb(new Error('not_open')); }
-&nbsp;
-    if ((uri === null) || (uri === undefined))
-    {
-        return cb(null, null);
-    }
-&nbsp;
-    this._db.get(uri, function (err, doc)
-    {
-        if (err) { return cb(err.statusCode === status_not_found ? null : <span class="branch-1 cbranch-no" title="branch not covered" >err,</span> null); }
-        cb(null, doc.pub_key, doc.issuer_id, doc._rev);
-    });
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
-{
-    cb = cb || <span class="fstat-no" title="function not covered" ><span class="branch-1 cbranch-no" title="branch not covered" >fu</span>nction () { <span class="cstat-no" title="statement not covered" >return undefined; </span>};</span>
-&nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this._db) { <span class="cstat-no" title="statement not covered" >return cb(new Error('not_open')); </span>}
-&nbsp;
-    if ((uri === null) || (uri === undefined))
-    {
-        return cb(new Error('invalid_uri'));
-    }
-&nbsp;
-    var ths = this,
-        issuer_id = crypto.randomBytes(64).toString('hex'),
-        doc = { issuer_id: issuer_id, pub_key: pub_key };
-&nbsp;
-    if (this._config.no_updates)
-    {
-        return this._db.insert(doc, uri, function (err, res)
-        {
-            if (err) { return cb(err); }
-            cb(null, issuer_id, res.rev);
-        });
-    }    
-&nbsp;
-    // Find existing revision first otherwise revision may start from 1
-    // (if doc has been deleted), meaning subsequent deletions will have
-    // revision 2. When replicating, if the replica has a doc with a higher
-    // revision, the deletion is lost.
-&nbsp;
-    this._db.fetch({ keys: [ uri ] }, function (err, res)
-    {
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (err) { <span class="cstat-no" title="statement not covered" >return cb(err); </span>}
-&nbsp;
-        var row = res.rows[0];
-&nbsp;
-        if (row.error)
-        {
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (row.error !== 'not_found') { <span class="cstat-no" title="statement not covered" >return cb(row.error); </span>}
-        }
-        else
-        {
-            doc._rev = row.value.rev;
-        }
-&nbsp;
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!ths._db) { <span class="cstat-no" title="statement not covered" >return cb(new Error('not_open')); </span>}
-        
-        ths._db.insert(doc, uri, function (err, res)
-        {
-            // if conflict then try again
-&nbsp;
-            if (err)
-            {
-                <span class="missing-if-branch" title="else path not taken" >E</span>if (err.statusCode === status_conflict)
-                {
-                    return setTimeout(function ()
-                    {
-                        ths.add_pub_key(uri, pub_key, cb);
-                    }, 1000 + Math.random() * 1000);
-                }
-                
-<span class="cstat-no" title="statement not covered" >                return cb(err);</span>
-            }
-&nbsp;
-            cb(null, issuer_id, res.rev);
-        });
-    });
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype.remove_pub_key = function (uri, cb)
-{
-    cb = cb || <span class="fstat-no" title="function not covered" ><span class="branch-1 cbranch-no" title="branch not covered" >fu</span>nction () { <span class="cstat-no" title="statement not covered" >return undefined; </span>};</span>
-&nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this._db) { <span class="cstat-no" title="statement not covered" >return cb(new Error('not_open')); </span>}
-&nbsp;
-    if ((uri === null) || (uri === undefined))
-    {
-        return cb(new Error('invalid_uri'));
-    }
-&nbsp;
-    var ths = this;
-&nbsp;
-    this._db.get(uri, function (err, doc)
-    {
-        if (err) { return cb(err.statusCode === status_not_found ? null : <span class="branch-1 cbranch-no" title="branch not covered" >err)</span>; }
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!ths._db) { <span class="cstat-no" title="statement not covered" >return cb(new Error('not_open')); </span>}
-        ths._db.destroy(uri, doc._rev, cb);
-    });
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype._stop = function (cb)
-{
-    if (this._feed)
-    {
-        var feed = this._feed;
-        this._feed = null;
-        feed.stop();
-    }
-&nbsp;
-    var query = this._query;
-    if (query)
-    {
-        this._query = null;
-        this._stop_cb = cb;
-        query.abort();
-        return query.emit('response', { body: 'aborted' });
-    }
-&nbsp;
-    cb();
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype._close_nano = function (cb)
-{
-    if (!this._nano) { return cb(new Error('not_open')); }
-&nbsp;
-    this._nano = null;
-    this._db = null;
-&nbsp;
-    cb();
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype.close = function (cb)
-{
-    cb = cb || <span class="fstat-no" title="function not covered" ><span class="branch-1 cbranch-no" title="branch not covered" >fu</span>nction () { <span class="cstat-no" title="statement not covered" >return undefined; </span>};</span>
-&nbsp;
-    var ths = this;
-&nbsp;
-    this._stop(function ()
-    {
-        ths._close_nano(cb);
-    });
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype.create = function (cb)
-{
-    cb = cb || <span class="fstat-no" title="function not covered" ><span class="branch-1 cbranch-no" title="branch not covered" >fu</span>nction () { <span class="cstat-no" title="statement not covered" >return undefined; </span>};</span>
-&nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this._db) { <span class="cstat-no" title="statement not covered" >return cb(new Error('not_open')); </span>}
-&nbsp;
-    var ths = this;
-&nbsp;
-    this._nano.db.create(this.db_name, function (err)
-    {
-        if (err &amp;&amp; (err.statusCode !== status_db_exists)) { return cb(err); }
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!ths._db) { <span class="cstat-no" title="statement not covered" >return cb(new Error('not_open')); </span>}
-&nbsp;
-        /*jslint unparam: true */
-        ths._db.insert(
-        {
-            views: {},
-            validate_doc_update: design.validate.toString().replace('DB_NAME', ths.db_name)
-        }, '_design/_auth', function (err)
-        {
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (err &amp;&amp; (err.statusCode !== status_conflict)) { <span class="cstat-no" title="statement not covered" >return cb(err); </span>}
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (!ths._db) { <span class="cstat-no" title="statement not covered" >return cb(new Error('not_open')); </span>}
-&nbsp;
-            ths._db.insert(
-            {
-                views: {
-                    by_issuer_id: {
-                        map: design.by_issuer_id
-                    }
-                }
-            }, '_design/pub_keys', function (err)
-            {
-                <span class="missing-if-branch" title="if path not taken" >I</span>if (err &amp;&amp; (err.statusCode !== status_conflict)) { <span class="cstat-no" title="statement not covered" >return cb(err); </span>}
-                <span class="missing-if-branch" title="if path not taken" >I</span>if (!ths._db) { <span class="cstat-no" title="statement not covered" >return cb(new Error('not_open')); </span>}
-                cb();
-            });
-        });
-        /*jslint unparam: false */
-    });
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype.destroy = function (cb)
-{
-    cb = cb || <span class="fstat-no" title="function not covered" ><span class="branch-1 cbranch-no" title="branch not covered" >fu</span>nction () { <span class="cstat-no" title="statement not covered" >return undefined; </span>};</span>
-&nbsp;
-    var ths = this;
-&nbsp;
-    this._stop(function ()
-    {
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!ths._db) { <span class="cstat-no" title="statement not covered" >return cb(new Error('not_open')); </span>}
-&nbsp;
-        ths._nano.db.destroy(ths.db_name, function (err)
-        {
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (err &amp;&amp; (err.statusCode != status_not_found))
-            {
-<span class="cstat-no" title="statement not covered" >                return cb(err);</span>
-            }
-            ths._close_nano(cb);
-        });
-    });
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype.deploy = function (cb)
-{
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (cb) { cb(); }
-};
-&nbsp;
-PubKeyStoreCouchDB.prototype.replicate = function (opts, cb)
-{
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (typeof opts === 'function')
-    {
-        cb = opts;
-    }
-&nbsp;
-    this.emit('replicated', function (cb)
-    {
-        cb();
-    });
-&nbsp;
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (cb) { cb(); }
-};
-&nbsp;
-module.exports = function (config, cb)
-{
-    return new PubKeyStoreCouchDB(config, cb);
-};
-&nbsp;
 &nbsp;</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
