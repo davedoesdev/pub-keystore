@@ -1454,7 +1454,7 @@ describe('close', function ()
 });
 });
 
-var nkeys = argv.cover ? [1, 2] : [1, num_keys/2, num_keys];
+var nkeys = argv.cover ? [2] : [1, num_keys/2, num_keys];
 
 [false, true].forEach(function (m)
 {
