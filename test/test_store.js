@@ -15,12 +15,12 @@
          db_name: false,
          before: false,
          after: false,
-         crypto: false */
+         crypto: false,
+         config: false */
 /*jslint node: true, nomen: true */
 "use strict";
 
 var argv = require('yargs').argv,
-    config = require('config'),
     num_keys = 10,
     uri = 'mailto:dave@davedoesdev.com',
     mp_port,
@@ -1455,8 +1455,9 @@ describe('close', function ()
 });
 
 var nkeys = argv.cover ? [2] : [1, num_keys/2, num_keys];
+var mp = argv.cover ? [false] : [false, true];
 
-[false, true].forEach(function (m)
+mp.forEach(function (m)
 {
     nkeys.forEach(function (n)
     {

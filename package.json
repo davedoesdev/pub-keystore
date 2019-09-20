@@ -21,7 +21,8 @@
     "test": "grunt lint test",
     "migrate": "cd sql && ../node_modules/.bin/migrate up && cp pub-keystore.empty.sqlite3 ../test/pub-keystore.sqlite3",
     "pg-migrate": "node-pg-migrate up",
-    "travis-test": "grunt lint coverage coveralls"
+    "travis-test": "grunt lint test",
+    "travis-cover": "grunt coverage coveralls"
   },
   "directories": {
     "test": "test"

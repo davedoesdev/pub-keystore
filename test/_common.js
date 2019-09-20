@@ -23,6 +23,12 @@ global.async = require('async');
 global.dnode = require('@davedoesdev/dnode');
 global.keystore = require('..');
 
+global.config = require('config');
+if (process.env.TRAVIS === 'true')
+{
+    delete global.config.user;
+}
+
 global.db_name = 'test';
 global.couchdb_admin_username = 'admin';
 global.couchdb_admin_password = 'admin';
@@ -118,8 +124,7 @@ const iferr = require('iferr');
 
 before(function (cb) {
     const { Client } = require('pg');
-    const config = require('config');
-    const db = new Client(config.db);
+    const db = new Client(global.config.db);
     db.connect(iferr(cb, () => {
         db.query('DELETE FROM pub_keys', iferr(cb, () => {
             db.end(cb);
