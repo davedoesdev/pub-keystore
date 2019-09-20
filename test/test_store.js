@@ -16,7 +16,8 @@
          before: false,
          after: false,
          crypto: false,
-         config: false */
+         config: false,
+         travis: false */
 /*jslint node: true, nomen: true */
 "use strict";
 
@@ -1454,19 +1455,26 @@ describe('close', function ()
 });
 });
 
-var nkeys = argv.cover ? [2] : [1, num_keys/2, num_keys];
-var mp = argv.cover ? [false] : [false, true];
-
-mp.forEach(function (m)
+if (travis)
 {
-    nkeys.forEach(function (n)
+    setup(false, 2, 'couchdb');
+    setup(true, 2, 'pouchdb');
+    setup(true, 2, 'sqlite');
+    setup(false, 2, 'pg');
+}
+else
+{
+    [false, true].forEach(function (m)
     {
-        setup(m, n, 'couchdb');
-        setup(m, n, 'pouchdb');
-        setup(m, n, 'sqlite');
-        setup(m, n, 'pg');
+        (argv.cover? [1, 2] : [1, num_keys/2, num_keys]).forEach(function (n)
+        {
+            setup(m, n, 'couchdb');
+            setup(m, n, 'pouchdb');
+            setup(m, n, 'sqlite');
+            setup(m, n, 'pg');
+        });
     });
-});
+}
 
 describe('no updates', function ()
 {

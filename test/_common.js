@@ -24,7 +24,9 @@ global.dnode = require('@davedoesdev/dnode');
 global.keystore = require('..');
 
 global.config = require('config');
-if (process.env.TRAVIS === 'true')
+global.travis = process.env.TRAVIS === 'true';
+
+if (global.travis)
 {
     delete global.config.user;
 }
