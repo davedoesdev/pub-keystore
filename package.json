@@ -33,7 +33,7 @@
     "PouchDB"
   ],
   "engines": {
-    "node": ">=6"
+    "node": ">=8"
   },
   "dependencies": {
     "async": "^3.1.0",
