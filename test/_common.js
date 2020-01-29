@@ -67,7 +67,7 @@ before(function (cb)
     this.timeout(10000);
 
     global.couchdb_process = child_process.spawn(
-            path.join(__dirname, '..', 'couchdb', 'run_couchdb.sh'),
+            path.join(__dirname, 'fixtures', 'run_couchdb.sh'),
             [],
             { stdio: 'inherit' });
 

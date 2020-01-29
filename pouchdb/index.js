@@ -49,7 +49,7 @@ function PubKeyStorePouchDB(config, db_name, db_path, deploy_path, deploy_file, 
                     return;
                 }
 
-                if (!config.silent)
+                if (config.verbose)
                 {
                     console.log('database change', change);
                 }
@@ -157,7 +157,7 @@ PubKeyStorePouchDB.prototype.replicate = function (opts, cb)
         opts = opts || {};
         cb = cb || function (err)
         {
-            if (err && !ths._config.silent)
+            if (err && ths._config.verbose)
             {
                 console.error(err);
             }
@@ -187,7 +187,7 @@ PubKeyStorePouchDB.prototype._replicate = function (opts, cb)
             return ths._replicate_try_again(err, opts, cb);
         }
 
-        if (!ths._config.silent)
+        if (ths._config.verbose)
         {
             console.log('replicated from', ths._from_db_path);
         }
@@ -225,7 +225,7 @@ PubKeyStorePouchDB.prototype._replicate = function (opts, cb)
 
 PubKeyStorePouchDB.prototype._replicate_try_again = function (err, opts, cb)
 {
-    if (!this._config.silent)
+    if (this._config.verbose)
     {
         console.error(err);
     }

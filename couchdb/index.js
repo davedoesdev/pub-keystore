@@ -67,7 +67,7 @@ function PubKeyStoreCouchDB(config, cb)
             return;
         }
 
-        if (!config.silent)
+        if (config.verbose)
         {
             console.log('database change', change);
         }

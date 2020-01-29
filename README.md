@@ -137,7 +137,7 @@ _Source: [docs.js](/docs.js)_
 
   - `{Boolean} [no_changes]` Don't emit `change` events when a key is changed. Defaults to `false` (i.e. do emit `change` events).
 
-  - `{Boolean} [silent]` Don't write key changes, warnings and errors to `console`. Defaults to `false`.
+  - `{Boolean} [verbose]` Write key changes, warnings and errors to `console`. Defaults to `false`.
 
   - `{Boolean} [no_updates]` Don't allow [`add_pub_key`](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb) to add a key if one already exists for a URI. That is, each URI can only be associated with a public key once and the association cannot be updated. Defaults to `false`.
 

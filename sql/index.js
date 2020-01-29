@@ -101,7 +101,7 @@ class PubKeyStoreSQL extends EventEmitter {
                     args,
                     iferr(cb, r => {
                         /* jshint expr: true */
-                        this._options.silent || console.log('database change', r);
+                        this._options.verbose && console.log('database change', r);
                         for (let { id, uri, deleted } of r) {
                             this.emit('change', uri, id.toString(), deleted === this._true);
                             this._last_id = id;

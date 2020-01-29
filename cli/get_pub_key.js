@@ -15,7 +15,6 @@ var path = require('path'),
         })
         .argv;
 
-argv.silent = true;
 argv.no_changes = true;
 
 require(path.join(__dirname, '_common.js'))(argv, function ()

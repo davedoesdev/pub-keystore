@@ -1,4 +1,4 @@
 /node_modules
 /.nyc_output
-/couchdb/store
+/test/fixtures/store
 /test/pub-keystore.sqlite3

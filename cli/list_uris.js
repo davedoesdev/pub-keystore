@@ -8,7 +8,6 @@ var path = require('path'),
         .demand('db_type')
         .argv;
 
-argv.silent = true;
 argv.no_changes = true;
 
 require(path.join(__dirname, '_common.js'))(argv, function ()

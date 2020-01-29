@@ -21,6 +21,16 @@
 /*jslint node: true, nomen: true */
 "use strict";
 
+/*const { EventEmitter } = require('events');
+const orig_emit = EventEmitter.prototype.emit;
+EventEmitter.prototype.emit = function (name) {
+    if (name == 'error') {
+        console.log("ERROR EVENT", name, this, arguments);
+        console.trace();
+    }
+    return orig_emit.apply(this, arguments);
+};*/
+
 var argv = require('yargs').argv,
     num_keys = 10,
     uri = 'mailto:dave@davedoesdev.com',
@@ -79,6 +89,12 @@ function mp_keystore(config, cb)
             if (!msg.has_ks) { return cb(msg.err); }
 
             client = dnode.connect(port);
+
+            /*client.on('error', function (err)
+            {
+                console.error(err);
+                expect(err.message).to.equal('read ECONNRESET');
+            });*/
 
             client.on('remote', function (remote)
             {
@@ -407,6 +423,8 @@ function make_stores_for_query(multiprocess, num, db_type, db_name, changes, sta
                 db_name: num === 1 ? db_name : undefined,
                 deploy_name: db_type === 'pouchdb' ? n : undefined,
                 no_changes: !changes,
+                username: couchdb_admin_username,
+                password: couchdb_admin_password,
                 keep_master_open: !multiprocess,
                 no_initial_replicate: multiprocess,
                 db_already_created: true,
@@ -592,11 +610,24 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
         }
         else
         {
-            after_deploy = () => {};
+            let deployed = false;
+            let replicated = false;
+
+            after_deploy = () => {
+                deployed = true;
+                if (replicated) {
+                    done();
+                }
+            };
 
             uks.once('replicated', function (close)
             {
-                close(done);
+                close(() => {
+                    replicated = true;
+                    if (deployed) {
+                        done();
+                    }
+                });
             }, multiprocess ? () => uks.replicate(do_deploy) : undefined);
 
             if (!multiprocess)

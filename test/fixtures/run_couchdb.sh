@@ -33,7 +33,7 @@ while ! nc -zv -w 5 localhost 5984; do sleep 1; done
 
 curl -X PUT http://admin:admin@localhost:5984/_users
 
-curl -X PUT http://localhost:5984/_users/org.couchdb.user:admin \
+curl -X PUT http://admin:admin@localhost:5984/_users/org.couchdb.user:admin \
      -H "Accept: application/json" \
      -H "Content-Type: application/json" \
      -d '{"name": "admin", "password": "admin", "roles": ["pub-keys-updater", "test-updater"], "type": "user"}'
