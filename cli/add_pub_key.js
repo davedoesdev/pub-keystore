@@ -8,19 +8,18 @@ var fs = require('fs'),
         .usage('usage: $0 --db_type <database-type> <uri> (base64-encoded public key on stdin)\n\nMake sure you verify the user owns the uri!')
         .demand(1)
         .demand('db_type')
-        .argv,
-    buf = new Buffer(1024*16);
+        .argv;
 
 argv.db_for_update = true;
 argv.no_changes = true;
 
 require(path.join(__dirname, '_common.js'))(argv, function ()
 {
-    fs.read(process.stdin.fd, buf, 0, buf.length, null, function (err, n)
+    fs.readFile(process.stdin.fd, function (err, buf)
     {
         if (err) { return console.error(err.toString()); }
 
-        var pub_key = buf.toString('utf8', 0, n);
+        var pub_key = buf.toString();
                          /*.replace("-----BEGIN PUBLIC KEY-----", "")
                          .replace("-----END PUBLIC KEY-----", "")
                          .replace(/[ \n]/g, "");*/

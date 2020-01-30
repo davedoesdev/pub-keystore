@@ -12,6 +12,8 @@ var path = require('path'),
             {
                 throw 'you must specify a URI or Issuer ID';
             }
+
+            return true;
         })
         .argv;
 
