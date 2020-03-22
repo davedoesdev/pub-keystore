@@ -1,7 +1,7 @@
 {
   "name": "pub-keystore",
   "description": "Simple store for public keys, with issuer IDs and change notification",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "homepage": "https://github.com/davedoesdev/pub-keystore",
   "author": {
     "name": "David Halls",
@@ -36,31 +36,31 @@
     "node": ">=8"
   },
   "dependencies": {
-    "async": "^3.1.1",
+    "async": "^3.2.0",
     "iferr": "^1.0.2",
-    "nano": "^8.1.0",
-    "node-pg-migrate": "^4.2.2",
-    "pg": "^7.17.1",
-    "pouchdb": "^7.1.1",
+    "nano": "^8.2.2",
+    "node-pg-migrate": "^4.2.3",
+    "pg": "^7.18.2",
+    "pouchdb": "^7.2.1",
     "prompt": "^1.0.0",
     "sqlite3": "^4.1.1",
     "touch": "^3.1.0",
-    "yargs": "^15.1.0"
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@davedoesdev/dnode": "^1.2.3",
     "chai": "^4.2.0",
-    "config": "^3.2.5",
-    "coveralls": "^3.0.9",
-    "grunt": "^1.0.4",
+    "config": "^3.3.0",
+    "coveralls": "^3.0.11",
+    "grunt": "^1.1.0",
     "grunt-apidox": "^2.0.7",
     "grunt-bg-shell": "^2.3.3",
     "grunt-contrib-jshint": "^2.1.0",
     "grunt-mocha-test": "^0.13.3",
     "lsof": "^0.1.0",
     "migrate": "^1.6.2",
-    "mocha": "^7.0.0",
+    "mocha": "^7.1.1",
     "nyc": "^15.0.0",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.2"
   }
 }

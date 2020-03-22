@@ -10,6 +10,7 @@ module.exports = function (config, cb)
     {
         case 'pouchdb':
         case 'couchdb':
+        case 'in-mem':
             driver = config.db_type;
             break;
 

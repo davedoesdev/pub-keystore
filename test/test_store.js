@@ -357,8 +357,16 @@ function make_stores_for_update(multiprocess, num, db_type, db_name, states)
 {
     return function (cb)
     {
+        let latest;
+        if (states[0].stores_for_update)
+        {
+            latest = states[0].stores_for_update[0];
+        }
+
         /*jslint unparam: true */
-        async.times(db_type === 'pouchdb' ? 1 : num, function (n, cb)
+        (db_type === 'in-mem' ? async.timesSeries : async.times)(
+        db_type === 'pouchdb' ? 1 : num,
+        function (n, cb)
         {
             (multiprocess ? mp_keystore : keystore)(
             {
@@ -370,7 +378,8 @@ function make_stores_for_update(multiprocess, num, db_type, db_name, states)
                 username: couchdb_admin_username,
                 password: couchdb_admin_password,
                 db_filename: path.join(__dirname, 'pub-keystore.sqlite3'),
-                db: config.db
+                db: config.db,
+                share_keys_with: latest // for in-mem
             }, function (err, store)
             {
                 // Sometimes we get 500 conflict if database was deleted
@@ -380,6 +389,8 @@ function make_stores_for_update(multiprocess, num, db_type, db_name, states)
                     console.error(err);
                     return cb(err);
                 }
+                expect(store.db_type).to.equal(db_type);
+                latest = store;
                 cb(null, store);
             });
         }, function (err, stores)
@@ -429,13 +440,16 @@ function make_stores_for_query(multiprocess, num, db_type, db_name, changes, sta
                 no_initial_replicate: multiprocess,
                 db_already_created: true,
                 db_filename: path.join(__dirname, 'pub-keystore.sqlite3'),
-                db: config.db
+                db: config.db,
+                share_keys_with: db_type === 'in-mem' ? states[0].stores_for_update[0] : undefined
             }, function (err, store)
             {
                 if (check_error(err))
                 {
                     return cb(err);
                 }
+
+                expect(store.db_type).to.equal(db_type);
 
                 function after_register_error()
                 {
@@ -491,7 +505,7 @@ function make_stores_for_query(multiprocess, num, db_type, db_name, changes, sta
     };
 }
 
-function close_stores_for_update(states)
+function close_stores_for_update(db_type, states)
 {
     return function (cb)
     {
@@ -506,7 +520,10 @@ function close_stores_for_update(states)
             });
         }, function (err)
         {
-            delete states[0].stores_for_update;
+            if (db_type !== 'in-mem')
+            {
+                delete states[0].stores_for_update;
+            }
             cb(err);
         });
     };
@@ -735,7 +752,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                         ks._nano = ks._nano_save;
                     }
                     ks.destroy(err => {
-                        if (ks.driver === 'sql') {
+                        if ((ks.driver === 'sql') || (ks.driver === 'in-mem')) {
                             expect(err.message).to.equal('not_open');
                             return cb();
                         }
@@ -1332,7 +1349,7 @@ function setup(multiprocess, num, db_type)
         var states = make_states(),
             make_query_stores = make_stores_for_query(multiprocess, num, db_type, db_name, false, states),
             close_query_stores = close_stores_for_query(states),
-            close_update_stores = close_stores_for_update(states);
+            close_update_stores = close_stores_for_update(db_type, states);
 
         beforeEach(reset_mp_port);
         beforeEach(make_stores_for_update(multiprocess, num, db_type, db_name, states));
@@ -1351,7 +1368,7 @@ function setup(multiprocess, num, db_type)
         var states = make_states(),
             make_query_stores = make_stores_for_query(multiprocess, num, db_type, db_name, false, states),
             close_query_stores = close_stores_for_query(states),
-            close_update_stores = close_stores_for_update(states),
+            close_update_stores = close_stores_for_update(db_type, states),
             bef, aft;
 
         if (multiprocess)
@@ -1382,7 +1399,7 @@ function setup(multiprocess, num, db_type)
         var states = make_states(),
             make_query_stores = make_stores_for_query(multiprocess, num, db_type, db_name, true, states),
             close_query_stores = close_stores_for_query(states),
-            close_update_stores = close_stores_for_update(states);
+            close_update_stores = close_stores_for_update(db_type, states);
 
         beforeEach(reset_mp_port);
         beforeEach(make_stores_for_update(multiprocess, num, db_type, db_name, states));
@@ -1401,7 +1418,7 @@ function setup(multiprocess, num, db_type)
         var states = make_states(),
             make_query_stores = make_stores_for_query(multiprocess, num, db_type, db_name, true, states),
             close_query_stores = close_stores_for_query(states),
-            close_update_stores = close_stores_for_update(states),
+            close_update_stores = close_stores_for_update(db_type, states),
             bef, aft;
 
         if (multiprocess)
@@ -1455,7 +1472,7 @@ describe('index', function ()
 
 describe('close', function ()
 {
-['pouchdb', 'couchdb', 'sqlite', 'pg'].forEach(function (db_type)
+['in-mem', 'pouchdb', 'couchdb', 'sqlite', 'pg'].forEach(function (db_type)
 {
     it('should not perform operations after close', function (cb)
     {
@@ -1488,6 +1505,7 @@ describe('close', function ()
 
 if (travis)
 {
+    setup(false, 2, 'in-mem');
     setup(false, 2, 'couchdb');
     setup(true, 2, 'pouchdb');
     setup(true, 2, 'sqlite');
@@ -1499,6 +1517,10 @@ else
     {
         (argv.cover? [1, 2] : [1, num_keys/2, num_keys]).forEach(function (n)
         {
+            if (!m)
+            {
+                setup(m, n, 'in-mem');
+            }
             setup(m, n, 'couchdb');
             setup(m, n, 'pouchdb');
             setup(m, n, 'sqlite');
@@ -1509,7 +1531,7 @@ else
 
 describe('no updates', function ()
 {
-['pouchdb', 'couchdb', 'sqlite', 'pg'].forEach(function (db_type)
+['in-mem', 'pouchdb', 'couchdb', 'sqlite', 'pg'].forEach(function (db_type)
 {
     it('should not update key', function (cb)
     {
@@ -1559,7 +1581,7 @@ describe('no updates', function ()
 
 describe('objects as public keys', function ()
 {
-['pouchdb', 'couchdb', 'sqlite', 'pg'].forEach(function (db_type)
+['in-mem', 'pouchdb', 'couchdb', 'sqlite', 'pg'].forEach(function (db_type)
 {
     it('should add object as public key', function (cb)
     {

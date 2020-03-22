@@ -5,7 +5,7 @@ A simple store for public keys in Node.js.
 
 - Index keys by URI and issuer IDs.
 - Listen to key updates.
-- Backed by [PouchDB](http://pouchdb.com/), [CouchDB 2](http://couchdb.apache.org/), [SQLite](https://www.sqlite.org) or [PostgreSQL](https://www.postgresql.org).
+- Backed by [PouchDB](http://pouchdb.com/), [CouchDB 2](http://couchdb.apache.org/), [SQLite](https://www.sqlite.org), [PostgreSQL](https://www.postgresql.org) or memory.
 - Keys can be in any format (or even not keys!).
 - Supports access from multiple processes.
 - Full set of unit tests.
@@ -92,7 +92,7 @@ In the `cli` directory are some command line utilities which call into the API. 
 Opens a public keystore.
 
 @param {Object} config Configures the keystore. Valid properties:
-- `{String} db_type` The type of database to use for backing the store. You must supply `pouchdb`, `couchdb`, `sqlite` or `pg`.
+- `{String} db_type` The type of database to use for backing the store. You must supply `pouchdb`, `couchdb`, `sqlite`, `pg` or `in-mem`.
 
 - `{String} [db_name]` (`db_type='pouchdb'` or `db_type='couchdb'`) Name of database to use for storing keys. Defaults to `pub-keys`.
 
@@ -242,7 +242,7 @@ Create the store's backing database.
 
 Unless you pass `db_already_created=true` when [opening the keystore](#moduleexportsconfig-cb), this method is automatically called for you when the store is opened. It is an idempotent operation so it doesn't matter if you call it twice.
 
-For SQLite- and PostgreSQL-backed databases, this is a no-op: you must create the database beforehand.
+For SQLite- and PostgreSQL-backed databases, this is a no-op: you must create the database beforehand. For in-memory databases, this is also a no-op.
 
 @param {Function} [cb] Function to call once the database has been created. It will receive the following arguments:
 - `{Object} err` If an error occurred then details of the error, otherwise `null`.
@@ -262,7 +262,7 @@ PubKeyStore.prototype.destroy = function (cb) { };
 /**
 (PouchDB) Notify reader processes to replicate from the master database. You should call this when you've [opened the keystore](#moduleexportsconfig-cb) with `db_for_update=true`, performed some updates and want other processes reading from the store to receive the updates. Internally it uses [`touch`](https://github.com/isaacs/node-touch) and [`fs.watch`](http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener) on a shared file.
 
-For CouchDB-, SQLite- and PostgreSQL-backed keystores, this is a no-op.
+For CouchDB-, SQLite-, PostgreSQL- and memory-backed keystores, this is a no-op.
 
 @param {Function} [cb] Function to call once the shared file has been `touch`ed. Note this will be before reader processes finish replicating. It will receive the following arguments:
 - `{Object} err` If an error occurred then details of the error, otherwise `null`.
@@ -272,7 +272,7 @@ PubKeyStore.prototype.deploy = function (cb) { };
 /**
 (PouchDB) Force replication from the master database. Usually you shouldn't need to call this because reader processes (where the keystore is [opened](#moduleexportsconfig-cb) _without_ `db_for_update=true`) will replicate when the keystore is opened and when they detect that a writer process has called [`deploy`](#pubkeystoreprototypedeploycb).
 
-For CouchDB-, SQLite- and PostgreSQL-backed keystores, this is a no-op.
+For CouchDB-, SQLite-, PostgreSQL- and memory-backed keystores, this is a no-op.
 
 @param {Object} opts Replication options. Valid properties:
 - `{Boolean} no_retry` If replication fails (typically because the master database is open in another process also trying to replicate) then it is automatically retried after a random delay of between 1 and 2 seconds. Set `no_retry` to `true` to disable this behaviour. Defaults to `false`.
@@ -307,7 +307,7 @@ PubKeyStore.events.error = function (err) { };
 /*
 `replicated` event
 
-Emitted when a successful replication from the master database completes (PouchDB-backed keystores). CouchDB-, SQLite- and PostgreSQL-backed stores emit this too for consistency, after [`replicate`](#pubkeystoreprototypereplicateopts-cb) is called.
+Emitted when a successful replication from the master database completes (PouchDB-backed keystores). CouchDB-, SQLite-, PostgreSQL- and memory-backed stores emit this too for consistency, after [`replicate`](#pubkeystoreprototypereplicateopts-cb) is called.
 
 @param {Function} close_master Function you can call to close the master database if you set `config.keep_master_open=true` when [opening the keystore](#moduleexportsconfig-cb). This lets you control when to close the master database yourself. If you didn't set `config.keep_master_open=true` then `close_master` is a no-op. `close_master` takes the following parameters:
 - `{Function} cb(err)` This will be called after the master database is closed (or after the no-op).
