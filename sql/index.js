@@ -278,8 +278,12 @@ class PubKeyStoreSQL extends EventEmitter {
     replicate(opts, cb) {
         /* jshint expr: true */
         (typeof opts !== 'function') || (cb = opts);
+        cb = cb || (() => {});
+        if (!this._open) {
+            return cb(new Error('not_open'));
+        }
         this.emit('replicated', cb => cb());
-        !cb || cb();
+        cb();
     }
 
     deploy(cb) {

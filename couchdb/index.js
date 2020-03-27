@@ -431,12 +431,19 @@ PubKeyStoreCouchDB.prototype.replicate = function (opts, cb)
         cb = opts;
     }
 
+    cb = cb || (() => {});
+
+    if (!this._db)
+    {
+        return cb(new Error('not_open'));
+    }
+
     this.emit('replicated', function (cb)
     {
         cb();
     });
 
-    if (cb) { cb(); }
+    cb();
 };
 
 module.exports = function (config, cb)

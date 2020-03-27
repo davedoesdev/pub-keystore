@@ -552,7 +552,7 @@ function close_stores_for_query(states)
 
 function tests(states, multiprocess, one_for_each, changes, make_query_stores, close_query_stores, close_update_stores)
 {
-    function deploy(cb)
+    function deploy(cb, closed)
     {
         function done(close)
         {
@@ -637,19 +637,31 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                 }
             };
 
-            uks.once('replicated', function (close)
+            if (closed)
             {
-                close(() => {
+                uks.replicate(err => {
+                    expr(expect(err).to.exist);
+                    expect(err.message).to.equal('not_open');
                     replicated = true;
-                    if (deployed) {
-                        done();
-                    }
+                    do_deploy();
                 });
-            }, multiprocess ? () => uks.replicate(do_deploy) : undefined);
-
-            if (!multiprocess)
+            }
+            else
             {
-                uks.replicate(do_deploy);
+                uks.once('replicated', function (close)
+                {
+                    close(() => {
+                        replicated = true;
+                        if (deployed) {
+                            done();
+                        }
+                    });
+                }, multiprocess ? () => uks.replicate(do_deploy) : undefined);
+
+                if (!multiprocess)
+                {
+                    uks.replicate(do_deploy);
+                }
             }
         }
     }
@@ -1330,7 +1342,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                 if (err) { return cb(err); }
                 if (close) { return close(after_deploy); }
                 after_deploy();
-            });
+            }, true);
         });
     });
 }
