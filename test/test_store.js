@@ -751,7 +751,13 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                 ks.destroy(cb);
             }, function (err)
             {
-                if (err) { return cb(err); }
+                if (err &&
+                    // work around https://github.com/apache/couchdb/issues/1106
+                    !((err.statusCode === 500) && (err.message !== 'badarg')))
+                {
+                    return cb(err);
+                }
+
                 async.each(states[0].stores_for_update, function (ks, cb)
                 {
                     if (multiprocess)
