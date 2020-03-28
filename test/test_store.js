@@ -751,9 +751,16 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                 ks.destroy(cb);
             }, function (err)
             {
-                if (err &&
-                    // work around https://github.com/apache/couchdb/issues/1106
-                    !((err.statusCode === 500) && (err.message !== 'badarg')))
+                // work around https://github.com/apache/couchdb/issues/1106
+                if ((ks.driver === 'couchdb') &&
+                    err &&
+                    (err.statusCode === 500) &&
+                    (err.message === 'badarg'))
+                {
+                    err = null;
+                }
+
+                if (err)
                 {
                     return cb(err);
                 }
@@ -770,11 +777,13 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                         ks._nano = ks._nano_save;
                     }
                     ks.destroy(err => {
-                        if (err &&
-                            // work around https://github.com/apache/couchdb/issues/1106
-                            !((err.statusCode === 500) && (err.message !== 'badarg')))
+                        // work around https://github.com/apache/couchdb/issues/1106
+                        if ((ks.driver === 'couchdb') &&
+                            err &&
+                            (err.statusCode === 500) &&
+                            (err.message === 'badarg'))
                         {
-                            return cb(err);
+                            err = null;
                         }
 
                         if ((ks.driver === 'sql') || (ks.driver === 'in-mem'))
