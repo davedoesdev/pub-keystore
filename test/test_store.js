@@ -1296,6 +1296,15 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
             ], cb);
         }, function (err)
         {
+            // work around https://github.com/apache/couchdb/issues/1106
+            if ((states[0].stores_for_update[0].driver === 'couchdb') &&
+                err &&
+                (err.statusCode === 500) &&
+                (err.message === 'badarg'))
+            {
+                err = null;
+            }
+
             if (err) { return cb(err); }
 
             console.log('destroyed');
