@@ -770,10 +770,19 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
                         ks._nano = ks._nano_save;
                     }
                     ks.destroy(err => {
-                        if ((ks.driver === 'sql') || (ks.driver === 'in-mem')) {
+                        if (err &&
+                            // work around https://github.com/apache/couchdb/issues/1106
+                            !((err.statusCode === 500) && (err.message !== 'badarg')))
+                        {
+                            return cb(err);
+                        }
+
+                        if ((ks.driver === 'sql') || (ks.driver === 'in-mem'))
+                        {
                             expect(err.message).to.equal('not_open');
                             return cb();
                         }
+
                         cb(err);
                     });
                 }, function (err)
