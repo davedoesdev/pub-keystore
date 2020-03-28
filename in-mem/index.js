@@ -26,10 +26,12 @@ class PubKeyStoreMemory extends EventEmitter {
             };
             this._state.on('change', this._change_listener);
         }
-        this._replicated_listener = cm => {
-            this.emit('replicated', cm);
+        this._deploy_listener = store => {
+            if (store !== this) {
+                this.replicate();
+            }
         };
-        this._state.on('replicated', this._replicated_listener);
+        this._state.on('deploy', this._deploy_listener);
         this._no_updates = options.no_updates;
         this._open = true;
         cb(null, this);
@@ -43,7 +45,7 @@ class PubKeyStoreMemory extends EventEmitter {
         if (this._changes) {
             this._state.removeListener('change', this._change_listener);
         }
-        this._state.removeListener('replicated', this._replicated_listener);
+        this._state.removeListener('deploy', this._deploy_listener);
         this._open = false;
         cb();
     }
@@ -166,11 +168,12 @@ class PubKeyStoreMemory extends EventEmitter {
         if (!this._open) {
             return cb(new Error('not_open'));
         }
-        this._state.emit('replicated', cb => cb());
+        this.emit('replicated', cb => cb());
         cb();
     }
 
     deploy(cb) {
+        this._state.emit('deploy', this);
         !cb || cb();
     }
 }

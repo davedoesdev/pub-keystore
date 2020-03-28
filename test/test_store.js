@@ -589,7 +589,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
             });
         }
 
-        if (uks.db_type === 'pouchdb')
+        if ((uks.db_type === 'pouchdb') || (uks.db_type === 'in-mem'))
         {
             qks = states[0].stores_for_query;
             n = qks.length;
