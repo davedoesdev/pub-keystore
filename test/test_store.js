@@ -752,7 +752,7 @@ function tests(states, multiprocess, one_for_each, changes, make_query_stores, c
             }, function (err)
             {
                 // work around https://github.com/apache/couchdb/issues/1106
-                if ((ks.driver === 'couchdb') &&
+                if ((states[0].stores_for_update.driver === 'couchdb') &&
                     err &&
                     (err.statusCode === 500) &&
                     (err.message === 'badarg'))
