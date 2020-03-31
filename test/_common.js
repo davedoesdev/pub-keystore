@@ -26,11 +26,6 @@ global.keystore = require('..');
 global.config = require('config');
 global.travis = process.env.TRAVIS === 'true';
 
-if (global.travis)
-{
-    delete global.config.user;
-}
-
 global.db_name = 'test';
 global.couchdb_admin_username = 'admin';
 global.couchdb_admin_password = 'admin';
