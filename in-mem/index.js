@@ -94,7 +94,12 @@ class PubKeyStoreMemory extends EventEmitter {
         cb(null, Array.from(this._state.keys_by_uri.keys()));
     }
 
-    add_pub_key(uri, pub_key, cb) {
+    add_pub_key(uri, pub_key, options, cb) {
+        if (typeof options == 'function') {
+            cb = options;
+            options = {};
+        }
+        options = options || {};
         cb = cb || (() => {});
         if (!this._open) {
             return cb(new Error('not_open'));
@@ -106,7 +111,7 @@ class PubKeyStoreMemory extends EventEmitter {
         const rev = randomBytes(64).toString('hex');
         const entry = this._state.keys_by_uri.get(uri);
         if (entry) {
-            if (this._no_updates) {
+            if (this._no_updates && !options.allow_update) {
                 const err = new Error('already exists');
                 err.statusCode = 409;
                 err.error = 'conflict';

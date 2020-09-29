@@ -96,7 +96,7 @@ _Source: [docs.js](/docs.js)_
 
 ## PubKeyStore
 ### Adding and removing keys
-- <a name="toc_pubkeystoreprototypeadd_pub_keyuri-pub_key-cb"></a><a name="toc_pubkeystoreprototype"></a><a name="toc_pubkeystore"></a>[PubKeyStore.prototype.add_pub_key](#pubkeystoreprototypeadd_pub_keyuri-pub_key-cb)
+- <a name="toc_pubkeystoreprototypeadd_pub_keyuri-pub_key-options-cb"></a><a name="toc_pubkeystoreprototype"></a><a name="toc_pubkeystore"></a>[PubKeyStore.prototype.add_pub_key](#pubkeystoreprototypeadd_pub_keyuri-pub_key-options-cb)
 - <a name="toc_pubkeystoreprototyperemove_pub_keyuri-cb"></a>[PubKeyStore.prototype.remove_pub_key](#pubkeystoreprototyperemove_pub_keyuri-cb)
 
 ### Retrieving keys
@@ -188,7 +188,7 @@ _Source: [docs.js](/docs.js)_
 
 <a name="pubkeystore"></a>
 
-## PubKeyStore.prototype.add_pub_key(uri, pub_key, [cb])
+## PubKeyStore.prototype.add_pub_key(uri, pub_key, [options], [cb])
 
 > Add a public key to the keystore.
 
@@ -196,6 +196,9 @@ _Source: [docs.js](/docs.js)_
 
 - `{String} uri` A known, permanent identifier for the public key's owner. You can use anything but a [URI](http://en.wikipedia.org/wiki/Uniform_resource_identifier) seems ideal. For example if you know the owner's email address then you could you a `mailto` URI (e.g. `mailto:dave@davedoesdev.com`).
 - `{String | Object} pub_key` The public key itself. This can be in any format (e.g. [PEM](http://www.faqs.org/qa/qa-14736.html)).
+- `{Object} [options]` Additional options. Valid properties:
+  - `{Boolean} [allow_update]` If you passed `no_updates=true` when [opening the keystore](#moduleexportsconfig-cb), you can override it here by passing `true`, which allows this call to update an existing public key.
+
 - `{Function} [cb]` Function to call once the key has been added. It will receive the following arguments:
   - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 

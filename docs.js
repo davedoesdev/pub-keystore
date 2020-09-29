@@ -154,6 +154,9 @@ Add a public key to the keystore.
 
 @param {String|Object} pub_key The public key itself. This can be in any format (e.g. [PEM](http://www.faqs.org/qa/qa-14736.html)).
 
+@param {Object} [options] Additional options. Valid properties:
+- `{Boolean} [allow_update]` If you passed `no_updates=true` when [opening the keystore](#moduleexportsconfig-cb), you can override it here by passing `true`, which allows this call to update an existing public key.
+
 @param {Function} [cb] Function to call once the key has been added. It will receive the following arguments:
 - `{Object} err` If an error occurred then details of the error, otherwise `null`.
 
@@ -161,7 +164,7 @@ Add a public key to the keystore.
 
 - `{String} rev` A revision string for the key. Like the `issuer_id`, this will change every time a key is added. Unlike the `issuer_id`, it is sent with [`change`](#pubkeystoreeventschangeuri-rev-deleted) events so you if you're caching keys then you can tell whether the cached version is up-to-date.
 */
-PubKeyStore.prototype.add_pub_key = function (uri, pub_key, cb) { };
+PubKeyStore.prototype.add_pub_key = function (uri, pub_key, options, cb) { };
 
 /**
 Remove a public key from the keystore.

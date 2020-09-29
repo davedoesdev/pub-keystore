@@ -322,8 +322,14 @@ PubKeyStorePouchDB.prototype.get_uris = function (cb)
     });
 };
 
-PubKeyStorePouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
+PubKeyStorePouchDB.prototype.add_pub_key = function (uri, pub_key, options, cb)
 {
+    if (typeof options === 'function')
+    {
+        cb = options;
+        options = {};
+    }
+    options = options || {};
     cb = cb || function () { return undefined; };
 
     if (!this._db) { return cb(new Error('not_open')); }
@@ -337,7 +343,7 @@ PubKeyStorePouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
         issuer_id = crypto.randomBytes(64).toString('hex'),
         doc = { _id: uri, issuer_id: issuer_id, pub_key: pub_key };
 
-    if (this._config.no_updates)
+    if (this._config.no_updates && !options.allow_update)
     {
         return this._db.put(doc, function (err, res)
         {

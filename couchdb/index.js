@@ -225,8 +225,14 @@ PubKeyStoreCouchDB.prototype.get_pub_key_by_uri = function (uri, cb)
     });
 };
 
-PubKeyStoreCouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
+PubKeyStoreCouchDB.prototype.add_pub_key = function (uri, pub_key, options, cb)
 {
+    if (typeof options === 'function')
+    {
+        cb = options;
+        options = {};
+    }
+    options = options || {};
     cb = cb || function () { return undefined; };
 
     if (!this._db) { return cb(new Error('not_open')); }
@@ -240,7 +246,7 @@ PubKeyStoreCouchDB.prototype.add_pub_key = function (uri, pub_key, cb)
         issuer_id = crypto.randomBytes(64).toString('hex'),
         doc = { issuer_id: issuer_id, pub_key: pub_key };
 
-    if (this._config.no_updates)
+    if (this._config.no_updates && !options.allow_update)
     {
         return this._db.insert(doc, uri, function (err, res)
         {

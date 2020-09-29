@@ -204,7 +204,14 @@ class PubKeyStoreSQL extends EventEmitter {
         }, this._busy(cb, this.get_uris.bind(this, cb)));
     }
 
-    add_pub_key(uri, pub_key, cb) {
+    add_pub_key(uri, pub_key, options, cb) {
+        if (typeof options === 'function')
+        {
+            cb = options;
+            options = {};
+        }
+        options = options || {};
+        cb = cb || function () { return undefined; };
         if ((uri === null) || (uri === undefined)) {
             return cb(new Error('invalid_uri'));
         }
@@ -217,6 +224,7 @@ class PubKeyStoreSQL extends EventEmitter {
                     [uri],
                     iferr(cb, r => {
                         if (this._options.no_updates &&
+                            !options.allow_update &&
                             (r !== undefined) &&
                             !r.deleted) {
                             const err = new Error('already exists');

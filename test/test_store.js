@@ -1605,15 +1605,22 @@ describe('no updates', function ()
                     {
                         expect(db_type === 'pouchdb' ? err.status : err.statusCode).to.equal(409);
                         expect(db_type === 'pouchdb' ? err.name : err.error).to.equal('conflict');
-                        store.remove_pub_key('update_test', function (err)
+                        store.add_pub_key('update_test', 'update_key', { allow_update: true }, function (err, issuer_id2, rev)
                         {
                             if (err) { return cb(err); }
-                            store.add_pub_key('update_test', 'update_key', function (err, issuer_id, rev)
+                            expr(expect(issuer_id2).to.exist);
+                            expect(issuer_id2).not.to.equal(issuer_id);
+                            expr(expect(rev).to.exist);
+                            store.remove_pub_key('update_test', function (err)
                             {
                                 if (err) { return cb(err); }
-                                expr(expect(issuer_id).to.exist);
-                                expr(expect(rev).to.exist);
-                                store.close(cb);
+                                store.add_pub_key('update_test', 'update_key', function (err, issuer_id, rev)
+                                {
+                                    if (err) { return cb(err); }
+                                    expr(expect(issuer_id).to.exist);
+                                    expr(expect(rev).to.exist);
+                                    store.close(cb);
+                                });
                             });
                         });
                     });
