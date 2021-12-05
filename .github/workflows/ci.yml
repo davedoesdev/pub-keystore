@@ -47,9 +47,6 @@ jobs:
       - name: Install packages
         run: npm install
 
-      - name: Debug
-        run: ls node_modules
-
       - name: Lint
         run: npx grunt lint
 
@@ -60,7 +57,9 @@ jobs:
         run: npx node-pg-migrate up
 
       - name: ${{ matrix.target }}
-        run: npx grunt ${{ matrix.target }}
+        run: |
+          ls node_modules/pouchdb
+          npx grunt ${{ matrix.target }}
 
       - name: Coveralls
         if: matrix.target == 'coverage'
