@@ -5,6 +5,7 @@ var events = require('events'),
     util = require('util'),
     crypto = require('crypto'),
     nano = require('nano'),
+    axios = require('axios'),
     design = require('./design'),
     status_not_found = 404,
     status_conflict = 409,
@@ -22,20 +23,22 @@ function PubKeyStoreCouchDB(config, cb)
     this.db_host = config.db_host || 'http://localhost';
     this.db_port = config.db_port || 5984;
 
+    const requestDefaults = {
+        auth: config.username ? {
+            username: config.username,
+            password: config.password
+        } : undefined,
+        strictSSL: true,
+        ca: config.ca,
+        pool: {
+            maxSockets: config.maxSockets || Infinity
+        }
+    };
+
     this._nano = nano(
     {
         url: this.db_host + ':' + this.db_port,
-        requestDefaults: {
-            auth: config.username ? {
-                username: config.username,
-                password: config.password
-            } : undefined,
-            strictSSL: true,
-            ca: config.ca,
-            pool: {
-                maxSockets: config.maxSockets || Infinity
-            }
-        }
+        requestDefaults
     });
 
     this.db_name = config.db_name || 'pub-keys';
@@ -54,11 +57,31 @@ function PubKeyStoreCouchDB(config, cb)
         });
     }
 
-    this._feed = this._db.follow(
+    const relax = this._db.changesReader.request;
+
+    this._db.changesReader.request = async function (opts)
     {
-        since: 'now',
-        request: { strictSSL: true, ca: config.ca }
+        ths._cancel_token = axios.CancelToken.source();
+
+        requestDefaults.cancelToken = ths._cancel_token.token;
+        const promise = relax(opts);
+        delete requestDefaults.cancelToken;
+
+        process.nextTick(() => ths._feed.emit('confirm'));
+
+        try {
+            return await promise;
+        } finally {
+            ths._cancel_token = null;
+        }
+    };
+
+    this._feed = this._db.changesReader.start(
+    {
+        since: 'now'
     });
+
+    this._feed.stop = () => this._db.changesReader.stop();
 
     this._feed.on('change', function (change)
     {
@@ -88,11 +111,6 @@ function PubKeyStoreCouchDB(config, cb)
         ths.emit('change', change.id, rev, !!change.deleted);
     });
 
-    this._feed.on('query', function (req)
-    {
-        ths._query = req;
-    });
-
     this._feed.on('error', function (err)
     {
         if (!ths._feed)
@@ -109,18 +127,10 @@ function PubKeyStoreCouchDB(config, cb)
 
         err.feed_error = true;
 
-        if (err.message)
+        if ((err.statusCode === status_not_found) ||
+            (err.message && (err.message.indexOf('missing_target') >= 0)))
         {
-            if (err.message.lastIndexOf(
-                    'Bad DB response: {"error":"not_found"', 0) === 0)
-            {
-                err.message = 'not_found';
-            }
-            else if (err.message.lastIndexOf(
-                    'Database deleted after change:', 0) === 0)
-            {
-                err.message = 'deleted';
-            }
+            err.message = 'not_found';
         }
 
         if (called_back)
@@ -134,7 +144,7 @@ function PubKeyStoreCouchDB(config, cb)
         }
     });
 
-    this._feed.on('confirm', function ()
+    this._feed.once('confirm', function ()
     {
         if (!called_back)
         {
@@ -142,8 +152,6 @@ function PubKeyStoreCouchDB(config, cb)
             cb(null, ths);
         }
     });
-
-    this._feed.follow();
 }
 
 util.inherits(PubKeyStoreCouchDB, events.EventEmitter);
@@ -329,13 +337,12 @@ PubKeyStoreCouchDB.prototype._stop = function (cb)
         feed.stop();
     }
 
-    var query = this._query;
-    if (query)
+    const cancel_token = this._cancel_token;
+    if (cancel_token)
     {
-        this._query = null;
+        this._cancel_token = null;
         this._stop_cb = cb;
-        query.abort();
-        return query.emit('response', { body: 'aborted' });
+        return cancel_token.cancel('aborted');
     }
 
     cb();

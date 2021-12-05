@@ -1,23 +1,25 @@
 /*jslint node: true */
 "use strict";
 
+const c8 = "npx c8 -x Gruntfile.js -x 'test/**' -x couchdb/design.js -x pouchdb/design.js";
+
 module.exports = function (grunt)
 {
     grunt.initConfig(
     {
         jshint: {
-            src: [ 'Gruntfile.js', 'index.js', 'couchdb/*.js', 'pouchdb/*.js', 'test/**/*.js', 'scripts/*.js', 'sql/**/*.js' ],
+            src: [
+                'Gruntfile.js',
+                'index.js',
+                'couchdb/*.js',
+                'pouchdb/*.js',
+                'test/**/*.js',
+                'scripts/*.js',
+                'sql/**/*.js'
+            ],
             options: {
-                esversion: 6,
+                esversion: 9,
                 node: true
-            }
-        },
-
-        mochaTest: {
-            src: ['test/*.js'],
-            options: {
-                timeout: 10000,
-                bail: true
             }
         },
 
@@ -36,36 +38,23 @@ module.exports = function (grunt)
             }
         },
 
-        exec: {
-            cover: {
-                cmd: "./node_modules/.bin/nyc -x Gruntfile.js -x 'test/**' -x couchdb/design.js -x pouchdb/design.js ./node_modules/.bin/grunt test --cover"
-            },
-
-            cover_report: {
-                cmd: './node_modules/.bin/nyc report -r lcov'
-            },
-
-            cover_check: {
-                cmd: './node_modules/.bin/nyc check-coverage --statements 78 --branches 65 --functions 80 --lines 80'
-            },
-
-            coveralls: {
-                cmd: 'cat coverage/lcov.info | coveralls'
-            }
-        }
+        exec: Object.fromEntries(Object.entries({
+            test: 'mocha --bail --timeout 10000',
+            cover: `${c8} npx grunt test --cover`,
+            cover_report: `${c8} report -r lcov`,
+            cover_check: `${c8} check-coverage --statements 78 --branches 65 --functions 75 --lines 80`
+        }).map(([k, cmd]) => [k, { cmd, stdio: 'inherit' }]))
     });
     
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-apidox');
     grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('lint', 'jshint');
-    grunt.registerTask('test', 'mochaTest');
+    grunt.registerTask('test', 'exec:test');
     grunt.registerTask('docs', 'apidox');
     grunt.registerTask('coverage', ['exec:cover',
                                     'exec:cover_report',
                                     'exec:cover_check']);
-    grunt.registerTask('coveralls', 'exec:coveralls');
     grunt.registerTask('default', ['lint', 'test']);
 };

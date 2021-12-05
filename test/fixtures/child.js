@@ -3,7 +3,6 @@
 
 var https = require('https'),
     dnode = require('@davedoesdev/dnode'),
-    Feed = require('cloudant-follow').Feed,
     keystore = require('../..'),    
     port = parseInt(process.argv[2], 10),
     config = JSON.parse(process.argv[3]),
@@ -19,9 +18,8 @@ JSON.stringify = function (v, f)
     }
     const r = orig_stringify.call(JSON, v, function (k, v)
     {
-        // Stop dnode trying to serialize change feed and TLS sessions
-        if ((v instanceof Feed) ||
-            (v instanceof https.Agent))
+        // Stop dnode trying to serialize TLS sessions
+        if (v instanceof https.Agent)
         {
             return undefined;
         }

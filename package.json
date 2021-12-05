@@ -1,7 +1,7 @@
 {
   "name": "pub-keystore",
   "description": "Simple store for public keys, with issuer IDs and change notification",
-  "version": "4.5.0",
+  "version": "5.0.0",
   "homepage": "https://github.com/davedoesdev/pub-keystore",
   "author": {
     "name": "David Halls",
@@ -18,11 +18,7 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "grunt lint test",
-    "migrate": "cd sql && ../node_modules/.bin/migrate up && cp pub-keystore.empty.sqlite3 ../test/pub-keystore.sqlite3",
-    "pg-migrate": "node-pg-migrate up",
-    "travis-test": "grunt lint test",
-    "travis-cover": "grunt coverage coveralls"
+    "test": "grunt lint test"
   },
   "directories": {
     "test": "test"
@@ -33,33 +29,31 @@
     "PouchDB"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "dependencies": {
-    "async": "^3.2.0",
+    "async": "^3.2.2",
     "iferr": "^1.0.2",
-    "nano": "^8.2.2",
-    "node-pg-migrate": "^5.8.0",
-    "pg": "^8.3.3",
-    "pouchdb": "^7.2.2",
-    "prompt": "^1.0.0",
-    "sqlite3": "^5.0.0",
+    "nano": "^9.0.5",
+    "node-pg-migrate": "^6.0.0",
+    "pg": "^8.7.1",
+    "pouchdb": "pouchdb/pouchdb",
+    "prompt": "^1.2.0",
+    "sqlite3": "npm:@vscode/sqlite3@^5.0.7",
     "touch": "^3.1.0",
-    "yargs": "^16.0.3"
+    "yargs": "^17.3.0"
   },
   "devDependencies": {
-    "@davedoesdev/dnode": "^1.2.4",
-    "chai": "^4.2.0",
-    "config": "^3.3.2",
-    "coveralls": "^3.1.0",
-    "grunt": "^1.3.0",
-    "grunt-apidox": "^2.0.10",
+    "@davedoesdev/dnode": "^2.0.0",
+    "c8": "^7.10.0",
+    "chai": "^4.3.4",
+    "config": "^3.3.6",
+    "grunt": "^1.4.1",
+    "grunt-apidox": "^2.0.14",
+    "grunt-contrib-jshint": "^3.1.1",
     "grunt-exec": "^3.0.0",
-    "grunt-contrib-jshint": "^2.1.0",
-    "grunt-mocha-test": "^0.13.3",
     "migrate": "^1.7.0",
-    "mocha": "^8.1.3",
-    "nyc": "^15.1.0",
+    "mocha": "^9.1.3",
     "rimraf": "^3.0.2"
   }
 }

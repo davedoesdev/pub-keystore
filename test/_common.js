@@ -24,7 +24,6 @@ global.dnode = require('@davedoesdev/dnode');
 global.keystore = require('..');
 
 global.config = require('config');
-global.travis = process.env.TRAVIS === 'true';
 
 global.db_name = 'test';
 global.couchdb_admin_username = 'admin';

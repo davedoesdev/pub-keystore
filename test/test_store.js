@@ -16,8 +16,7 @@
          before: false,
          after: false,
          crypto: false,
-         config: false,
-         travis: false */
+         config: false */
 /*jslint node: true, nomen: true */
 "use strict";
 
@@ -56,7 +55,8 @@ function mp_keystore(config, cb)
 {
     var port = mp_port,
         child = child_process.fork(path.join(__dirname, 'fixtures', 'child.js'),
-                                   [String(port), JSON.stringify(config)]),
+                                   [String(port), JSON.stringify(config)],
+                                   {env: {...process.env, NODE_V8_COVERAGE: ''}}),
         cb_called = false,
         ks = null,
         client = null;
@@ -415,11 +415,7 @@ function make_stores_for_query(multiprocess, num, db_type, db_name, changes, sta
 
                 if (err.feed_error)
                 {
-                    expect(err.message).to.satisfy(function (msg)
-                    {
-                        return (msg === 'not_found') || (msg === 'deleted');
-                    });
-
+                    expect(err.message).to.equal('not_found');
                     states[0].feed_failed = true;
                     return false;
                 }
@@ -1548,7 +1544,7 @@ describe('close', function ()
 });
 });
 
-if (travis)
+if (process.env.CI)
 {
     setup(false, 2, 'in-mem');
     setup(false, 2, 'couchdb');
