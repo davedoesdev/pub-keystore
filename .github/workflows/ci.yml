@@ -47,6 +47,9 @@ jobs:
       - name: Install packages
         run: npm install
 
+      - name: Debug
+        run: ls node_modules
+
       - name: Lint
         run: npx grunt lint
 
