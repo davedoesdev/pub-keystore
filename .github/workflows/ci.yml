@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Get CouchDB
         run: |
-          ( cd; git clone "https://github.com/davedoesdev/build-couchdb-gha.git"; cd build-couchdb-gha; wget -O - "https://github.com/davedoesdev/build-couchdb-gha/releases/download/$(git tag | tail -n 1)/couchdb.tar.gz" | tar -zx; ln -s "$PWD/couchdb" "$HOME" )
+          ( cd; git clone "https://github.com/davedoesdev/build-couchdb-gha.git"; cd build-couchdb-gha; wget -O - "https://github.com/davedoesdev/build-couchdb-gha/releases/download/$(git tag | tail -n 1)/couchdb.tar.gz" | tar -zx; mkdir "$HOME/couchdb"; ln -s "$PWD/couchdb" "$HOME/couchdb/rel" )
           ls -l "$HOME/couchdb/rel/couchdb/bin"
 
       - name: Checkout
