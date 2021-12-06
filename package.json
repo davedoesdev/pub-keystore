@@ -18,7 +18,8 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "grunt lint test"
+    "test": "grunt lint test",
+    "install": "npm explore pouchdb-monorepo npm install && cd node_modules && ln -s pouchdb-monorepo/packages/node_modules/pouchdb ."
   },
   "directories": {
     "test": "test"
@@ -37,7 +38,7 @@
     "nano": "^9.0.5",
     "node-pg-migrate": "^6.0.0",
     "pg": "^8.7.1",
-    "pouchdb": "pouchdb/pouchdb",
+    "pouchdb-monorepo": "pouchdb/pouchdb",
     "prompt": "^1.2.0",
     "sqlite3": "npm:@vscode/sqlite3@^5.0.7",
     "touch": "^3.1.0",
