@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12, 14, 16]
+        node-version: [16]
         target: [test, coverage]
 
     services:
@@ -57,9 +57,7 @@ jobs:
         run: npx node-pg-migrate up
 
       - name: ${{ matrix.target }}
-        run: |
-          ls node_modules/pouchdb
-          npx grunt ${{ matrix.target }}
+        run: npx grunt ${{ matrix.target }}
 
       - name: Coveralls
         if: matrix.target == 'coverage'
