@@ -45,7 +45,7 @@
     "yargs": "^17.3.0"
   },
   "devDependencies": {
-    "@davedoesdev/dnode": "^2.0.0",
+    "@davedoesdev/dnode": "^2.0.1",
     "c8": "^7.10.0",
     "chai": "^4.3.4",
     "config": "^3.3.6",
