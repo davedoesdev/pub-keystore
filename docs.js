@@ -1,5 +1,5 @@
 /**
-# pub-keystore&nbsp;&nbsp;&nbsp;[![Build Status](https://travis-ci.org/davedoesdev/pub-keystore.png)](https://travis-ci.org/davedoesdev/pub-keystore) [![Coverage Status](https://coveralls.io/repos/davedoesdev/pub-keystore/badge.png?branch=master)](https://coveralls.io/r/davedoesdev/pub-keystore?branch=master) [![NPM version](https://badge.fury.io/js/pub-keystore.png)](http://badge.fury.io/js/pub-keystore)
+# pub-keystore&nbsp;&nbsp;&nbsp;[![Build Status](https://github.com/davedoesdev/pub-keystore/actions/workflows/ci.yml/badge.svg)](https://github.com/davedoesdev/pub-keystore/actions/workflows/ci.yml) [![Coverage Status](https://coveralls.io/repos/davedoesdev/pub-keystore/badge.png?branch=master)](https://coveralls.io/r/davedoesdev/pub-keystore?branch=master) [![NPM version](https://badge.fury.io/js/pub-keystore.png)](http://badge.fury.io/js/pub-keystore)
 
 A simple store for public keys in Node.js.
 
