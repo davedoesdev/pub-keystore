@@ -19,7 +19,7 @@
   "main": "index.js",
   "scripts": {
     "test": "grunt lint test",
-    "prepare": "cd node_modules && ln -s pouchdb-monorepo/node_modules/pouchdb ."
+    "prepare": "pwd && cd node_modules && ls -l && ln -s pouchdb-monorepo/node_modules/pouchdb ."
   },
   "directories": {
     "test": "test"
