@@ -18,8 +18,7 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "grunt lint test",
-    "postinstall": "cd $(npm ls pouchdb-monorepo -ps) && pwd && ln -sf packages/node_modules ."
+    "test": "grunt lint test"
   },
   "directories": {
     "test": "test"
