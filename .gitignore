@@ -2,3 +2,4 @@
 /coverage/tmp
 /test/fixtures/store
 /test/pub-keystore.sqlite3
+/pouchdb/packages

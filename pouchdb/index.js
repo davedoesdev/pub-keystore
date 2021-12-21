@@ -8,7 +8,7 @@ var events = require('events'),
     fs = require('fs'),
     crypto = require('crypto'),
     async = require('async'),
-    PouchDB = require('pouchdb'),
+    PouchDB = require('./packages/node_modules/pouchdb'),
     touch = require('touch'),
     design = require('./design');
 
