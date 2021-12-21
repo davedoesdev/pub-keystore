@@ -19,7 +19,7 @@
   "main": "index.js",
   "scripts": {
     "test": "grunt lint test",
-    "postinstall": "ls -l .. && echo ONE && ls -l ../pouchdb-monorepo && cd ../pouchdb-monorepo && npm install"
+    "prepare": "ls -l .. && echo ONE && ls -l && echo TWO && cd ../pouchdb-monorepo && npm install"
   },
   "directories": {
     "test": "test"
