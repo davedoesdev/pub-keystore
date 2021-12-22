@@ -1,7 +1,7 @@
 {
   "name": "pub-keystore",
   "description": "Simple store for public keys, with issuer IDs and change notification",
-  "version": "5.0.3",
+  "version": "5.0.4",
   "homepage": "https://github.com/davedoesdev/pub-keystore",
   "author": {
     "name": "David Halls",
@@ -19,7 +19,7 @@
   "main": "index.js",
   "scripts": {
     "test": "grunt lint test",
-    "postinstall": "npm explore pouchdb-monorepo npm install && cp -R $(npm ls pouchdb-monorepo -ps)/packages pouchdb",
+    "postinstall": "cd $(npm ls pouchdb-monorepo -ps) && npm install && ls packages",
     "prepack": "echo packages > pouchdb/.npmignore",
     "postpack": "rm pouchdb/.npmignore"
   },
