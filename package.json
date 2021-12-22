@@ -19,7 +19,9 @@
   "main": "index.js",
   "scripts": {
     "test": "grunt lint test",
-    "prepare": "npm explore pouchdb-monorepo npm install && cp -R $(npm ls pouchdb-monorepo -ps)/packages pouchdb"
+    "prepare": "npm explore pouchdb-monorepo npm install && cp -R $(npm ls pouchdb-monorepo -ps)/packages pouchdb",
+    "prepack": "echo packages > pouchdb/.npmignore",
+    "postpack": "rm pouchdb/.npmignore"
   },
   "directories": {
     "test": "test"
