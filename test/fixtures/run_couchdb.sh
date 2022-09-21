@@ -24,16 +24,19 @@ level = debug
 
 [fabric]
 request_timeout = 300000
+
+[chttpd]
+bind_address = 127.0.0.1
 EOF
 
 trap 'kill $(jobs -p); wait' INT TERM
 couchdb &
 
-while ! nc -zv -w 5 localhost 5984; do sleep 1; done
+while ! nc -zv -w 5 127.0.0.1 5984; do sleep 1; done
 
-curl -X PUT http://admin:admin@localhost:5984/_users
+curl -X PUT http://admin:admin@127.0.0.1:5984/_users
 
-curl -X PUT http://admin:admin@localhost:5984/_users/org.couchdb.user:admin \
+curl -X PUT http://admin:admin@127.0.0.1:5984/_users/org.couchdb.user:admin \
      -H "Accept: application/json" \
      -H "Content-Type: application/json" \
      -d '{"name": "admin", "password": "admin", "roles": ["pub-keys-updater", "test-updater"], "type": "user"}'

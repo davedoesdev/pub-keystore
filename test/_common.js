@@ -68,7 +68,7 @@ before(function (cb)
     function check()
     {
         var nv = child_process.spawn('nc',
-                ['-zv', '-w', '5', 'localhost', '5984'],
+                ['-zv', '-w', '5', '127.0.0.1', '5984'],
                 { stdio: 'inherit' });
 
         nv.on('exit', function (code)
@@ -92,7 +92,7 @@ before(function (cb)
     {
         require('nano')(
         {
-            url: 'http://localhost:5984',
+            url: 'http://127.0.0.1:5984',
             requestDefaults: {
                 auth: {
                     username: global.couchdb_admin_username,

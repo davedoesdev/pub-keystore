@@ -20,7 +20,7 @@ function PubKeyStoreCouchDB(config, cb)
 
     this._config = config;
 
-    this.db_host = config.db_host || 'http://localhost';
+    this.db_host = config.db_host || 'http://127.0.0.1';
     this.db_port = config.db_port || 5984;
 
     const requestDefaults = {

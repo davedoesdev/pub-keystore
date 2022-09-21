@@ -155,7 +155,7 @@ _Source: [docs.js](/docs.js)_
 
   - `{String} [replicate_signal]` (`db_type='pouchdb'`) Name of a Unix signal (e.g. `SIGUSR2`) which can be sent to a reader process to force a replication from the master database. Defaults to `undefined` (no signal will be listened to). Replication normally happens when [`deploy`](#pubkeystoreprototypedeploycb) is called from the writing process or [`replicate`](#pubkeystoreprototypereplicateopts-cb) is called from the reading process.
 
-  - `{String} [db_host]` (`db_type='couchdb'`) URL of the CouchDB server. Defaults to `http://localhost`.
+  - `{String} [db_host]` (`db_type='couchdb'`) URL of the CouchDB server. Defaults to `http://127.0.0.1`.
 
   - `{Integer} [db_port]` (`db_type='couchdb'`) Port number of the CouchDB server. Defaults to `5984`.
 
