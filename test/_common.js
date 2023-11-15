@@ -15,7 +15,9 @@
 global.path = require('path');
 global.fs = require('fs');
 global.os = require('os');
-global.crypto = require('crypto');
+if (!global.crypto) {
+    global.crypto = require('crypto');
+}
 global.rimraf = require('rimraf').rimraf;
 global.child_process = require('child_process');
 global.expect = require('chai').expect;
