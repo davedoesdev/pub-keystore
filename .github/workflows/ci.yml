@@ -35,7 +35,7 @@ jobs:
         run: sudo apt update
 
       - name: Install dependencies
-        run: sudo apt install libmozjs-91
+        run: sudo apt install libmozjs-91-0
 
       - name: Get CouchDB
         run: |
