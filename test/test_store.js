@@ -30,7 +30,8 @@ EventEmitter.prototype.emit = function (name) {
     return orig_emit.apply(this, arguments);
 };*/
 
-var argv = require('yargs').argv,
+var crypto = require('crypto'),
+    argv = require('yargs').argv,
     num_keys = 10,
     uri = 'mailto:dave@davedoesdev.com',
     mp_port,
