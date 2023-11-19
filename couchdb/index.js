@@ -101,6 +101,11 @@ function PubKeyStoreCouchDB(config, cb)
 
     this._feed.on('error', function (err)
     {
+        if (!this._feed)
+        {
+            return;
+        }
+
         err.feed_error = true;
 
         if ((err.statusCode === status_not_found) ||
@@ -309,6 +314,7 @@ PubKeyStoreCouchDB.prototype._stop = function (cb)
     if (this._feed && this._db.changesReader.started)
     {
         this._feed.once('end', cb);
+        this._feed = null;
         return this._db.changesReader.stop();
     }
 
