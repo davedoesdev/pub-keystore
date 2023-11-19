@@ -42,7 +42,7 @@ function PubKeyStoreCouchDB(config, cb)
     });
 
     this.db_name = config.db_name || 'pub-keys';
-    this._db = this._nano.db.use(this.db_name);
+    this._db = this._nano.use(this.db_name);
 
     if (config.no_changes)
     {
@@ -61,27 +61,15 @@ function PubKeyStoreCouchDB(config, cb)
 
     this._db.changesReader.request = async function (opts)
     {
-        ths._cancel_token = axios.CancelToken.source();
-
-        requestDefaults.cancelToken = ths._cancel_token.token;
         const promise = relax(opts);
-        delete requestDefaults.cancelToken;
-
         process.nextTick(() => ths._feed.emit('confirm'));
-
-        try {
-            return await promise;
-        } finally {
-            ths._cancel_token = null;
-        }
+        return await promise;
     };
 
     this._feed = this._db.changesReader.start(
     {
         since: 'now'
     });
-
-    this._feed.stop = () => this._db.changesReader.stop();
 
     this._feed.on('change', function (change)
     {
@@ -113,18 +101,6 @@ function PubKeyStoreCouchDB(config, cb)
 
     this._feed.on('error', function (err)
     {
-        if (!ths._feed)
-        {
-            // aborted
-            var stop_cb = ths._stop_cb;
-            ths._stop_cb = null;
-            if (stop_cb)
-            {
-                process.nextTick(stop_cb);
-            }
-            return;
-        }
-
         err.feed_error = true;
 
         if ((err.statusCode === status_not_found) ||
@@ -330,19 +306,10 @@ PubKeyStoreCouchDB.prototype.remove_pub_key = function (uri, cb)
 
 PubKeyStoreCouchDB.prototype._stop = function (cb)
 {
-    if (this._feed)
+    if (this._feed && this._db.changesReader.started)
     {
-        var feed = this._feed;
-        this._feed = null;
-        feed.stop();
-    }
-
-    const cancel_token = this._cancel_token;
-    if (cancel_token)
-    {
-        this._cancel_token = null;
-        this._stop_cb = cb;
-        return cancel_token.cancel('aborted');
+        this._feed.once('end', cb);
+        return this._db.changesReader.stop();
     }
 
     cb();

@@ -440,8 +440,9 @@ PubKeyStorePouchDB.prototype._stop = function (cb)
             
         if (ths._feed)
         {
-            ths._feed.cancel();
+            let feed = ths._feed;
             ths._feed = null;
+            feed.cancel();
         }
 
         cb();
