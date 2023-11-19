@@ -506,6 +506,8 @@ function close_stores_for_update(db_type, states)
 {
     return function (cb)
     {
+        console.log('closing stores for update');
+
         if (!states[0].stores_for_update) { return cb(); }
 
         async.each(states[0].stores_for_update, function (ks, cb)
@@ -517,6 +519,7 @@ function close_stores_for_update(db_type, states)
             });
         }, function (err)
         {
+            console.log(`closed ${states[0].stores_for_update.length} stores for query`);
             if (db_type !== 'in-mem')
             {
                 delete states[0].stores_for_update;
@@ -530,6 +533,8 @@ function close_stores_for_query(states)
 {
     return function (cb)
     {
+        console.log('closing stores for query');
+
         if (!states[0].stores_for_query) { return cb(); }
 
         async.each(states[0].stores_for_query, function (ks, cb)
@@ -541,6 +546,7 @@ function close_stores_for_query(states)
             });
         }, function (err)
         {
+            console.log(`closed ${states[0].stores_for_query.length} stores for query`);
             delete states[0].stores_for_query;
             cb(err);
         });
