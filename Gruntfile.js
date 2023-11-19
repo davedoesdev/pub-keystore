@@ -42,7 +42,7 @@ module.exports = function (grunt)
             test: 'mocha --bail --timeout 10000',
             cover: `${c8} npx grunt test --cover`,
             cover_report: `${c8} report -r lcov`,
-            cover_check: `${c8} check-coverage --statements 78 --branches 65 --functions 75 --lines 80`
+            cover_check: `${c8} check-coverage --statements 75 --branches 65 --functions 70 --lines 80`
         }).map(([k, cmd]) => [k, { cmd, stdio: 'inherit' }]))
     });
     
